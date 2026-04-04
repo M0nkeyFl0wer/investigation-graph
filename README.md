@@ -4,6 +4,12 @@ A privacy-first knowledge graph toolkit for investigative journalists. Ingest do
 
 **No cloud required. No accounts. No data leaves your machine.**
 
+<a href="https://ladybugdb.com"><img src="https://ladybugdb.com/img/logo.svg" alt="LadybugDB" height="50"></a>&nbsp;&nbsp;&nbsp;
+<a href="https://networkx.org"><img src="https://networkx.org/documentation/stable/_static/networkx_logo.svg" alt="NetworkX" height="50"></a>&nbsp;&nbsp;&nbsp;
+<a href="https://ollama.com"><img src="https://ollama.com/public/ollama.png" alt="Ollama" height="50"></a>
+
+> **Research context:** Inspired by [*An Alternative Trajectory for Generative AI*](https://arxiv.org/abs/2603.14147) (Belova et al., Princeton, 2026), which proposes domain-specific superintelligence built on knowledge graphs and formal logic rather than monolithic LLMs. This toolkit applies that vision to investigative journalism: a local, specialized knowledge graph where every entity traces back to a source document, every connection is typed and auditable, and structural gaps — found through topology, not AI guessing — become investigative leads. *"Intelligence arises from manipulating relational symbolic structures, abstracting away low-level sensory details."*
+
 ## What This Does
 
 You have a pile of documents — court filings, corporate registrations, leaked emails, public records. You need to find connections and, more importantly, find what's *missing*.
