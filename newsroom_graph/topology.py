@@ -222,3 +222,68 @@ def run_persistent_homology(G: nx.Graph, max_nodes: int = 500) -> dict:
             for b, d in sorted(h1_persistent, key=lambda x: -(x[1] - x[0]))[:10]
         ],
     }
+
+
+def extract_skeleton(G: nx.Graph, max_edges: int = 200) -> nx.Graph:
+    """
+    Reduce a dense graph to a readable skeleton for visualization.
+    Removes edges in order of decreasing betweenness until max_edges remain,
+    preserving the structural backbone while eliminating visual "hairball" noise.
+
+    The skeleton retains:
+    - All nodes (no entities are hidden)
+    - High-betweenness edges (structural bridges)
+    - Community-internal edges with highest weight
+    """
+    if G.number_of_edges() <= max_edges:
+        return G.copy()
+
+    # Compute edge betweenness
+    edge_bc = nx.edge_betweenness_centrality(G)
+
+    # Sort edges: keep highest betweenness (structural bridges) first
+    edges_ranked = sorted(edge_bc.items(), key=lambda x: -x[1])
+
+    # Build skeleton: take top edges by betweenness
+    skeleton = nx.Graph()
+    skeleton.add_nodes_from(G.nodes(data=True))
+
+    for (u, v), _ in edges_ranked[:max_edges]:
+        skeleton.add_edge(u, v, **G.edges[u, v])
+
+    return skeleton
+
+
+def export_skeleton_json(graph, max_edges: int = 200) -> dict:
+    """
+    Export a visualization-ready skeleton of the graph as JSON.
+    Returns {nodes: [...], edges: [...]} suitable for D3, vis-network, etc.
+    """
+    G = build_networkx_graph(graph)
+    S = extract_skeleton(G, max_edges=max_edges)
+
+    nodes = []
+    for node_id, data in S.nodes(data=True):
+        nodes.append({
+            "id": node_id,
+            "label": data.get("label", node_id),
+            "type": data.get("type", ""),
+            "degree": S.degree(node_id),
+        })
+
+    edges = []
+    for u, v, data in S.edges(data=True):
+        edges.append({
+            "source": u,
+            "target": v,
+            "type": data.get("type", ""),
+            "weight": data.get("weight", 1.0),
+        })
+
+    return {
+        "nodes": nodes,
+        "edges": edges,
+        "original_edges": G.number_of_edges(),
+        "skeleton_edges": S.number_of_edges(),
+        "reduction": round(1 - S.number_of_edges() / max(G.number_of_edges(), 1), 2),
+    }

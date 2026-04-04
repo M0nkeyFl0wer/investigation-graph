@@ -282,7 +282,7 @@ Three search modes:
 |------|-------------|----------|
 | `keyword` | Cypher `CONTAINS` match on entity labels | Finding specific entities by name |
 | `semantic` | Cosine similarity between query embedding and entity embeddings | Finding related entities without knowing their name |
-| `hybrid` | Merges keyword and semantic results, deduplicates by entity ID | Best general-purpose search |
+| `hybrid` | Reciprocal Rank Fusion (RRF) — ranks by position across both lists, no weight tuning needed | Best general-purpose search |
 
 **Path search** finds typed chains between entities. Not just "these are related" but:
 
@@ -360,6 +360,20 @@ Everything via remote API. Not recommended for sensitive material.
 **When to use:** Bulk processing of purely public datasets where speed and quality matter more than confidentiality.
 
 See `docs/privacy-guide.md` for detailed comparison and provider recommendations.
+
+### Ethics: Identity Ambiguity and Source Protection
+
+Two risks that automated extraction creates for investigative journalists:
+
+**Identity ambiguity.** The pipeline will extract "John Smith", "J. Smith", and "John S. Smith" as three separate entities. It may also split "BP US" and "British Petroleum" into different organizations. Before publishing any finding based on graph connections, **manually verify that linked entities are actually the same person or organization.** Misattributing connections in an automated graph can falsely accuse individuals. The deduplication threshold in `config.py` (`DEDUP_THRESHOLD = 0.92`) catches some duplicates via embedding similarity, but it is not sufficient for names that are similar but refer to different people.
+
+**Triangulation risk.** Combining multiple datasets (public records + leaked internal emails + confidential source interviews) creates a graph where the structural position of entities can inadvertently reveal confidential sources. If you publish a subset of the graph — even with names redacted — the unique pattern of connections around a source may be enough for an adversary to identify who leaked the information. Before sharing any graph visualization or export:
+
+- Review whether the structural layout reveals source identity through unique relational positions
+- Consider removing or generalizing edges that trace back to confidential sources
+- Remember that even aggregate statistics (community membership, betweenness scores) can narrow down candidates
+
+**The graph is an intelligence product.** Treat it with the same operational security as your source list.
 
 ---
 
@@ -583,6 +597,16 @@ MENTIONED_IN (Edge Table: Entity → Document)
 CHUNK_OF (Edge Table: Chunk → Document)
 ```
 
+### Integration with AI assistants (MCP / Claude Code)
+
+If you connect this graph to an AI assistant via MCP (Model Context Protocol) or similar tool-use framework, use **progressive disclosure** to avoid context bloat:
+
+- **Don't** dump the full schema, ontology, and query library into the system prompt upfront. This wastes tokens and degrades reasoning.
+- **Do** provide high-level tool descriptions initially ("search the knowledge graph", "find paths between entities", "run topology analysis").
+- **Only when the assistant decides to query the graph** should it fetch the specific schema (entity types, edge types) and query patterns it needs.
+
+In practice: expose `search_cli.py` and `run_analysis.py` as tools with short descriptions. Let the assistant call them with natural language queries. The assistant doesn't need to know Cypher or the full ONTOLOGY.md unless it's constructing custom queries — and `queries.py` means it shouldn't need to.
+
 ---
 
 ## Recipes
@@ -629,7 +653,62 @@ python scripts/search_cli.py -q "payments consulting fees" --mode semantic
 python scripts/run_analysis.py | grep -A5 "CONTRADICTIONS"
 ```
 
-### Export the graph for visualization
+### Trim the hairball for visualization
+
+When your graph has thousands of edges, direct visualization is unusable — a "hairball" of overlapping lines where nothing is readable. The skeleton extractor removes edges in order of decreasing betweenness centrality, keeping only the structural backbone:
+
+```python
+# In a Python script or REPL
+from newsroom_graph.graph import Graph
+from newsroom_graph.topology import export_skeleton_json
+import json
+
+graph = Graph()
+skeleton = export_skeleton_json(graph, max_edges=200)
+print(f"Reduced {skeleton['original_edges']} edges to {skeleton['skeleton_edges']} "
+      f"({skeleton['reduction']:.0%} reduction)")
+
+# Export for D3, vis-network, Gephi, etc.
+with open("skeleton.json", "w") as f:
+    json.dump(skeleton, f, indent=2)
+```
+
+The skeleton preserves all nodes and the highest-betweenness edges — the structural bridges that define your investigation's shape. Low-weight, redundant edges are removed first.
+
+### Query the graph at a point in time
+
+Investigations span months. Witnesses change stories, early facts get disproven. The graph stores `created_at` timestamps on all edges and reserves `expired_at` for soft-expiry (marking relationships as superseded without deleting them).
+
+```python
+# What did the graph look like on October 1st?
+# (only edges created before that date, excluding expired ones)
+import time
+from datetime import datetime
+
+cutoff = int(datetime(2024, 10, 1).timestamp())
+graph = Graph()
+results = graph.query("""
+    MATCH (a:Entity)-[r:RELATES_TO]->(b:Entity)
+    WHERE r.created_at <= $cutoff AND r.expired_at = 0
+    RETURN a.label, r.edge_type, b.label, r.created_at
+    ORDER BY r.created_at DESC LIMIT 20
+""", parameters={"cutoff": cutoff})
+```
+
+To mark a relationship as superseded (e.g., a witness recanted):
+
+```python
+# Soft-expire the old claim, add the new one
+now = int(time.time())
+graph.query("""
+    MATCH (a:Entity {label: $claim})-[r:RELATES_TO]->(b:Entity)
+    SET r.expired_at = $now
+""", parameters={"claim": "No payments were made", "now": now})
+```
+
+The old relationship remains in the graph for the audit trail. Current queries filter on `expired_at = 0`; historical queries drop the filter.
+
+### Export the graph for sharing
 
 ```bash
 # The graph lives at data/graph.lbug — copy it to share with colleagues

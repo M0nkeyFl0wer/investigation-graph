@@ -27,33 +27,45 @@ def search_semantic(graph, query, limit):
 
 
 def search_hybrid(graph, query, entity_type, limit):
-    """Merge keyword and semantic results, deduplicate by entity ID."""
-    keyword_results = search_keyword(graph, query, entity_type, limit)
-    semantic_results = search_semantic(graph, query, limit)
+    """
+    Merge keyword and semantic results via Reciprocal Rank Fusion (RRF).
+    RRF scores by position (1/(k + rank)) rather than raw scores, making it
+    domain-agnostic — no per-investigation weight tuning needed.
+    """
+    RRF_K = 60  # standard RRF constant
 
-    # Merge: keyword results get a boost, semantic results contribute score
-    merged = {}
-    for r in keyword_results:
-        merged[r["id"]] = {
-            **r,
-            "match": "keyword",
-            "score": r.get("confidence", 0.5),
-        }
+    keyword_results = search_keyword(graph, query, entity_type, limit * 2)
+    semantic_results = search_semantic(graph, query, limit * 2)
 
-    for r in semantic_results:
+    # Assign RRF scores by rank position in each list
+    rrf_scores = {}  # entity_id → cumulative RRF score
+    entity_data = {}  # entity_id → entity dict
+    match_sources = {}  # entity_id → set of sources
+
+    for rank, r in enumerate(keyword_results, start=1):
         eid = r["id"]
-        if eid in merged:
-            merged[eid]["match"] = "both"
-            merged[eid]["score"] = max(merged[eid]["score"],
-                                       r.get("score", 0))
-        else:
-            merged[eid] = {
-                **r,
-                "match": "semantic",
-                "score": r.get("score", 0),
-            }
+        rrf_scores[eid] = rrf_scores.get(eid, 0) + 1.0 / (RRF_K + rank)
+        entity_data[eid] = r
+        match_sources.setdefault(eid, set()).add("keyword")
 
-    results = sorted(merged.values(), key=lambda r: -r["score"])
+    for rank, r in enumerate(semantic_results, start=1):
+        eid = r["id"]
+        rrf_scores[eid] = rrf_scores.get(eid, 0) + 1.0 / (RRF_K + rank)
+        if eid not in entity_data:
+            entity_data[eid] = r
+        match_sources.setdefault(eid, set()).add("semantic")
+
+    # Build results sorted by RRF score
+    results = []
+    for eid in sorted(rrf_scores, key=lambda x: -rrf_scores[x]):
+        sources = match_sources[eid]
+        match = "both" if len(sources) > 1 else sources.pop()
+        results.append({
+            **entity_data[eid],
+            "match": match,
+            "score": round(rrf_scores[eid], 4),
+        })
+
     return results[:limit]
 
 
