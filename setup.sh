@@ -39,12 +39,12 @@ if command -v ollama &> /dev/null; then
     echo "Ollama found. Pulling embedding model..."
     ollama pull nomic-embed-text
     echo "Pulling extraction model..."
-    ollama pull mistral
+    ollama pull llama3.2:3b
     echo "Models ready."
 else
     echo "WARNING: Ollama not found."
     echo "Install from https://ollama.com/download"
-    echo "Then run: ollama pull nomic-embed-text && ollama pull mistral"
+    echo "Then run: ollama pull nomic-embed-text && ollama pull llama3.2:3b"
 fi
 
 # Create directories

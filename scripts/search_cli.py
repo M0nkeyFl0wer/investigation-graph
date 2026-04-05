@@ -142,26 +142,26 @@ def main():
         parser.error("Provide --query or --path")
 
     graph = Graph()
+    try:
+        if args.path:
+            source, target = args.path
+            print(f"Finding paths: {source} → {target}\n")
+            paths = graph.find_path(source, target)
+            display_paths(paths)
+            return
 
-    if args.path:
-        source, target = args.path
-        print(f"Finding paths: {source} → {target}\n")
-        paths = graph.find_path(source, target)
-        display_paths(paths)
+        if args.mode == "keyword":
+            results = search_keyword(graph, args.query, args.type, args.limit)
+        elif args.mode == "semantic":
+            results = search_semantic(graph, args.query, args.limit)
+        elif args.mode == "hybrid":
+            results = search_hybrid(graph, args.query, args.type, args.limit)
+        else:
+            results = []
+
+        display_results(results, args.mode)
+    finally:
         graph.close()
-        return
-
-    if args.mode == "keyword":
-        results = search_keyword(graph, args.query, args.type, args.limit)
-    elif args.mode == "semantic":
-        results = search_semantic(graph, args.query, args.limit)
-    elif args.mode == "hybrid":
-        results = search_hybrid(graph, args.query, args.type, args.limit)
-    else:
-        results = []
-
-    display_results(results, args.mode)
-    graph.close()
 
 
 if __name__ == "__main__":

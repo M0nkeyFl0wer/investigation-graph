@@ -4,21 +4,23 @@ Edit this file to match your setup. Defaults are fully local — no cloud needed
 """
 from pathlib import Path
 
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
 # =============================================================================
 # PATHS
 # =============================================================================
 
 # Where the graph database lives (LadybugDB directory)
-GRAPH_DIR = Path("data/graph.lbug")
+GRAPH_DIR = _PROJECT_ROOT / "data" / "graph.lbug"
 
 # Embedding dimension (nomic-embed-text output)
 EMBEDDING_DIM = 768
 
 # Where documents go for ingestion
-INGEST_DIR = Path("ingest")
+INGEST_DIR = _PROJECT_ROOT / "ingest"
 
 # Where daily briefings are written
-BRIEFING_DIR = Path("briefings")
+BRIEFING_DIR = _PROJECT_ROOT / "briefings"
 
 # Optional: path to your Obsidian vault for briefing delivery
 # Leave empty to skip Obsidian integration

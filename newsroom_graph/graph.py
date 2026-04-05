@@ -6,6 +6,7 @@ LadybugDB is a KuzuDB fork — same Cypher dialect, same embedded architecture.
 Bulk ingestion uses COPY FROM Parquet (25x faster than iterative MERGE).
 Vector search uses native FLOAT[768] columns + array_cosine_similarity.
 """
+import logging
 import real_ladybug as lb
 import time
 import tempfile
@@ -13,25 +14,41 @@ from pathlib import Path
 from .ontology import Ontology
 from . import config
 
+logger = logging.getLogger(__name__)
+
 
 class Graph:
     """Knowledge graph backed by LadybugDB."""
 
-    def __init__(self, graph_dir: Path = None, ontology: Ontology = None):
+    def __init__(self, graph_dir: Path = None, ontology: Ontology = None,
+                 read_only: bool = False):
         self.graph_dir = graph_dir or config.GRAPH_DIR
         self.ontology = ontology or Ontology()
+        self.read_only = read_only
         self.db = None
         self.conn = None
         self._open()
-        self._init_schema()
+        if not read_only:
+            self._init_schema()
+            # Run schema migrations if needed (adds columns, etc.)
+            from .migrations import ensure_schema_version
+            ensure_schema_version(self.conn)
 
     def _open(self):
         self.graph_dir.parent.mkdir(parents=True, exist_ok=True)
-        self.db = lb.Database(str(self.graph_dir))
+        self.db = lb.Database(str(self.graph_dir), read_only=self.read_only)
         self.conn = lb.Connection(self.db)
 
     def _init_schema(self):
         """Create node and edge tables if they don't exist."""
+        # --- Load extensions (log failures instead of silently swallowing) ---
+        for ext in ("vector", "fts", "algo"):
+            try:
+                self.conn.execute(f"INSTALL {ext}; LOAD EXTENSION {ext};")
+                logger.debug("Loaded extension: %s", ext)
+            except Exception as e:
+                logger.warning("Extension '%s' not available: %s", ext, e)
+
         self.conn.execute("""
             CREATE NODE TABLE IF NOT EXISTS Entity (
                 id STRING PRIMARY KEY,
@@ -87,6 +104,22 @@ class Graph:
                     expired_at INT64 DEFAULT 0
                 )
             """)
+
+        # --- Create FTS indexes (safe to create at init) ---
+        for table, index_name, cols in [
+            ("Entity", "entity_fts", ["label", "description"]),
+        ]:
+            try:
+                col_list = str(cols).replace("'", '"')
+                self.conn.execute(f"""
+                    CALL CREATE_FTS_INDEX('{table}', '{index_name}', {col_list})
+                """)
+            except Exception:
+                pass  # Index already exists
+
+        # NOTE: HNSW vector indexes are NOT created at init because they
+        # block SET operations on the embedding column. Call rebuild_vector_indexes()
+        # after bulk embedding operations are complete.
 
     # =========================================================================
     # Incremental writes (single entity/edge at a time)
@@ -161,7 +194,7 @@ class Graph:
                  if self.ontology.validate_entity_type(e["entity_type"])]
         rejected = len(entities) - len(valid)
         if rejected > 0:
-            print(f"  Rejected {rejected} entities (type not in ontology)")
+            logger.info("Rejected %d entities (type not in ontology)", rejected)
 
         if not valid:
             return 0
@@ -218,7 +251,7 @@ class Graph:
                  if self.ontology.validate_edge_type(e["edge_type"])]
         rejected = len(edges) - len(valid)
         if rejected > 0:
-            print(f"  Rejected {rejected} edges (type not in ontology)")
+            logger.info("Rejected %d edges (type not in ontology)", rejected)
 
         if not valid:
             return 0
@@ -258,9 +291,48 @@ class Graph:
             SET e.embedding = $emb
         """, parameters={"id": entity_id, "emb": embedding})
 
+    def rebuild_vector_indexes(self) -> None:
+        """
+        (Re)build HNSW vector indexes. Call after bulk embedding operations.
+        Drops existing indexes first, then recreates.
+        """
+        for table, index_name, col in [
+            ("Entity", "entity_vec", "embedding"),
+        ]:
+            try:
+                self.conn.execute(
+                    f"CALL DROP_VECTOR_INDEX('{table}', '{index_name}')")
+            except Exception:
+                pass
+            try:
+                self.conn.execute(f"""
+                    CALL CREATE_VECTOR_INDEX('{table}', '{index_name}', '{col}',
+                        mu := 30, ml := 60, metric := 'cosine', efc := 200)
+                """)
+            except Exception:
+                pass
+
     def vector_search(self, query_embedding: list[float],
                       limit: int = 10) -> list:
-        """Find entities by vector similarity using native cosine similarity."""
+        """Find entities by vector similarity. Uses HNSW index if available, falls back to brute force."""
+        # Try HNSW index first
+        try:
+            result = self.conn.execute("""
+                CALL QUERY_VECTOR_INDEX('Entity', 'entity_vec', $qemb, $limit)
+                RETURN node.id AS id, node.label AS label,
+                       node.entity_type AS type, distance AS score
+            """, parameters={"qemb": query_embedding, "limit": limit})
+            columns = result.get_column_names()
+            rows = []
+            while result.has_next():
+                row = result.get_next()
+                rows.append(dict(zip(columns, row)))
+            if rows:
+                return rows
+        except Exception:
+            pass
+
+        # Fallback: brute-force cosine similarity
         from .queries import QUERIES
         return self.query(QUERIES["vector_search"],
                           parameters={"qemb": query_embedding, "limit": limit})
