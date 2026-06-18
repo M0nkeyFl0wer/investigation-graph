@@ -2,13 +2,10 @@
 Configuration for open-newsroom-graph.
 Edit this file to match your setup. Defaults are fully local — no cloud needed.
 
-DATABASE SUBSTRATE OPTIONS:
-- "sqlite" : Simple, reliable. Good for single-user, retrieval-focused use.
-- "duckdb" : More powerful, analytical. Good for search + future analytics.
-- "postgres" : Server-based. Good for teams, multiple concurrent users.
-- "ladybug" : (default) No chunk substrate, all in graph. Good for prototyping.
-
-See docs/database-choice.md for help picking the right one.
+The store is always the DuckDB(base) + LadybugDB(graph) hybrid (see SPEC.md):
+chunks, embeddings, and full-text search live in DuckDB at data/chunks.duckdb;
+the entity/edge graph lives in LadybugDB at data/graph.lbug. There is no
+substrate to choose — one well-trodden path, so non-experts get a working tool.
 """
 from pathlib import Path
 
@@ -32,28 +29,12 @@ BRIEFING_DIR = _PROJECT_ROOT / "briefings"
 OBSIDIAN_VAULT = ""  # e.g., "~/obsidian-vault/investigations"
 
 # =============================================================================
-# DATABASE SUBSTRATE
+# CHUNK STORE (DuckDB — the base of the hybrid)
 # =============================================================================
 
-# Choose where to store chunks and embeddings:
-# - "sqlite"   : Simple, reliable (FTS5 + sqlite-vec). Best for single user.
-# - "duckdb"   : Analytical power + Cypher ATTACH bridge. Best for flexibility.
-# - "postgres" : Server-based, team use. Requires Postgres server setup.
-# - "ladybug"  : (legacy) All in graph, no chunk substrate. Simple but limited.
-
-CHUNK_SUBSTRATE = "sqlite"
-
-# Chunk database path (relative to _PROJECT_ROOT / "data")
-# SQLite:   data/chunks.db
-# DuckDB:   data/chunks.duckdb
-# Postgres: set via POSTGRES_* env vars below
-
-# PostgreSQL config (only used if CHUNK_SUBSTRATE = "postgres")
-POSTGRES_HOST = "localhost"
-POSTGRES_PORT = 5432
-POSTGRES_DB = "newsroom"
-POSTGRES_USER = "newsroom"
-POSTGRES_PASSWORD = ""  # Set via environment variable NEWSROOM_POSTGRES_PASSWORD
+# Chunks, embeddings, and BM25 full-text search live here. Single file, easy to
+# back up (plain copy). Path is fixed; there is no substrate choice.
+CHUNK_DB = _PROJECT_ROOT / "data" / "chunks.duckdb"
 
 # =============================================================================
 # PRIVACY MODE
