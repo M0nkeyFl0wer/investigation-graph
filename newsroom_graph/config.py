@@ -1,6 +1,14 @@
 """
 Configuration for open-newsroom-graph.
 Edit this file to match your setup. Defaults are fully local — no cloud needed.
+
+DATABASE SUBSTRATE OPTIONS:
+- "sqlite" : Simple, reliable. Good for single-user, retrieval-focused use.
+- "duckdb" : More powerful, analytical. Good for search + future analytics.
+- "postgres" : Server-based. Good for teams, multiple concurrent users.
+- "ladybug" : (default) No chunk substrate, all in graph. Good for prototyping.
+
+See docs/database-choice.md for help picking the right one.
 """
 from pathlib import Path
 
@@ -13,9 +21,6 @@ _PROJECT_ROOT = Path(__file__).resolve().parent.parent
 # Where the graph database lives (LadybugDB directory)
 GRAPH_DIR = _PROJECT_ROOT / "data" / "graph.lbug"
 
-# Embedding dimension (nomic-embed-text output)
-EMBEDDING_DIM = 768
-
 # Where documents go for ingestion
 INGEST_DIR = _PROJECT_ROOT / "ingest"
 
@@ -25,6 +30,30 @@ BRIEFING_DIR = _PROJECT_ROOT / "briefings"
 # Optional: path to your Obsidian vault for briefing delivery
 # Leave empty to skip Obsidian integration
 OBSIDIAN_VAULT = ""  # e.g., "~/obsidian-vault/investigations"
+
+# =============================================================================
+# DATABASE SUBSTRATE
+# =============================================================================
+
+# Choose where to store chunks and embeddings:
+# - "sqlite"   : Simple, reliable (FTS5 + sqlite-vec). Best for single user.
+# - "duckdb"   : Analytical power + Cypher ATTACH bridge. Best for flexibility.
+# - "postgres" : Server-based, team use. Requires Postgres server setup.
+# - "ladybug"  : (legacy) All in graph, no chunk substrate. Simple but limited.
+
+CHUNK_SUBSTRATE = "sqlite"
+
+# Chunk database path (relative to _PROJECT_ROOT / "data")
+# SQLite:   data/chunks.db
+# DuckDB:   data/chunks.duckdb
+# Postgres: set via POSTGRES_* env vars below
+
+# PostgreSQL config (only used if CHUNK_SUBSTRATE = "postgres")
+POSTGRES_HOST = "localhost"
+POSTGRES_PORT = 5432
+POSTGRES_DB = "newsroom"
+POSTGRES_USER = "newsroom"
+POSTGRES_PASSWORD = ""  # Set via environment variable NEWSROOM_POSTGRES_PASSWORD
 
 # =============================================================================
 # PRIVACY MODE
@@ -46,8 +75,17 @@ PRIVACY_MODE = "local"
 # LOCAL MODELS (used in "local" and "hybrid" modes)
 # =============================================================================
 
-# Embedding model (runs via Ollama, ~60ms per chunk)
+# Embedding model (runs via Ollama)
+# Options:
+#   - "nomic-embed-text"    : 768 dimensions. Faster, smaller.
+#   - "qwen3-embedding:8b" : 4096 dimensions. Better quality, slower.
+#   - "nomic-embed-text" is the default for simplicity.
+#   - If you want better retrieval, upgrade to qwen3-embedding:8b
 EMBEDDING_MODEL = "nomic-embed-text"
+
+# Embedding dimension (must match the model)
+# - nomic-embed-text:     768
+# - qwen3-embedding:8b:  4096
 EMBEDDING_DIM = 768
 
 # Local extraction model (runs via Ollama, used in "local" mode)
@@ -108,3 +146,20 @@ BRIEFING_SECTIONS = [
     "surprising_connections", # High betweenness on low-frequency entities
     "unlinked_entities",     # Entities needing attention
 ]
+
+# =============================================================================
+# SEARCH / RETRIEVAL
+# =============================================================================
+
+# Default search mode when not specified
+# Options: "fts" (keyword), "semantic" (vector), "hybrid" (combined), "graph" (entity paths)
+DEFAULT_SEARCH_MODE = "hybrid"
+
+# Hybrid retrieval: RRF k parameter (higher = more smoothing between methods)
+RRF_K = 60
+
+# Vector search: number of candidates for reranking
+VECTOR_CANDIDATES = 50
+
+# Maximum results to return
+DEFAULT_SEARCH_LIMIT = 12

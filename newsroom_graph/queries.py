@@ -97,4 +97,64 @@ QUERIES = {
     "entity_count": "MATCH (e:Entity) RETURN count(e) AS cnt",
     "edge_count": "MATCH ()-[r:RELATES_TO]->() RETURN count(r) AS cnt",
     "document_count": "MATCH (d:Document) RETURN count(d) AS cnt",
+
+    # Quality gates
+    "llm_extracted_entities": """
+        MATCH (e:Entity)
+        WHERE e.extraction_source = 'llm'
+        RETURN e.id AS id, e.label AS label, e.entity_type AS type,
+               e.trust_penalty AS trust_penalty
+        LIMIT $limit
+    """,
+
+    "low_confidence_entities": """
+        MATCH (e:Entity)
+        WHERE e.confidence < 0.6
+        RETURN e.id AS id, e.label AS label, e.entity_type AS type,
+               e.confidence AS confidence, e.last_reviewed AS last_reviewed
+        LIMIT $limit
+    """,
+
+    "needs_review_entities": """
+        MATCH (e:Entity)
+        WHERE e.quality_flag = 'needs_review'
+        RETURN e.id AS id, e.label AS label, e.entity_type AS type,
+               e.created_at AS created_at
+        LIMIT $limit
+    """,
+
+    "junk_entities": """
+        MATCH (e:Entity)
+        WHERE e.entity_type = 'concept'
+          AND (e.label CONTAINS 'Session' OR e.label CONTAINS 'Commit'
+               OR e.label CONTAINS 'File' OR e.label MATCHES '.*\\d{4}-\\d{2}-\\d{2}.*')
+        RETURN e.id AS id, e.label AS label
+        LIMIT $limit
+    """,
+
+    "entity_type_distribution": """
+        MATCH (e:Entity)
+        RETURN e.entity_type AS type, count(e) AS cnt
+        ORDER BY cnt DESC
+    """,
+
+    "llm_extracted_edges": """
+        MATCH ()-[r:RELATES_TO]->()
+        WHERE r.extraction_source = 'llm'
+        RETURN count(r) AS cnt
+    """,
+
+    # Graph health
+    "entities_with_embeddings": """
+        MATCH (e:Entity)
+        WHERE e.embedding IS NOT NULL
+        RETURN count(e) AS cnt
+    """,
+
+    "orphaned_entities": """
+        MATCH (e:Entity)
+        WHERE NOT (e)-[:RELATES_TO]-() AND NOT (e)-[:MENTIONED_IN]-()
+        RETURN e.id AS id, e.label AS label, e.entity_type AS type
+        LIMIT $limit
+    """,
 }

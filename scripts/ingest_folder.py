@@ -3,6 +3,10 @@
 Ingest documents from the ingest/ folder into the knowledge graph.
 Supports: .txt, .md, .pdf, .html
 Uses COPY FROM Parquet for bulk entity loading.
+
+Triplet extraction: Phase 3 LLM extracts (entity, relationship, entity) triplets.
+Chunk storage: Documents are chunked and stored in the configured chunk store
+(SQLite, DuckDB, or Postgres) for hybrid retrieval.
 """
 import sys
 import hashlib
@@ -15,6 +19,7 @@ from newsroom_graph.graph import Graph
 from newsroom_graph.extract import Extractor
 from newsroom_graph.embed import embed_text, embed_batch
 from newsroom_graph.ontology import Ontology
+from newsroom_graph.chunk_store import get_chunk_store
 from newsroom_graph import config
 
 
@@ -96,6 +101,13 @@ def main():
 
     ontology = Ontology()
     graph = Graph(ontology=ontology)
+
+    # Initialize chunk store (if configured)
+    chunk_store = None
+    if config.CHUNK_SUBSTRATE not in ("ladybug", ""):
+        chunk_store = get_chunk_store()
+        print(f"Chunk store: {chunk_store.substrate}")
+
     try:
         extractor = Extractor(ontology)
 
@@ -118,21 +130,38 @@ def main():
             # Register document
             graph.add_document(doc_id, str(filepath), filepath.stem)
 
-            # Extract entities and relationships
+            # Extract entities and relationships (including triplets)
             result = extractor.extract_from_text(
                 text, source_url=source_url, doc_id=doc_id)
             print(f"  Extracted: {len(result['entities'])} entities, "
                   f"{len(result['edges'])} edges")
 
-            # Compute embeddings for chunks
+            # Process chunks for retrieval
             chunks = chunk_text(text)
             if chunks:
+                # Store chunks in chunk store (if enabled)
+                if chunk_store:
+                    for idx, chunk_text_content in enumerate(chunks):
+                        chunk_id = f"{doc_id}_chunk_{idx}"
+                        chunk_store.add_chunk(
+                            chunk_id=chunk_id,
+                            doc_id=doc_id,
+                            body=chunk_text_content,
+                            title=filepath.stem,
+                            doc_path=str(filepath),
+                            chunk_index=idx,
+                        )
+
+                # Compute embeddings for chunks (stored on entities for now)
                 embeddings = embed_batch(chunks)
                 total_chunks += len(chunks)
                 print(f"  Embedded: {len(chunks)} chunks")
 
-                # Store chunk embeddings on the entities they mention
-                # (For now, embed entity descriptions directly after bulk load)
+                # Store chunk embeddings in chunk store
+                if chunk_store and embeddings:
+                    for idx, emb in enumerate(embeddings):
+                        chunk_id = f"{doc_id}_chunk_{idx}"
+                        chunk_store.add_embedding(chunk_id, emb)
 
             all_entities.extend(result["entities"])
             all_edges.extend(result["edges"])
@@ -163,6 +192,10 @@ def main():
         # Rebuild vector indexes after all embeddings are stored
         graph.rebuild_vector_indexes()
 
+        # Rebuild FTS index for DuckDB if applicable
+        if chunk_store and hasattr(chunk_store, 'rebuild_fts'):
+            chunk_store.rebuild_fts()
+
         # Summary
         elapsed = time.time() - t_start
         print(f"\n{'=' * 50}")
@@ -172,6 +205,8 @@ def main():
         print(f"  Total entities:      {graph.entity_count()}")
         print(f"  Total edges:         {graph.edge_count()}")
         print(f"  Total documents:     {graph.document_count()}")
+        if chunk_store:
+            print(f"  Chunks in store:     {chunk_store.chunk_count()}")
         print(f"\nNext steps:")
         print(f"  Search:    python scripts/search_cli.py -q 'your query'")
         print(f"  Analyze:   python scripts/run_analysis.py")
@@ -186,6 +221,8 @@ def main():
             print(f"  Tip: Consider adding frequently rejected types to ONTOLOGY.md")
     finally:
         graph.close()
+        if chunk_store:
+            chunk_store.close()
 
 
 if __name__ == "__main__":

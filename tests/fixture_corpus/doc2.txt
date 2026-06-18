@@ -1,0 +1,18 @@
+Property Transaction Records - Q4 2023
+
+The following properties were transferred:
+
+1. 123 Main Street - Sold to Harbor City Redevelopment Authority for $1.2M
+   Seller: Acme Properties LLC
+   Buyer: Harbor City Redevelopment Authority
+   Date: October 15, 2023
+
+2. 456 Waterfront Ave - Purchased by Meridian Holdings LLC for $3.8M
+   Seller: Coastal Development Corp
+   Buyer: Meridian Holdings LLC
+   Date: November 22, 2023
+
+3. 789 Harbor View - Leased to Brightpath Advisors
+   Owner: City of Harbor City
+   Lessee: Brightpath Advisors
+   Annual rent: $120,000

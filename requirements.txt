@@ -5,3 +5,9 @@ spacy>=3.7.0
 networkx>=3.2
 ripser>=0.6.0
 ollama>=0.3.0
+
+# Optional: for DuckDB chunk substrate
+# duckdb>=1.0.0
+
+# Optional: for Postgres chunk substrate
+# psycopg2-binary>=2.9.0

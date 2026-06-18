@@ -1,8 +1,12 @@
 """Quick system check — verifies all dependencies are available."""
+# ruff: noqa: F401
 
 
 def run():
+    from . import config
     checks = []
+
+    # Core dependencies
     try:
         import real_ladybug
         checks.append(f"  LadybugDB: {real_ladybug.__version__}")
@@ -38,15 +42,49 @@ def run():
     except ImportError:
         checks.append("  Ripser: not installed (optional, pip install ripser)")
 
+    # Chunk substrate checks
+    substrate = config.CHUNK_SUBSTRATE
+    checks.append(f"\n  Chunk substrate: {substrate}")
+
+    if substrate == "sqlite":
+        try:
+            import sqlite3
+            checks.append("  SQLite: OK")
+        except ImportError:
+            checks.append("  SQLite: NOT AVAILABLE (built-in)")
+
+    elif substrate == "duckdb":
+        try:
+            import duckdb
+            checks.append(f"  DuckDB: {duckdb.__version__}")
+        except ImportError:
+            checks.append("  DuckDB: NOT INSTALLED (pip install duckdb)")
+
+    elif substrate == "postgres":
+        try:
+            import psycopg2
+            checks.append("  Postgres client: OK")
+        except ImportError:
+            checks.append("  Postgres client: NOT INSTALLED (pip install psycopg2-binary)")
+        checks.append("  NOTE: Requires Postgres server running")
+
+    elif substrate == "ladybug":
+        checks.append("  (Using graph-only, no chunk substrate)")
+
+    # Embedding model
     try:
         import ollama
         models = ollama.list()
         model_names = [m.model for m in models.models] if hasattr(models, "models") else []
-        checks.append(f"  Ollama: OK ({len(model_names)} models)")
-        if any("nomic-embed-text" in m for m in model_names):
-            checks.append("  Embedding model: nomic-embed-text OK")
+        checks.append(f"\n  Ollama: OK ({len(model_names)} models)")
+
+        # Check configured embedding model
+        emb_model = config.EMBEDDING_MODEL
+        if any(emb_model in m for m in model_names):
+            checks.append(f"  Embedding model ({emb_model}, {config.EMBEDDING_DIM}d): OK")
         else:
-            checks.append("  Embedding model: MISSING (ollama pull nomic-embed-text)")
+            checks.append(f"  Embedding model: MISSING ({emb_model})")
+            checks.append(f"    Run: ollama pull {emb_model}")
     except Exception:
         checks.append("  Ollama: NOT RUNNING (install from ollama.com, then: ollama serve)")
 

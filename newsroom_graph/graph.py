@@ -58,9 +58,12 @@ class Graph:
                 confidence DOUBLE DEFAULT 0.5,
                 source_url STRING DEFAULT '',
                 provenance STRING DEFAULT 'unknown',
+                extraction_source STRING DEFAULT 'unknown',  -- 'llm', 'nlp', 'deterministic', 'human'
+                trust_penalty DOUBLE DEFAULT 0.0,               -- LLM gets -0.1, human gets 0.0
+                quality_flag STRING,                            -- 'verified', 'needs_review', 'junk'
+                last_reviewed INT64 DEFAULT 0,
                 created_at INT64 DEFAULT 0,
                 updated_at INT64 DEFAULT 0,
-                embedding FLOAT[768],
                 layer STRING DEFAULT 'domain'
             )
         """)
@@ -98,8 +101,12 @@ class Graph:
                     edge_type STRING DEFAULT '',
                     weight DOUBLE DEFAULT 1.0,
                     confidence DOUBLE DEFAULT 0.5,
+                    evidence STRING DEFAULT '',               -- Quoted source text
                     source_url STRING DEFAULT '',
                     provenance STRING DEFAULT 'unknown',
+                    extraction_source STRING DEFAULT 'unknown',  -- 'llm', 'nlp', 'deterministic'
+                    valid_from INT64 DEFAULT 0,               -- When this edge became true
+                    valid_until INT64 DEFAULT 0,              -- When it stopped being true (0 = still valid)
                     created_at INT64 DEFAULT 0,
                     expired_at INT64 DEFAULT 0
                 )

@@ -4,10 +4,10 @@ Contradictions, gaps, surprising connections, new entities, unlinked nodes.
 No AI — just structural observations from the graph.
 """
 import time
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
 from .graph import Graph
-from .topology import run_topology, run_persistent_homology, build_networkx_graph
+from .topology import run_topology
 from . import config
 
 
@@ -49,7 +49,7 @@ def generate_briefing(graph: Graph, output_dir: Path = None) -> str:
             sections.append(f"  **\"{c['claim_a']}\"**")
             if c.get("source_a"):
                 sections.append(f"  (source: {c['source_a']})")
-            sections.append(f"  contradicts")
+            sections.append("  contradicts")
             sections.append(f"  **\"{c['claim_b']}\"**")
             if c.get("source_b"):
                 sections.append(f"  (source: {c['source_b']})")
@@ -77,10 +77,8 @@ def generate_briefing(graph: Graph, output_dir: Path = None) -> str:
             sections.append(f"## Surprising Connections: {len(surprising)}\n")
             for s in surprising[:5]:
                 sections.append(f"  **{s['label']}** ({s['type']})")
-                sections.append(f"  Betweenness: {s['betweenness']} | "
-                              f"Degree: {s['degree']}")
-                sections.append(f"  → High structural importance despite appearing in "
-                              f"few documents. Worth investigating.")
+                sections.append(f"  Betweenness: {s['betweenness']} | Degree: {s['degree']}")
+                sections.append("  → High structural importance despite appearing in few documents. Worth investigating.")
                 sections.append("")
 
     # --- Unlinked entities ---
