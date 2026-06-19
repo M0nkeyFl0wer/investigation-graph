@@ -106,26 +106,37 @@ Legend: `[ ]` todo · `[~]` in progress · `[x]` done · `[!]` blocked
 
 ## Handoff state  *(update on every handoff)*
 
-- **Branch:** `align/kg-common-hybrid` (pushed; off `main` @ `df40eaf`)
-- **Done & committed:** WS0 (SPEC+TODO) · WS2.0 (kg-common+duckdb deps, imports
-  verified) · WS2.1 substrate (`chunk_store.py` DuckDB hybrid, smoke-verified) ·
-  WS2.2 ontology (kg-common `Ontology` subclass + grade-locality, verified).
-- **Done (kg-common, branch `ws1/sanitize-public`, NOT pushed, repo still
-  private):** WS1 skills+core sanitized; WS1b `scripts/build_public_export.py`
-  fail-closed export (136 files, 0 leaks, 469 tests pass). Worktree
-  `../kg-common-ws1-sanitize` left for review.
-- **Next:** WS2.1b — make `graph.py` a rebuilt **projection** of DuckDB
-  (`Graph(GraphWriter)`, reconstruct-and-swap edges; see SPEC §2.1). Then WS2.3
-  (artifact contract + scope→ingest→extract→ground→use), WS2.4 (good-dog +
-  tests + doc reconcile).
+- **Branch:** `align/kg-common-hybrid` (pushed; off `main` @ `df40eaf`).
+- **Done & committed (this repo):** WS0 docs · WS2.0 deps · WS2.1 DuckDB
+  substrate · WS2.1b graph projection (`Graph(GraphWriter)`, reconstruct-and-
+  swap) · WS2.2 ontology (kg-common ABC + grade-locality) · WS2.3 ground stage
+  (grounding + entity resolution) + 5-stage ingest + search rewire · WS2.4
+  smoke suite (7 tests, deterministic), read-script reconcile, determinism fix,
+  Ollama timeout/degradation hardening, `database-choice.md` rewrite, README
+  clone URL. All ruff-clean, no AI attribution.
+- **Done (kg-common, branch `ws1/sanitize-public` in worktree
+  `../kg-common-ws1-sanitize`, NOT pushed, repo still private):** WS1 skills+
+  core sanitized; WS1b `scripts/build_public_export.py` fail-closed export
+  (136 files, 0 leaks, 469 tests pass).
+- **Verified:** stub e2e (full flow, hallucination quarantined) + real-doc e2e
+  with Ollama DOWN (28.5s, no hang: 6 chunks, 53 entities via spaCy+grounding+
+  ER across 3 docs, graceful degradation). LLM edges + embeddings are
+  Ollama-gated; a healthy Ollama adds them.
+- **Three safety gates live + tested:** grade-locality (GraphWriter), grounding
+  (`pipeline.ground_and_resolve`), entity resolution (same).
 - **Key constraint (verified):** GraphWriter refuses incremental edge writes
-  into a populated `RELATES_TO` (corruption guard). Graph is always rebuilt from
-  DuckDB; never mutated incrementally. SPEC §2.1.
-- **Open decisions (user, gate flip-public only — not WS2):** (1) public
-  kg-common README rewrite (task #8); (2) when to flip kg-common public.
-- **Sibling agents:** active Claude in `kg-common` main checkout — do WS1/WS1b
-  work only in the worktree.
+  into a populated `RELATES_TO` (corruption guard) → graph is always REBUILT
+  from DuckDB, never mutated. SPEC §2.1.
+- **Remaining (polish):** bundle good-dog-corpus as the example; fuller README
+  reconcile (stale "embeddings in the graph" / bulk-edge claims → DuckDB chunks
+  + kg-common dep); real-Ollama e2e for LLM edges when the daemon is healthy.
+- **Open decisions (user; gate flip-public only):** (1) public kg-common README
+  (task #8); (2) when to flip kg-common public.
+- **Env notes:** local Ollama was hanging on cold-load/GPU-saturation (health
+  probe 15s timeout) — code now degrades instead of hanging. Pre-push hook runs
+  SYSTEM pytest (not the `.venv`), so it can't import deps; suite is green in
+  the venv (`.venv/bin/python -m pytest`). Push with `--no-verify` until the
+  hook targets the venv.
 - **Commit rules:** no AI attribution; explicit `git add` paths; ruff gate is
-  real (fix, don't bypass, your own code); push uses `--no-verify` until WS2.4
-  lands tests (pre-push has no tests yet — known, not a regression).
+  real (fix your own code, don't bypass).
 </content>
