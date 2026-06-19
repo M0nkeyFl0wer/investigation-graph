@@ -1,407 +1,248 @@
 """
-LadybugDB graph wrapper. Handles schema creation, entity/edge writing, and queries.
-The graph is a directory on disk. No server. No configuration.
+The LadybugDB graph — a rebuilt *projection* of the DuckDB source of truth.
 
-LadybugDB is a KuzuDB fork — same Cypher dialect, same embedded architecture.
-Bulk ingestion uses COPY FROM Parquet (25x faster than iterative MERGE).
-Vector search uses native FLOAT[768] columns + array_cosine_similarity.
+DuckDB (``chunk_store.py``) holds the records (documents, chunks, entities,
+edges). This module turns the entity/edge records into the typed graph that
+powers path search and topology. Writes go through kg-common's ``GraphWriter``,
+so we inherit its correctness machinery for free: type + grade-locality
+validation, the single-writer pidfile lock, and — critically — the RELATES_TO
+**corruption guard**.
+
+Why "projection, not incremental store" (verified at
+``kg-common/kg_common/write/ladybug.py:603-645``): on this LadybugDB build, an
+incremental edge write into a *populated* RELATES_TO table permutes a column's
+values across unrelated rows on the next checkpoint. ``GraphWriter.add_edge``
+therefore refuses incremental edge writes once the table holds rows. The only
+safe pattern is **reconstruct-and-swap**: build the whole edge set into a fresh,
+empty table in one uninterrupted pass, then checkpoint once. So the graph is
+disposable — ``build_graph()`` wipes it and rebuilds it from the full DuckDB
+record set every time. Adding documents means appending records to DuckDB and
+rebuilding (fast at single-investigator scale). See ``SPEC.md`` §2.1.
+
+Embeddings and full-text search are NOT here — they live on DuckDB chunks (one
+embedding model, one place). The graph stores structure: who connects to whom,
+typed and evidence-bearing.
 """
 import logging
-import real_ladybug as lb
-import time
-import tempfile
+import shutil
 from pathlib import Path
-from .ontology import Ontology
+
+from kg_common.write import GraphWriter
+
 from . import config
+from .ontology import Ontology
 
 logger = logging.getLogger(__name__)
 
 
-class Graph:
-    """Knowledge graph backed by LadybugDB."""
+def _import_ladybug():
+    """Dual-import: source builds expose ``ladybug``; PyPI ships ``real_ladybug``."""
+    try:
+        import ladybug as lb  # noqa: F401
+        return lb
+    except ImportError:
+        import real_ladybug as lb
+        return lb
 
-    def __init__(self, graph_dir: Path = None, ontology: Ontology = None,
+
+class Graph:
+    """Read/write handle on the LadybugDB graph projection.
+
+    Two modes:
+      - read_only=True  → a plain read connection (NO writer lock). Use this for
+        search, analysis, and briefings; many can run at once and none collide
+        with a build.
+      - read_only=False → wraps a kg-common ``GraphWriter`` (takes the
+        single-writer pidfile lock, ensures schema from the ontology). Use for
+        incremental writes inside a build.
+
+    For a full rebuild from DuckDB records, prefer the module-level
+    ``build_graph()`` — it does the corruption-safe reconstruct-and-swap.
+    """
+
+    def __init__(self, graph_dir: Path | None = None, ontology: Ontology | None = None,
                  read_only: bool = False):
-        self.graph_dir = graph_dir or config.GRAPH_DIR
+        self.graph_dir = Path(graph_dir) if graph_dir else config.GRAPH_DIR
         self.ontology = ontology or Ontology()
         self.read_only = read_only
-        self.db = None
-        self.conn = None
-        self._open()
-        if not read_only:
-            self._init_schema()
-            # Run schema migrations if needed (adds columns, etc.)
-            from .migrations import ensure_schema_version
-            ensure_schema_version(self.conn)
+        self._writer: GraphWriter | None = None
+        self._db = None
+        self._conn = None
 
-    def _open(self):
-        self.graph_dir.parent.mkdir(parents=True, exist_ok=True)
-        self.db = lb.Database(str(self.graph_dir), read_only=self.read_only)
-        self.conn = lb.Connection(self.db)
-
-    def _init_schema(self):
-        """Create node and edge tables if they don't exist."""
-        # --- Load extensions (log failures instead of silently swallowing) ---
-        for ext in ("vector", "fts", "algo"):
-            try:
-                self.conn.execute(f"INSTALL {ext}; LOAD EXTENSION {ext};")
-                logger.debug("Loaded extension: %s", ext)
-            except Exception as e:
-                logger.warning("Extension '%s' not available: %s", ext, e)
-
-        self.conn.execute("""
-            CREATE NODE TABLE IF NOT EXISTS Entity (
-                id STRING PRIMARY KEY,
-                entity_type STRING,
-                label STRING,
-                description STRING DEFAULT '',
-                confidence DOUBLE DEFAULT 0.5,
-                source_url STRING DEFAULT '',
-                provenance STRING DEFAULT 'unknown',
-                extraction_source STRING DEFAULT 'unknown',  -- 'llm', 'nlp', 'deterministic', 'human'
-                trust_penalty DOUBLE DEFAULT 0.0,               -- LLM gets -0.1, human gets 0.0
-                quality_flag STRING,                            -- 'verified', 'needs_review', 'junk'
-                last_reviewed INT64 DEFAULT 0,
-                created_at INT64 DEFAULT 0,
-                updated_at INT64 DEFAULT 0,
-                layer STRING DEFAULT 'domain'
-            )
-        """)
-
-        self.conn.execute("""
-            CREATE NODE TABLE IF NOT EXISTS Document (
-                id STRING PRIMARY KEY,
-                path STRING,
-                title STRING DEFAULT '',
-                ingested_at INT64 DEFAULT 0,
-                chunk_count INT32 DEFAULT 0
-            )
-        """)
-
-        self.conn.execute("""
-            CREATE NODE TABLE IF NOT EXISTS Chunk (
-                id STRING PRIMARY KEY,
-                doc_id STRING,
-                text STRING,
-                chunk_index INT32 DEFAULT 0,
-                created_at INT64 DEFAULT 0,
-                embedding FLOAT[768]
-            )
-        """)
-
-        edge_defs = [
-            ("MENTIONED_IN", "Entity", "Document"),
-            ("CHUNK_OF", "Chunk", "Document"),
-            ("RELATES_TO", "Entity", "Entity"),
-        ]
-        for edge_name, from_table, to_table in edge_defs:
-            self.conn.execute(f"""
-                CREATE REL TABLE IF NOT EXISTS {edge_name} (
-                    FROM {from_table} TO {to_table},
-                    edge_type STRING DEFAULT '',
-                    weight DOUBLE DEFAULT 1.0,
-                    confidence DOUBLE DEFAULT 0.5,
-                    evidence STRING DEFAULT '',               -- Quoted source text
-                    source_url STRING DEFAULT '',
-                    provenance STRING DEFAULT 'unknown',
-                    extraction_source STRING DEFAULT 'unknown',  -- 'llm', 'nlp', 'deterministic'
-                    valid_from INT64 DEFAULT 0,               -- When this edge became true
-                    valid_until INT64 DEFAULT 0,              -- When it stopped being true (0 = still valid)
-                    created_at INT64 DEFAULT 0,
-                    expired_at INT64 DEFAULT 0
-                )
-            """)
-
-        # --- Create FTS indexes (safe to create at init) ---
-        for table, index_name, cols in [
-            ("Entity", "entity_fts", ["label", "description"]),
-        ]:
-            try:
-                col_list = str(cols).replace("'", '"')
-                self.conn.execute(f"""
-                    CALL CREATE_FTS_INDEX('{table}', '{index_name}', {col_list})
-                """)
-            except Exception:
-                pass  # Index already exists
-
-        # NOTE: HNSW vector indexes are NOT created at init because they
-        # block SET operations on the embedding column. Call rebuild_vector_indexes()
-        # after bulk embedding operations are complete.
+        if read_only:
+            # Plain read connection — does not acquire the writer pidfile lock.
+            self.graph_dir.parent.mkdir(parents=True, exist_ok=True)
+            lb = _import_ladybug()
+            self._db = lb.Database(str(self.graph_dir), read_only=True)
+            self._conn = lb.Connection(self._db)
+        else:
+            # GraphWriter opens read-write, ensures schema, takes the lock.
+            self._writer = GraphWriter(self.graph_dir, self.ontology)
+            self._conn = self._writer._conn  # reads during a write session
 
     # =========================================================================
-    # Incremental writes (single entity/edge at a time)
+    # Writes (delegate to GraphWriter; refuse in read-only mode)
     # =========================================================================
 
-    def add_entity(self, entity_id: str, entity_type: str, label: str,
-                   description: str = "", confidence: float = 0.5,
-                   source_url: str = "", provenance: str = "unknown") -> bool:
-        """Add an entity to the graph. Validates against ontology first."""
-        if not self.ontology.validate_entity_type(entity_type):
-            return False
+    def _require_writer(self) -> GraphWriter:
+        if self._writer is None:
+            raise RuntimeError("Graph opened read_only; writes are not allowed.")
+        return self._writer
 
-        now = int(time.time())
-        self.conn.execute("""
-            MERGE (e:Entity {id: $eid})
-            ON CREATE SET e.entity_type = $etype, e.label = $elabel,
-                e.description = $edesc, e.confidence = $econf,
-                e.source_url = $eurl, e.provenance = $eprov,
-                e.created_at = $enow, e.updated_at = $enow
-            ON MATCH SET e.updated_at = $enow
-        """, parameters={
-            "eid": entity_id, "etype": entity_type, "elabel": label,
-            "edesc": description, "econf": confidence,
-            "eurl": source_url, "eprov": provenance, "enow": now,
-        })
-        return True
+    def add_document(self, doc_id: str, **extras) -> bool:
+        """Register a source document node."""
+        return self._require_writer().add_document(doc_id, **extras)
 
-    def add_edge(self, source_id: str, target_id: str, edge_type: str,
-                 weight: float = 1.0, confidence: float = 0.5,
-                 source_url: str = "", provenance: str = "unknown") -> bool:
-        """Add a typed edge between two entities."""
-        if not self.ontology.validate_edge_type(edge_type):
-            return False
+    def add_entity(self, entity_id: str, entity_type: str, label: str, **extras) -> bool:
+        """Add an entity. GraphWriter validates the type + runs the dedup gate."""
+        return self._require_writer().add_entity(entity_id, entity_type, label, **extras)
 
-        self.conn.execute("""
-            MATCH (a:Entity {id: $src}), (b:Entity {id: $tgt})
-            MERGE (a)-[r:RELATES_TO {edge_type: $etype}]->(b)
-            ON CREATE SET r.weight = $w, r.confidence = $conf,
-                r.source_url = $url, r.provenance = $prov,
-                r.created_at = $now
-        """, parameters={
-            "src": source_id, "tgt": target_id, "etype": edge_type,
-            "w": weight, "conf": confidence,
-            "url": source_url, "prov": provenance, "now": int(time.time()),
-        })
-        return True
+    def add_edge(self, source_id: str, target_id: str, edge_type: str, **extras) -> bool:
+        """Add a typed edge. GraphWriter validates type + grade-locality and
+        enforces the corruption guard (only safe during a fresh bulk build)."""
+        return self._require_writer().add_edge(source_id, target_id, edge_type, **extras)
 
-    def add_document(self, doc_id: str, path: str, title: str = "") -> None:
-        """Register a source document."""
-        self.conn.execute("""
-            MERGE (d:Document {id: $id})
-            ON CREATE SET d.path = $path, d.title = $title,
-                d.ingested_at = $now
-        """, parameters={
-            "id": doc_id, "path": path, "title": title,
-            "now": int(time.time()),
-        })
+    def add_mention(self, entity_id: str, doc_id: str, mention_count: int = 1) -> bool:
+        """Add an entity→document provenance edge (MENTIONED_IN)."""
+        return self._require_writer().add_mention(entity_id, doc_id, mention_count)
 
     # =========================================================================
-    # Bulk writes (Parquet-based, 25x faster than iterative)
+    # Reads (work in both modes via the shared connection)
     # =========================================================================
 
-    def bulk_add_entities(self, entities: list[dict]) -> int:
-        """
-        Bulk-load entities via COPY FROM Parquet.
-        Each dict must have: id, entity_type, label, description, confidence,
-        source_url, provenance, created_at, updated_at.
-        All validated against ontology before loading.
-        Returns count of entities loaded (after validation filtering).
-        """
-        valid = [e for e in entities
-                 if self.ontology.validate_entity_type(e["entity_type"])]
-        rejected = len(entities) - len(valid)
-        if rejected > 0:
-            logger.info("Rejected %d entities (type not in ontology)", rejected)
-
-        if not valid:
-            return 0
-
-        import pandas as pd
-        df = pd.DataFrame(valid)
-
-        # Ensure all required columns exist with defaults
-        defaults = {
-            "description": "", "confidence": 0.5, "source_url": "",
-            "provenance": "unknown", "created_at": int(time.time()),
-            "updated_at": int(time.time()),
-        }
-        for col, default in defaults.items():
-            if col not in df.columns:
-                df[col] = default
-
-        # Select columns in schema order, include embedding as null
-        cols = ["id", "entity_type", "label", "description", "confidence",
-                "source_url", "provenance", "created_at", "updated_at"]
-        df = df[cols]
-
-        # Write via PyArrow to get properly-typed null embedding column
-        import pyarrow as pa
-        import pyarrow.parquet as pq
-
-        # Build arrow table from the DataFrame columns
-        table = pa.Table.from_pandas(df)
-
-        # Add embedding as a fixed-size list of float32, all nulls
-        emb_type = pa.list_(pa.float32(), config.EMBEDDING_DIM)
-        null_embs = pa.nulls(len(df), type=emb_type)
-        table = table.append_column("embedding", null_embs)
-
-        # Add layer column (default 'domain', reserved for semantic layering)
-        layer_col = pa.array(["domain"] * len(df), type=pa.string())
-        table = table.append_column("layer", layer_col)
-
-        with tempfile.NamedTemporaryFile(suffix=".parquet", delete=False) as f:
-            pq.write_table(table, f.name)
-            self.conn.execute(f"COPY Entity FROM '{f.name}'")
-            Path(f.name).unlink()
-
-        return len(valid)
-
-    def bulk_add_edges(self, edges: list[dict]) -> int:
-        """
-        Bulk-load edges via COPY FROM Parquet.
-        Each dict must have: source_id, target_id, edge_type, weight,
-        confidence, source_url, provenance, created_at.
-        All validated against ontology before loading.
-        """
-        valid = [e for e in edges
-                 if self.ontology.validate_edge_type(e["edge_type"])]
-        rejected = len(edges) - len(valid)
-        if rejected > 0:
-            logger.info("Rejected %d edges (type not in ontology)", rejected)
-
-        if not valid:
-            return 0
-
-        # Edges must be inserted via MERGE (COPY FROM for rel tables
-        # requires matching source/target node IDs in specific format).
-        # Batch them but use parameterized MERGE for correctness.
-        now = int(time.time())
-        for e in valid:
-            self.conn.execute("""
-                MATCH (a:Entity {id: $src}), (b:Entity {id: $tgt})
-                MERGE (a)-[r:RELATES_TO {edge_type: $etype}]->(b)
-                ON CREATE SET r.weight = $w, r.confidence = $conf,
-                    r.source_url = $url, r.provenance = $prov,
-                    r.created_at = $now
-            """, parameters={
-                "src": e.get("source_id", ""),
-                "tgt": e.get("target_id", ""),
-                "etype": e["edge_type"],
-                "w": e.get("weight", 1.0),
-                "conf": e.get("confidence", 0.5),
-                "url": e.get("source_url", ""),
-                "prov": e.get("provenance", "unknown"),
-                "now": e.get("created_at", now),
-            })
-
-        return len(valid)
-
-    # =========================================================================
-    # Embedding storage and vector search
-    # =========================================================================
-
-    def set_embedding(self, entity_id: str, embedding: list[float]) -> None:
-        """Store an embedding vector on an entity node."""
-        self.conn.execute("""
-            MATCH (e:Entity {id: $id})
-            SET e.embedding = $emb
-        """, parameters={"id": entity_id, "emb": embedding})
-
-    def rebuild_vector_indexes(self) -> None:
-        """
-        (Re)build HNSW vector indexes. Call after bulk embedding operations.
-        Drops existing indexes first, then recreates.
-        """
-        for table, index_name, col in [
-            ("Entity", "entity_vec", "embedding"),
-        ]:
-            try:
-                self.conn.execute(
-                    f"CALL DROP_VECTOR_INDEX('{table}', '{index_name}')")
-            except Exception:
-                pass
-            try:
-                self.conn.execute(f"""
-                    CALL CREATE_VECTOR_INDEX('{table}', '{index_name}', '{col}',
-                        mu := 30, ml := 60, metric := 'cosine', efc := 200)
-                """)
-            except Exception:
-                pass
-
-    def vector_search(self, query_embedding: list[float],
-                      limit: int = 10) -> list:
-        """Find entities by vector similarity. Uses HNSW index if available, falls back to brute force."""
-        # Try HNSW index first
-        try:
-            result = self.conn.execute("""
-                CALL QUERY_VECTOR_INDEX('Entity', 'entity_vec', $qemb, $limit)
-                RETURN node.id AS id, node.label AS label,
-                       node.entity_type AS type, distance AS score
-            """, parameters={"qemb": query_embedding, "limit": limit})
-            columns = result.get_column_names()
-            rows = []
-            while result.has_next():
-                row = result.get_next()
-                rows.append(dict(zip(columns, row)))
-            if rows:
-                return rows
-        except Exception:
-            pass
-
-        # Fallback: brute-force cosine similarity
-        from .queries import QUERIES
-        return self.query(QUERIES["vector_search"],
-                          parameters={"qemb": query_embedding, "limit": limit})
-
-    # =========================================================================
-    # Queries
-    # =========================================================================
-
-    def query(self, cypher: str, parameters: dict = None) -> list:
-        """Run a Cypher query and return results as list of dicts."""
-        result = self.conn.execute(cypher, parameters=parameters or {})
-        columns = result.get_column_names()
+    def query(self, cypher: str, parameters: dict | None = None) -> list[dict]:
+        """Run a Cypher read query, returning a list of column→value dicts."""
+        result = self._conn.execute(cypher, parameters=parameters or {})
+        cols = result.get_column_names()
         rows = []
         while result.has_next():
-            row = result.get_next()
-            rows.append(dict(zip(columns, row)))
+            rows.append(dict(zip(cols, result.get_next())))
         return rows
 
     def entity_count(self) -> int:
-        from .queries import QUERIES
-        result = self.query(QUERIES["entity_count"])
-        return result[0]["cnt"] if result else 0
+        r = self.query("MATCH (e:Entity) RETURN count(e) AS n")
+        return r[0]["n"] if r else 0
 
     def edge_count(self) -> int:
-        from .queries import QUERIES
-        result = self.query(QUERIES["edge_count"])
-        return result[0]["cnt"] if result else 0
+        r = self.query("MATCH ()-[r:RELATES_TO]->() RETURN count(r) AS n")
+        return r[0]["n"] if r else 0
 
     def document_count(self) -> int:
-        from .queries import QUERIES
-        result = self.query(QUERIES["document_count"])
-        return result[0]["cnt"] if result else 0
+        r = self.query("MATCH (d:Document) RETURN count(d) AS n")
+        return r[0]["n"] if r else 0
 
-    def find_path(self, source_label: str, target_label: str,
-                  max_hops: int = 4) -> list:
-        """Find typed paths between two entities by label."""
-        raw = self.query("""
-            MATCH p = (a:Entity)-[r:RELATES_TO*1..%d]->(b:Entity)
+    def find_path(self, source_label: str, target_label: str, max_hops: int = 4) -> list:
+        """Find typed paths between two entities matched by label substring.
+
+        Returns paths with their node labels, edge types, and a confidence that
+        is the product of edge confidences (lower = more uncertain chain). The
+        max_hops bound is interpolated as an int literal (LadybugDB does not
+        accept a parameter inside the variable-length bound) — never user input.
+        """
+        hops = int(max_hops)
+        raw = self.query(
+            f"""
+            MATCH p = (a:Entity)-[r:RELATES_TO*1..{hops}]->(b:Entity)
             WHERE a.label CONTAINS $src AND b.label CONTAINS $tgt
-            RETURN nodes(p) AS path_nodes,
-                   rels(p) AS path_rels,
-                   length(p) AS hops
+            RETURN nodes(p) AS path_nodes, rels(p) AS path_rels
             LIMIT 5
-        """ % max_hops, parameters={"src": source_label, "tgt": target_label})
-
-        # Post-process into clean format
+            """,
+            {"src": source_label, "tgt": target_label},
+        )
         results = []
         for row in raw:
-            node_labels = [n["label"] for n in row["path_nodes"]]
-            edge_types = [r["edge_type"] for r in row["path_rels"]]
-            path_conf = 1.0
+            labels = [n["label"] for n in row["path_nodes"]]
+            etypes = [r["edge_type"] for r in row["path_rels"]]
+            conf = 1.0
             for r in row["path_rels"]:
-                path_conf *= r.get("confidence", 1.0)
+                conf *= r.get("confidence", 1.0)
             results.append({
-                "node_labels": node_labels,
-                "edge_types": edge_types,
-                "path_confidence": round(path_conf, 4),
+                "node_labels": labels,
+                "edge_types": etypes,
+                "path_confidence": round(conf, 4),
             })
         return sorted(results, key=lambda p: -p["path_confidence"])
 
-    def close(self):
-        if self.conn:
-            self.conn = None
-        if self.db:
-            self.db = None
+    # =========================================================================
+    # Lifecycle
+    # =========================================================================
+
+    def flush(self) -> None:
+        """Flush the write buffer (write mode only). Do NOT call mid-edge-load:
+        a checkpoint between edge writes re-opens the corruption window."""
+        if self._writer is not None:
+            self._writer.flush()
+            self._conn = self._writer._conn  # flush rebinds the connection
+
+    def close(self) -> None:
+        """Release the writer lock (write mode) or the read connection."""
+        if self._writer is not None:
+            self._writer.close()
+            self._writer = None
+        self._conn = None
+        self._db = None
+
+
+def build_graph(records: dict, graph_dir: Path | None = None,
+                ontology: Ontology | None = None) -> dict:
+    """Rebuild the whole graph projection from DuckDB records (reconstruct-and-swap).
+
+    ``records`` is the artifact-contract payload:
+        {
+          "documents": [ {id, ...extras} ],
+          "entities":  [ {id, entity_type, label, ...extras} ],
+          "edges":     [ {source_id, target_id, edge_type, ...extras} ],
+          "mentions":  [ {entity_id, doc_id, mention_count} ],   # optional
+        }
+
+    The graph directory is WIPED and rebuilt: documents + entities first, then
+    every edge in one uninterrupted pass into the freshly-empty RELATES_TO
+    table, then a single checkpoint at close. Because the table starts empty and
+    is never checkpointed mid-load, the LadybugDB edge-corruption window never
+    opens — this is the guard-sanctioned reconstruct-and-swap. We pass
+    ``allow_inplace_edge_writes=True`` because that precondition (single-process
+    bulk load into a freshly emptied table) is exactly satisfied here.
+
+    Returns counts: {documents, entities, edges, mentions}.
+    """
+    graph_dir = Path(graph_dir) if graph_dir else config.GRAPH_DIR
+    ontology = ontology or Ontology()
+
+    # Wipe — the graph is a disposable projection of the DuckDB source of truth.
+    if graph_dir.exists():
+        shutil.rmtree(graph_dir)
+
+    documents = records.get("documents", [])
+    entities = records.get("entities", [])
+    edges = records.get("edges", [])
+    mentions = records.get("mentions", [])
+
+    # allow_inplace_edge_writes=True is SAFE here only: fresh empty table, single
+    # bulk pass, one checkpoint at close (see module + SPEC §2.1).
+    writer = GraphWriter(graph_dir, ontology, allow_inplace_edge_writes=True)
+    counts = {"documents": 0, "entities": 0, "edges": 0, "mentions": 0}
+    try:
+        for d in documents:
+            did = d.pop("id")
+            if writer.add_document(did, **d):
+                counts["documents"] += 1
+
+        for e in entities:
+            eid, etype, label = e.pop("id"), e.pop("entity_type"), e.pop("label")
+            if writer.add_entity(eid, etype, label, **e):
+                counts["entities"] += 1
+
+        # All edges in ONE pass — no flush/checkpoint between them.
+        for ed in edges:
+            src, tgt, etype = ed.pop("source_id"), ed.pop("target_id"), ed.pop("edge_type")
+            if writer.add_edge(src, tgt, etype, **ed):
+                counts["edges"] += 1
+
+        for m in mentions:
+            if writer.add_mention(m["entity_id"], m["doc_id"], m.get("mention_count", 1)):
+                counts["mentions"] += 1
+    finally:
+        writer.close()  # single checkpoint here
+
+    logger.info("Rebuilt graph at %s: %s", graph_dir, counts)
+    return counts
