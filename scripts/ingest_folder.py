@@ -33,11 +33,19 @@ from investigation_graph.graph import build_graph
 from investigation_graph.ontology import Ontology
 from investigation_graph.pipeline import ground_and_resolve
 
-SUPPORTED = (".txt", ".md", ".pdf", ".html")
+from investigation_graph.ocr import IMAGE_SUFFIXES, ocr_image, ocr_pdf
+
+# Text formats + PDFs + image formats (images go through OCR, P0.3).
+SUPPORTED = (".txt", ".md", ".pdf", ".html") + IMAGE_SUFFIXES
+
+# A digital PDF usually yields plenty of text; below this many chars we treat it
+# as effectively scanned and fall back to OCR.
+_SCANNED_PDF_THRESHOLD = 40
 
 
 def read_document(path: Path) -> str:
-    """Read document content. Handles txt, md, html. PDF needs pdftotext."""
+    """Read document text. Handles txt/md/html directly, PDFs via pdftotext (with
+    an OCR fallback for scanned PDFs), and image files via OCR (P0.3)."""
     suffix = path.suffix.lower()
     if suffix in (".txt", ".md"):
         return path.read_text(errors="replace")
@@ -56,19 +64,30 @@ def read_document(path: Path) -> str:
         parser.feed(path.read_text(errors="replace"))
         return " ".join(parser.text)
     if suffix == ".pdf":
+        text = ""
         try:
             import subprocess
             result = subprocess.run(
                 ["pdftotext", str(path), "-"],
                 capture_output=True, text=True, timeout=30,
             )
-            return result.stdout
+            text = result.stdout
         except FileNotFoundError:
             print("  Warning: pdftotext not found. Install: sudo apt install poppler-utils")
-            return ""
         except Exception as e:
             print(f"  Warning: could not read PDF {path.name}: {e}")
-            return ""
+        # Scanned PDF (no/scant text layer) → OCR the rasterized pages.
+        if len((text or "").strip()) < _SCANNED_PDF_THRESHOLD:
+            ocr_text = ocr_pdf(path)
+            if ocr_text.strip():
+                print(f"  (scanned PDF — recovered {len(ocr_text)} chars via OCR)")
+                return ocr_text
+        return text
+    if suffix in IMAGE_SUFFIXES:
+        text = ocr_image(path)
+        if text.strip():
+            print(f"  (image — recovered {len(text)} chars via OCR)")
+        return text
     print(f"  Skipping unsupported format: {path.name}")
     return ""
 
