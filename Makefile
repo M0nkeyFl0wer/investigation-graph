@@ -1,24 +1,28 @@
-.PHONY: test lint smoke check all pre-push
+.PHONY: test eval lint check all pre-push
 
-# Unit + integration tests (mocked Ollama, tmpdir graphs)
+PY := .venv/bin/python
+
+# Unit + integration tests — synthetic Ollama, tmpdir graphs. Fast + deterministic.
 test:
-	source .venv/bin/activate && python -m pytest tests/ -x -q --timeout=30
+	$(PY) -m pytest tests/ -q
 
-# Syntax check all Python files
+# Full-pipeline eval — REAL execution on the bundled sample corpus, with evidence
+# artifacts under eval/evidence/. Uses real Ollama if available; degrades to
+# deterministic + spaCy otherwise. This is the release gate.
+eval:
+	$(PY) -m eval.eval_full_pipeline
+
+# Lint (style + correctness)
 lint:
-	source .venv/bin/activate && python -m py_compile newsroom_graph/*.py scripts/*.py
+	ruff check investigation_graph scripts tests eval
 
-# Full pipeline smoke test (requires Ollama running)
-smoke:
-	source .venv/bin/activate && bash tests/smoke.sh
-
-# Dependency check
+# Dependency / environment check
 check:
-	source .venv/bin/activate && python -m newsroom_graph.check
+	$(PY) -m investigation_graph.check
 
-# Run everything except smoke (no Ollama needed)
+# Fast gate (no real-corpus run): deps + lint + unit/integration tests
 all: check lint test
 
-# Run before pushing
-pre-push: all
-	@echo "All checks passed. Safe to push."
+# Full gate before a push or a public release: fast gate + the real-execution eval
+pre-push: all eval
+	@echo "All checks + full-pipeline eval passed. Safe to push."

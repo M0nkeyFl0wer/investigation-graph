@@ -102,8 +102,10 @@ class ChunkStore:
         read_only: bool = False,
         embedding_dim: int | None = None,
     ):
-        # Default location lives beside the graph database, under data/.
-        self.db_path = Path(db_path) if db_path else (config._PROJECT_ROOT / "data" / "chunks.duckdb")
+        # Default to the configured chunk DB (config.CHUNK_DB) so a throwaway
+        # investigation can redirect it; fall back to the data/ default.
+        self.db_path = Path(db_path) if db_path else getattr(
+            config, "CHUNK_DB", config._PROJECT_ROOT / "data" / "chunks.duckdb")
         self.read_only = read_only
         # Dimension is parameterized (never hardcoded in DDL) so switching the
         # embedding model — e.g. nomic-embed-text (768) to qwen3-embedding (4096)
