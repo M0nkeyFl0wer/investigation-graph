@@ -76,7 +76,6 @@ def ground_and_resolve(
     recs: list[dict] = [{"kind": "chunk", "id": c["id"], "text": c.get("text", "")}
                         for c in chunks]
 
-    ent_by_id = {e["id"]: e for e in entities}
     for e in entities:
         label_norm = _norm(e.get("label", ""))
         # Chunks whose text contains this entity's surface form.
@@ -98,7 +97,11 @@ def ground_and_resolve(
     report = ground(recs, min_edge_overlap=min_edge_overlap)
 
     grounded_entity_ids = {r["id"] for r in report.grounded if r.get("kind") == "entity"}
-    grounded_entities = [ent_by_id[i] for i in grounded_entity_ids if i in ent_by_id]
+    # Preserve INPUT order (not set-iteration order) so entity resolution is
+    # deterministic: the first-seen surface form becomes the canonical node every
+    # run. Iterating the id set directly would let PYTHONHASHSEED decide which
+    # duplicate wins — unacceptable for a tool whose output must be reproducible.
+    grounded_entities = [e for e in entities if e["id"] in grounded_entity_ids]
     grounded_edges = [r["_orig"] for r in report.grounded if r.get("kind") == "edge"]
 
     # ── 2. Entity resolution ──────────────────────────────────────────────
