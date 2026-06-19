@@ -26,6 +26,7 @@ sys.path.insert(0, ".")
 
 from investigation_graph import config
 from investigation_graph.chunk_store import chunk_id_from_uri, get_chunk_store
+from investigation_graph.chunking import chunk_text
 from investigation_graph.embed import embed_batch
 from investigation_graph.extract import Extractor
 from investigation_graph.graph import build_graph
@@ -72,16 +73,8 @@ def read_document(path: Path) -> str:
     return ""
 
 
-def chunk_text(text: str, chunk_size: int = 1000, overlap: int = 200) -> list[str]:
-    """Split text into overlapping chunks for embedding."""
-    if not text.strip():
-        return []
-    chunks = []
-    start = 0
-    while start < len(text):
-        chunks.append(text[start:start + chunk_size])
-        start += chunk_size - overlap
-    return chunks
+# chunk_text now lives in investigation_graph.chunking (shared with extraction so
+# embedded chunks and the LLM's chunks line up — see chunking.py / P0.1).
 
 
 def main():

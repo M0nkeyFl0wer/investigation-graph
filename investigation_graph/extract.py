@@ -13,8 +13,10 @@ import json
 import hashlib
 import time
 import spacy
-from .ontology import Ontology
+
 from . import config
+from .chunking import chunk_text
+from .ontology import Ontology
 
 logger = logging.getLogger(__name__)
 
@@ -50,16 +52,26 @@ class Extractor:
         p2_entities = self._phase2_spacy(text, source_url, now)
         entities.extend(p2_entities)
 
-        # Phase 3: LLM extraction (relationships + type refinement)
-        if config.PRIVACY_MODE == "local":
-            p3 = self._phase3_llm_local(text, source_url, entities, now)
-        elif config.PRIVACY_MODE in ("hybrid", "remote"):
-            p3 = self._phase3_llm_remote(text, source_url, entities, now)
-        else:
-            p3 = {"entities": [], "edges": []}
-
-        entities.extend(p3.get("entities", []))
-        edges.extend(p3.get("edges", []))
+        # Phase 3: LLM extraction (relationships + type refinement) — PER CHUNK.
+        # This used to run on text[:4000] (the first ~4k chars only), so any
+        # relationship past the top of a real document was silently missed. We
+        # now run the LLM over EVERY chunk — the same 1000/200 windows ingestion
+        # embeds — and union the results, so a long filing's later-page
+        # connections are actually extracted. A per-document cap bounds cost on
+        # very large files (raise MAX_LLM_CHUNKS_PER_DOC to cover more).
+        if config.PRIVACY_MODE in ("local", "hybrid", "remote"):
+            chunks = chunk_text(text)
+            cap = getattr(config, "MAX_LLM_CHUNKS_PER_DOC", 40)
+            if len(chunks) > cap:
+                logger.info("Doc has %d chunks; LLM extraction capped at %d.",
+                            len(chunks), cap)
+            extract_fn = (self._phase3_llm_local if config.PRIVACY_MODE == "local"
+                          else self._phase3_llm_remote)
+            for chunk in chunks[:cap]:
+                # Pass entities seen so far so cross-chunk edge endpoints resolve.
+                p3 = extract_fn(chunk, source_url, entities, now)
+                entities.extend(p3.get("entities", []))
+                edges.extend(p3.get("edges", []))
 
         # Deduplicate by ID
         seen_ids = set()
@@ -131,7 +143,13 @@ class Extractor:
 
     def _phase3_llm_local(self, text: str, source_url: str,
                           existing_entities: list, now: int) -> dict:
-        """LLM extraction via local Ollama model."""
+        """LLM extraction via local Ollama model, over ONE chunk of text.
+
+        Called once per chunk by extract_from_text (see P0.1). Each edge carries
+        an ``evidence`` span — the verbatim text that states the relationship —
+        so a connection is auditable (P0.2): the graph can show *why* two entities
+        are linked, not just that they are.
+        """
         import ollama
 
         type_guidance = self.ontology.get_extraction_prompt_context()
@@ -153,12 +171,13 @@ Format:
     {{"label": "...", "type": "...", "description": "..."}}
   ],
   "edges": [
-    {{"source": "entity label", "target": "entity label", "type": "EDGE_TYPE"}}
+    {{"source": "entity label", "target": "entity label", "type": "EDGE_TYPE",
+      "evidence": "short verbatim quote from the text that states this relationship"}}
   ]
 }}
 
 Text to analyze:
-{text[:4000]}"""
+{text}"""
 
         try:
             # Timed client: a cold/saturated Ollama raises on timeout instead of
@@ -202,6 +221,9 @@ Text to analyze:
                     "edge_type": etype,
                     "weight": 1.0,
                     "confidence": 0.6,
+                    # The verbatim span justifying the edge (capped) — the audit
+                    # trail an investigator needs before quoting a connection.
+                    "evidence": (e.get("evidence", "") or "").strip()[:500],
                     "source_url": source_url,
                     "provenance": f"llm_{config.LOCAL_EXTRACTION_MODEL}",
                     "created_at": now,

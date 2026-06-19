@@ -100,6 +100,12 @@ MIN_CONFIDENCE = 0.5
 # Maximum entities per document (safety limit)
 MAX_ENTITIES_PER_DOC = 200
 
+# Phase-3 LLM extraction runs once per chunk so relationships are extracted from
+# the WHOLE document (not just the first ~4k chars). This caps chunks sent to the
+# LLM per document — a runaway-cost guard for very large files. Raise to cover
+# more of a long document at the cost of more LLM calls.
+MAX_LLM_CHUNKS_PER_DOC = 40
+
 # Deduplication threshold (cosine similarity above this = likely duplicate)
 DEDUP_THRESHOLD = 0.92
 
