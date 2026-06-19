@@ -8,6 +8,12 @@ skill to consult before coding.
 
 Legend: `[ ]` todo · `[~]` in progress · `[x]` done
 
+**Done (2026-06-19):** P0.1 (per-chunk extraction), P0.2 (edge evidence), P0.3
+(OCR for scanned PDFs + images), P1.1 (ER semantic/embedding tier + DEDUP_THRESHOLD
+wired), P1.2 (whole-word grounding), P1.3 (merge-review `merges.jsonl`). Plus a
+per-run LLM circuit breaker (graceful degradation). **Next:** P1.4–P1.6 (LadybugDB
+hardening), then P2.1 (visual subsystem).
+
 ---
 
 ## P0 — correctness (silently misleading today)

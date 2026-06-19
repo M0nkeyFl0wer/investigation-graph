@@ -27,9 +27,12 @@ The artifact contract: this stage consumes ``chunks`` / ``entities`` / ``edges``
 the one the manual ingest path already produces.
 """
 import logging
+import re
 
 from kg_common.write.dedup import ResolutionIndex, resolve_or_create_semantic
 from kg_common.write.grounding import ground
+
+from . import config
 
 logger = logging.getLogger(__name__)
 
@@ -40,6 +43,20 @@ def _norm(s: str) -> str:
     return " ".join((s or "").lower().split())
 
 
+def _label_in_text(label_norm: str, text_norm: str) -> bool:
+    """Whole-word containment for grounding (P1.2).
+
+    The label must occur bounded by non-word characters, not as a raw substring —
+    so a short/common label ("city", "the authority") no longer grounds to any
+    chunk that merely contains those letters (e.g. "city" inside "capacity").
+    Labels under 2 chars never ground. This tightens the gate against
+    plausible-but-wrong attribution; it doesn't loosen anything.
+    """
+    if len(label_norm) < 2:
+        return False
+    return re.search(rf"(?<!\w){re.escape(label_norm)}(?!\w)", text_norm) is not None
+
+
 def ground_and_resolve(
     chunks: list[dict],
     entities: list[dict],
@@ -47,6 +64,8 @@ def ground_and_resolve(
     *,
     min_edge_overlap: int = 1,
     fuzzy_threshold: float = 0.92,
+    embeddings: dict | None = None,
+    threshold: float | None = None,
 ) -> tuple[dict, dict]:
     """Run grounding + entity resolution over extracted candidates.
 
@@ -56,14 +75,24 @@ def ground_and_resolve(
         edges:    [{"source_id", "target_id", "edge_type", ...}]
         min_edge_overlap: shared chunks an edge's endpoints must co-occur in.
         fuzzy_threshold:  rapidfuzz merge line for entity resolution.
+        embeddings: optional {entity_id: vector}. When given, the resolver's
+            cosine tier engages (P1.1) — merges aliases that aren't fuzzy-close
+            (e.g. "IBM" / "International Business Machines"). Absent → exact+fuzzy
+            only (no Ollama needed). Vectors must be one model/dimension.
+        threshold: cosine merge line for the embedding tier; defaults to
+            ``config.DEDUP_THRESHOLD``.
 
     Returns:
         (build_records, report)
         - build_records = {"entities": [...], "edges": [...]} — survivors, with
           edges re-pointed to canonical entity ids. Feed straight to
           ``graph.build_graph`` (add the documents/mentions there).
-        - report = grounding + resolution stats (quarantine rates, merge count).
+        - report = grounding + resolution stats, incl. a ``merges`` list of every
+          (kept, merged) pair for human review (P1.3 — a wrong merge fuses two
+          real people, the libel vector, so every merge is recorded).
     """
+    embeddings = embeddings or {}
+    threshold = config.DEDUP_THRESHOLD if threshold is None else threshold
     # ── 1. Grounding ──────────────────────────────────────────────────────
     # Attribute each entity to the chunk(s) whose text contains its label. An
     # entity in no chunk gets no pointer and is quarantined as ungrounded; this
@@ -78,8 +107,8 @@ def ground_and_resolve(
 
     for e in entities:
         label_norm = _norm(e.get("label", ""))
-        # Chunks whose text contains this entity's surface form.
-        src_chunks = [cid for cid, t in norm_chunks.items() if label_norm and label_norm in t]
+        # Chunks where this entity's surface form occurs as a whole word (P1.2).
+        src_chunks = [cid for cid, t in norm_chunks.items() if _label_in_text(label_norm, t)]
         rec = {"kind": "entity", "id": e["id"], "name": e.get("label", "")}
         if src_chunks:
             rec["source_chunk_id"] = src_chunks  # ground() accepts a list
@@ -111,17 +140,30 @@ def ground_and_resolve(
     index = ResolutionIndex()
     id_map: dict[str, str] = {}
     canonical: dict[str, dict] = {}
-    merges = 0
+    merge_records: list[dict] = []
     for e in grounded_entities:
         canon = resolve_or_create_semantic(
             e["id"], e.get("label", ""), e.get("entity_type", ""),
-            index, fuzzy_threshold=fuzzy_threshold,
+            index,
+            embedding=embeddings.get(e["id"]),   # engages the cosine tier (P1.1)
+            threshold=threshold,
+            fuzzy_threshold=fuzzy_threshold,
         )
         id_map[e["id"]] = canon
         if canon == e["id"]:
             canonical[canon] = e          # first sighting — keep it
         else:
-            merges += 1                   # duplicate folds into the canonical
+            # Duplicate folds into the canonical. Record the pair for human
+            # review (P1.3): a wrong merge fuses two real entities.
+            kept = canonical.get(canon, {})
+            merge_records.append({
+                "kept_id": canon,
+                "kept_label": kept.get("label", ""),
+                "merged_id": e["id"],
+                "merged_label": e.get("label", ""),
+                "entity_type": e.get("entity_type", ""),
+                "via_embedding": e["id"] in embeddings,
+            })
 
     # Re-point edges to canonical ids; drop self-loops created by a merge.
     resolved_edges = []
@@ -140,10 +182,11 @@ def ground_and_resolve(
         "edges_grounded": len(grounded_edges),
         "entities_quarantined": len(report.ungrounded_entities),
         "edges_quarantined": len(report.unsupported_edges),
-        "entities_merged": merges,
+        "entities_merged": len(merge_records),
         "entities_out": len(canonical),
         "edges_out": len(resolved_edges),
         "quarantine_rate": report.quarantine_rate(),
+        "merges": merge_records,   # (kept, merged) pairs for review (P1.3)
     }
     logger.info("ground+resolve: %s", report_dict)
 

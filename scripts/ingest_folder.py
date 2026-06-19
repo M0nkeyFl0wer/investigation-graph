@@ -173,7 +173,15 @@ def main():
         all_edges = store.all_edges()
         print(f"\nGrounding {len(all_entities)} entities / {len(all_edges)} edges "
               f"against {len(all_chunks)} chunks...")
-        build_records, report = ground_and_resolve(all_chunks, all_entities, all_edges)
+        # Entity embeddings engage the resolver's semantic tier (P1.1) so aliases
+        # that aren't fuzzy-close still merge. Graceful: if Ollama is unavailable,
+        # embed_batch returns Nones → empty map → ER falls back to exact+fuzzy.
+        ent_vecs = embed_batch([f"{e.get('label', '')}: {e.get('description', '')}"
+                                for e in all_entities])
+        entity_embeddings = {e["id"]: v for e, v in zip(all_entities, ent_vecs)
+                             if v is not None}
+        build_records, report = ground_and_resolve(
+            all_chunks, all_entities, all_edges, embeddings=entity_embeddings)
 
         # Mentions (entity → its source document) before stripping doc_id.
         mentions = [{"entity_id": e["id"], "doc_id": e["doc_id"]}
@@ -200,6 +208,18 @@ def main():
         print(f"  Chunks in DuckDB:     {store.chunk_count()}")
         print(f"  Entities (graph):     {counts['entities']}  "
               f"(merged {report['entities_merged']} duplicates)")
+        # Merge-review artifact (P1.3): every (kept, merged) pair, so a human can
+        # confirm fused identities before trusting them — a wrong merge fuses two
+        # real entities (the libel vector). Lands beside the investigation data.
+        merges = report.get("merges", [])
+        if merges:
+            import json
+            review_path = Path(config.GRAPH_DIR).parent / "merges.jsonl"
+            review_path.parent.mkdir(parents=True, exist_ok=True)
+            with review_path.open("w", encoding="utf-8") as fh:
+                for m in merges:
+                    fh.write(json.dumps(m) + "\n")
+            print(f"    ↳ review {len(merges)} merge(s): {review_path}")
         print(f"  Edges (graph):        {counts['edges']}")
         print(f"  Quarantined:          {report['entities_quarantined']} entities "
               f"({qr['entities']:.0%}), {report['edges_quarantined']} edges "
