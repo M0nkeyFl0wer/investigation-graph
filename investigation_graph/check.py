@@ -1,8 +1,12 @@
 """Quick system check — verifies all dependencies are available."""
+# ruff: noqa: F401
 
 
 def run():
+    from . import config
     checks = []
+
+    # Core dependencies
     try:
         import real_ladybug
         checks.append(f"  LadybugDB: {real_ladybug.__version__}")
@@ -38,19 +42,40 @@ def run():
     except ImportError:
         checks.append("  Ripser: not installed (optional, pip install ripser)")
 
+    # DuckDB — the base of the hybrid (chunks + embeddings + FTS). Required.
+    try:
+        import duckdb
+        checks.append(f"  DuckDB: {duckdb.__version__}")
+    except ImportError:
+        checks.append("  DuckDB: NOT INSTALLED (pip install duckdb)")
+
+    # kg-common — the shared substrate (GraphWriter, Ontology, ER, grounding).
+    try:
+        import kg_common
+        ver = getattr(kg_common, "__version__", "OK")
+        checks.append(f"  kg-common: {ver}")
+    except ImportError:
+        checks.append("  kg-common: NOT INSTALLED "
+                      '(pip install -e "../kg-common[ladybug,ollama,dedup,measure]")')
+
+    # Embedding model
     try:
         import ollama
         models = ollama.list()
         model_names = [m.model for m in models.models] if hasattr(models, "models") else []
-        checks.append(f"  Ollama: OK ({len(model_names)} models)")
-        if any("nomic-embed-text" in m for m in model_names):
-            checks.append("  Embedding model: nomic-embed-text OK")
+        checks.append(f"\n  Ollama: OK ({len(model_names)} models)")
+
+        # Check configured embedding model
+        emb_model = config.EMBEDDING_MODEL
+        if any(emb_model in m for m in model_names):
+            checks.append(f"  Embedding model ({emb_model}, {config.EMBEDDING_DIM}d): OK")
         else:
-            checks.append("  Embedding model: MISSING (ollama pull nomic-embed-text)")
+            checks.append(f"  Embedding model: MISSING ({emb_model})")
+            checks.append(f"    Run: ollama pull {emb_model}")
     except Exception:
         checks.append("  Ollama: NOT RUNNING (install from ollama.com, then: ollama serve)")
 
-    print("open-newsroom-graph system check")
+    print("investigation-graph system check")
     print("=" * 40)
     for c in checks:
         print(c)

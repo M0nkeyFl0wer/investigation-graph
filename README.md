@@ -1,6 +1,6 @@
-# open-newsroom-graph
+# investigation-graph
 
-A privacy-first knowledge graph toolkit for investigative journalists. Ingest documents, extract entities and relationships, build a searchable graph, and find structural gaps that suggest leads. Runs entirely on your laptop.
+A privacy-first knowledge graph toolkit for **investigative journalists, OSINT investigators, and researchers**. Ingest documents, extract entities and relationships, build a searchable graph, and find structural gaps that suggest leads. Runs entirely on your laptop.
 
 **No cloud required. No accounts. No data leaves your machine.**
 
@@ -8,7 +8,7 @@ A privacy-first knowledge graph toolkit for investigative journalists. Ingest do
 <a href="https://networkx.org"><img src="https://networkx.org/documentation/stable/_static/networkx_logo.svg" alt="NetworkX" height="50"></a>&nbsp;&nbsp;&nbsp;
 <a href="https://ollama.com"><img src="https://ollama.com/public/ollama.png" alt="Ollama" height="50"></a>
 
-> **Research context:** Inspired by [*An Alternative Trajectory for Generative AI*](https://arxiv.org/abs/2603.14147) (Belova et al., Princeton, 2026), which proposes domain-specific superintelligence built on knowledge graphs and formal logic rather than monolithic LLMs. This toolkit applies that vision to investigative journalism: a local, specialized knowledge graph where every entity traces back to a source document, every connection is typed and auditable, and structural gaps — found through topology, not AI guessing — become investigative leads. *"Intelligence arises from manipulating relational symbolic structures, abstracting away low-level sensory details."*
+> **Research context:** Inspired by [*An Alternative Trajectory for Generative AI*](https://arxiv.org/abs/2603.14147) (Belova et al., Princeton, 2026), which proposes domain-specific superintelligence built on knowledge graphs and formal logic rather than monolithic LLMs. This toolkit applies that vision to investigative work — journalism, OSINT, and research: a local, specialized knowledge graph where every entity traces back to a source document, every connection is typed and auditable, and structural gaps — found through topology, not AI guessing — become investigative leads. *"Intelligence arises from manipulating relational symbolic structures, abstracting away low-level sensory details."*
 
 ## What This Does
 
@@ -36,31 +36,35 @@ This toolkit:
 
 ```bash
 # Clone the repo
-git clone https://github.com/M0nkeyFl0wer/open-newsroom-graph.git
-cd open-newsroom-graph
+git clone https://github.com/M0nkeyFl0wer/investigation-graph.git
+cd investigation-graph
 
-# Run setup (installs Python packages + downloads local AI models)
+# Run setup (installs Python packages — including the kg-common substrate — and
+# downloads the local AI models)
 bash setup.sh
 
 # Verify everything works
-python -m newsroom_graph.check
+python -m investigation_graph.check
 ```
 
 You should see:
 
 ```
-open-newsroom-graph system check
+investigation-graph system check
 ========================================
   LadybugDB: 0.15.3
   PyArrow: 23.0.1
   spaCy: 3.8.14
   spaCy model: en_core_web_sm OK
   NetworkX: 3.6.1
-  Ripser: not installed (optional, pip install ripser)
-  Ollama: OK (2 models)
-  Embedding model: nomic-embed-text OK
+  Ripser: OK
+  DuckDB: 1.5.4
+  kg-common: 0.0.1
 
-Ontology: Ontology(8 entity types, 14 edge types)
+  Ollama: OK (5 models)
+  Embedding model (nomic-embed-text, 768d): OK
+
+Ontology: Ontology(8 entity types, 12 edge types)
   All checks passed.
 ```
 
@@ -68,43 +72,55 @@ If anything says NOT INSTALLED or MISSING, the check tells you exactly what to r
 
 ### Ingest Your First Documents
 
-```bash
-# Drop documents into the ingest folder
-cp /path/to/your/documents/*.pdf ingest/
-cp /path/to/your/documents/*.txt ingest/
+Try the bundled sample investigation first (a small fictional Harbor City graft
+case — the one this README's examples walk through):
 
-# Run ingestion
+```bash
+mkdir -p ingest
+cp examples/sample-investigation/* ingest/
+python scripts/ingest_folder.py
+```
+
+Then swap in your own documents:
+
+```bash
+# Drop documents into the ingest folder (PDF, text, markdown, HTML)
+cp /path/to/your/documents/* ingest/
+
+# Re-run ingestion (idempotent — re-processes each document cleanly)
 python scripts/ingest_folder.py
 ```
 
 Output looks like:
 
 ```
-Found 3 documents to ingest.
+Scope: Ontology(8 entity types, 12 edge types)
+Corpus: 3 document(s) in ingest/  →  DuckDB chunks.duckdb
 
 [1/3] harbor-city-expose.txt
-  Extracted: 27 entities, 13 edges
-  Embedded: 2 chunks
+  2 chunks (2 embedded), 24 entities, 6 edges → DuckDB
 [2/3] property-records.md
-  Extracted: 21 entities, 8 edges
-  Embedded: 2 chunks
+  2 chunks (2 embedded), 20 entities, 4 edges → DuckDB
 [3/3] financial-disclosure.html
-  Extracted: 32 entities, 8 edges
-  Embedded: 2 chunks
+  2 chunks (2 embedded), 30 entities, 5 edges → DuckDB
 
-Bulk loading 80 entities...
-  Loaded: 80
-Computing entity embeddings...
-Loading 29 edges...
-  Loaded: 29
+Grounding 74 entities / 15 edges against 6 chunks...
 
-==================================================
-Ingestion complete in 99.3s.
-  Documents processed: 3
-  Total entities:      80
-  Total edges:         28
-  Total documents:     3
+========================================================
+Ingestion complete in 61.4s.
+  Documents:            3
+  Chunks in DuckDB:     6
+  Entities (graph):     41  (merged 12 duplicates)
+  Edges (graph):        9
+  Quarantined:          21 entities (28%), 6 edges (40%) — failed the grounding gate
 ```
+
+Each document is chunked and embedded into DuckDB, then extracted; the **ground**
+stage drops entities/edges that aren't supported by the source text and merges
+duplicate names before the graph is built. The "Quarantined" line is the gate
+doing its job — extracted claims that didn't survive verification never enter the
+graph. (Edge counts come from the local LLM; with Ollama unavailable you'll still
+get the deterministic + spaCy entities and a keyword-searchable corpus.)
 
 ### Search the Graph
 
@@ -222,7 +238,7 @@ Shows how well your ontology matches reality:
 
 ### 1. Ontology — What matters
 
-Edit `ONTOLOGY.md` to define entity types and relationship types for your beat. Ships with a general investigative journalism ontology covering 8 entity types and 14 edge types.
+Edit `ONTOLOGY.md` to define entity types and relationship types for your beat or case. Ships with a general investigative ontology (journalism / OSINT / research) covering 8 entity types and 12 edge types.
 
 The system **rejects entities that don't match your ontology** at write time — no junk accumulates. Rejections are counted and reported, so you know when to expand the ontology.
 
@@ -240,7 +256,7 @@ The exotypical examples prevent the most common extraction error: everything get
 
 Documents are chunked (1000 characters with 200-character overlap) and converted to 768-dimensional vectors using a local AI model (Ollama + nomic-embed-text). These power semantic search — finding documents by meaning, not just keywords.
 
-Embeddings are stored directly in the graph database as `FLOAT[768]` columns. No separate vector database. One database for everything.
+Chunks, embeddings, and full-text (BM25) search live in **DuckDB** (a single file, `data/chunks.duckdb`) — the base of the hybrid. The entity/edge **graph** lives in LadybugDB and is rebuilt from those records. See [`docs/database-choice.md`](docs/database-choice.md) for why the two-part store, and `SPEC.md` for the architecture. If Ollama is unavailable, ingestion still completes — chunks are stored unembedded (keyword search keeps working) and semantic search simply skips them.
 
 ### 3. Extraction — Three-phase entity extraction
 
@@ -350,7 +366,7 @@ Everything runs on your machine. No network connections. No API keys. No account
 Embeddings stay local. Entity extraction can optionally use a remote LLM with zero-data-retention (ZDR) for non-sensitive documents. Better extraction quality on complex documents.
 
 ```python
-# In newsroom_graph/config.py
+# In investigation_graph/config.py
 PRIVACY_MODE = "hybrid"
 REMOTE_API_BASE = "https://api.anthropic.com/v1"
 REMOTE_MODEL = "claude-haiku-4-5-20251001"
@@ -369,7 +385,7 @@ See `docs/privacy-guide.md` for detailed comparison and provider recommendations
 
 ### Ethics: Identity Ambiguity and Source Protection
 
-Two risks that automated extraction creates for investigative journalists:
+Two risks that automated extraction creates for anyone publishing findings — journalists, OSINT investigators, and researchers alike:
 
 **Identity ambiguity.** The pipeline will extract "John Smith", "J. Smith", and "John S. Smith" as three separate entities. It may also split "BP US" and "British Petroleum" into different organizations. Before publishing any finding based on graph connections, **manually verify that linked entities are actually the same person or organization.** Misattributing connections in an automated graph can falsely accuse individuals. The deduplication threshold in `config.py` (`DEDUP_THRESHOLD = 0.92`) catches some duplicates via embedding similarity, but it is not sufficient for names that are similar but refer to different people.
 
@@ -385,7 +401,7 @@ Two risks that automated extraction creates for investigative journalists:
 
 ## Configuration
 
-All configuration lives in `newsroom_graph/config.py`:
+All configuration lives in `investigation_graph/config.py`:
 
 ### Paths
 
@@ -485,8 +501,10 @@ All open source. All installable with pip (except Ollama).
 
 | Tool | Version | Purpose | Why this one |
 |------|---------|---------|-------------|
-| [LadybugDB](https://ladybugdb.com) | 0.15.3 | Graph database + vector storage | Embedded columnar graph DB. Cypher queries. Native `FLOAT[768]` vector columns with `array_cosine_similarity`. No server. One directory = one investigation. Continuation of KuzuDB. |
-| [PyArrow](https://arrow.apache.org) | 23.0+ | Bulk data loading | LadybugDB's `COPY FROM` Parquet is 25x faster than iterative inserts. PyArrow writes the Parquet files. |
+| [DuckDB](https://duckdb.org) | 1.0+ | Chunks + embeddings + FTS (the base) | Single-file columnar DB. BM25 full-text + HNSW vector search fused with RRF. Source of truth for chunk text, embeddings, and the record set. |
+| [LadybugDB](https://ladybugdb.com) | 0.15.3 | Graph database (the projection) | Embedded graph DB, Cypher queries, typed edges. Rebuilt from the DuckDB records each ingest. No server. Continuation of KuzuDB. |
+| [kg-common](https://github.com/M0nkeyFl0wer/kg-common) | pinned | Shared KG substrate | GraphWriter (edge-corruption guard), the Ontology contract (grade-locality), entity resolution, and the grounding gate — imported, not reinvented. |
+| [PyArrow](https://arrow.apache.org) | 15.0+ | Bulk data loading | `COPY FROM` Parquet is far faster than row-by-row inserts; PyArrow writes the Parquet files for both DuckDB and LadybugDB. |
 | [Pandas](https://pandas.pydata.org) | 3.0+ | Data manipulation | DataFrame operations for bulk entity preparation before Parquet export. |
 | [spaCy](https://spacy.io) | 3.8+ | NLP extraction (Phase 2) | Named entity recognition. `en_core_web_sm` model — small, fast, good enough for people/orgs/locations. |
 | [NetworkX](https://networkx.org) | 3.6+ | Graph analysis | Louvain communities, betweenness centrality, bridge detection, connected components. Runs on the extracted graph. |
@@ -494,13 +512,14 @@ All open source. All installable with pip (except Ollama).
 | [Ollama](https://ollama.com) | 0.3+ | Local AI models | Runs embedding + extraction models on your hardware. No API keys. No cloud. |
 | [Obsidian](https://obsidian.md) | any | Reading/writing (optional) | If configured, daily briefings auto-copy to your Obsidian vault inbox. |
 
-### Why LadybugDB instead of Neo4j/SQLite/etc?
+### Why DuckDB + LadybugDB (and no choice to make)?
 
-- **Embedded**: No server process. The database is a directory on disk. Copy it, back it up, encrypt it.
-- **Cypher**: Industry-standard graph query language. Transferable knowledge.
-- **Native vectors**: `FLOAT[768]` columns with `array_cosine_similarity` — no separate vector database needed.
-- **Bulk loading**: `COPY FROM` Parquet files is 25x faster than row-by-row inserts. Matters when ingesting 200+ documents.
-- **Single database**: Graph + vectors + metadata in one place. One directory = one investigation.
+You don't pick a database — it's always this hybrid, so there's nothing to misconfigure:
+
+- **DuckDB does retrieval**: BM25 full-text + HNSW vector search out of the box, fused with Reciprocal Rank Fusion. One file, no server, easy to back up.
+- **LadybugDB does structure**: a real graph DB (Cypher, typed edges) for the investigative payoff — paths, gaps, bridges, communities.
+- **The graph is a rebuilt projection** of the DuckDB records, not an incrementally-mutated store. This sidesteps a LadybugDB edge-write corruption mode and keeps re-ingestion safe (see `SPEC.md` §2.1).
+- **Embedded**: both are files/dirs under `data/` — copy, back up, or encrypt the whole investigation as a unit.
 
 ### Why not a cloud graph database?
 
@@ -514,7 +533,7 @@ Your investigation data — leaked documents, source identities, financial recor
 ONTOLOGY.md                    ← You edit this
     │
     ▼
-newsroom_graph/ontology.py     ← Parses types, validates at write time
+investigation_graph/ontology.py     ← Parses types, validates at write time
     │
     ▼
 ingest/ ──► extract.py         ← Three-phase extraction
@@ -553,7 +572,7 @@ ingest/ ──► extract.py         ← Three-phase extraction
 
 ### Query safety
 
-**All Cypher queries are pre-built and parameterized** in `newsroom_graph/queries.py`. No dynamic Cypher generation anywhere in the codebase. This means:
+**All Cypher queries are pre-built and parameterized** in `investigation_graph/queries.py`. No dynamic Cypher generation anywhere in the codebase. This means:
 
 - No query injection
 - No LLM hallucinating Cypher syntax
@@ -561,47 +580,33 @@ ingest/ ──► extract.py         ← Three-phase extraction
 
 ### Database schema
 
+**DuckDB (`data/chunks.duckdb`) — the source of truth.**
+
 ```
-Entity (Node Table)
-├── id: STRING (primary key, SHA256 hash)
-├── entity_type: STRING (validated against ONTOLOGY.md)
-├── label: STRING
-├── description: STRING
-├── confidence: DOUBLE (0.0-1.0)
-├── source_url: STRING (which document)
-├── provenance: STRING (which extraction phase)
-├── created_at: INT64 (unix timestamp)
-├── updated_at: INT64
-├── embedding: FLOAT[768] (nomic-embed-text vector)
-└── layer: STRING (reserved for future semantic layering)
-
-Document (Node Table)
-├── id: STRING (primary key)
-├── path: STRING
-├── title: STRING
-├── ingested_at: INT64
-└── chunk_count: INT32
-
-Chunk (Node Table)
-├── id: STRING (primary key)
-├── doc_id: STRING
-├── text: STRING
-├── chunk_index: INT32
-├── created_at: INT64
-└── embedding: FLOAT[768]
-
-RELATES_TO (Edge Table: Entity → Entity)
-├── edge_type: STRING (EMPLOYED_BY, FUNDED_BY, etc.)
-├── weight: DOUBLE
-├── confidence: DOUBLE
-├── source_url: STRING
-├── provenance: STRING
-├── created_at: INT64
-└── expired_at: INT64 (reserved for future soft-expiry)
-
-MENTIONED_IN (Edge Table: Entity → Document)
-CHUNK_OF (Edge Table: Chunk → Document)
+chunk        id, doc_id, source_uri, title, body, chunk_index,
+             entity_ids, embedding FLOAT[N], sensitivity, embedded_at   (+ BM25 FTS index)
+document     id, path, title, ingested_at        ← the full record set, so the
+entity       id, doc_id, entity_type, label, ...   graph can be rebuilt from here
+edge         doc_id, source_id, target_id, edge_type, evidence, ...
 ```
+
+**LadybugDB (`data/graph.lbug`) — the rebuilt projection.** Schema comes from
+the kg-common `Ontology` (so it stays consistent with the writer's validation):
+
+```
+Entity (Node)      id (PK), entity_type, label, description, confidence,
+                   source_url, provenance, extraction_source, quality_flag, ...
+Document (Node)    id (PK), path, title, ingested_at
+RELATES_TO (Edge)  edge_type, weight, confidence, evidence, provenance,
+                   valid_at_ms, invalid_at_ms, expired_at_ms   (bi-temporal trio)
+MENTIONED_IN (Edge: Entity → Document)
+CHUNK_OF (Edge: Chunk → Document)
+```
+
+Entities carry no embedding column — semantic search runs over the DuckDB
+chunks, not over graph nodes (one embedding model, one place). Edge writes go
+through kg-common's corruption-guarded `GraphWriter`; the graph is rebuilt in a
+single reconstruct-and-swap pass per ingest.
 
 ### Integration with AI assistants (MCP / Claude Code)
 
@@ -621,7 +626,7 @@ In practice: expose `search_cli.py` and `run_analysis.py` as tools with short de
 
 ```bash
 mkdir my-investigation && cd my-investigation
-cp -r /path/to/open-newsroom-graph/* .
+cp -r /path/to/investigation-graph/* .
 bash setup.sh
 # Edit ONTOLOGY.md for your beat
 mkdir ingest && cp /path/to/documents/* ingest/
@@ -665,8 +670,8 @@ When your graph has thousands of edges, direct visualization is unusable — a "
 
 ```python
 # In a Python script or REPL
-from newsroom_graph.graph import Graph
-from newsroom_graph.topology import export_skeleton_json
+from investigation_graph.graph import Graph
+from investigation_graph.topology import export_skeleton_json
 import json
 
 graph = Graph()
@@ -751,7 +756,7 @@ python -m spacy download en_core_web_sm
 
 ### "LLM extraction failed: model not found"
 
-The configured model isn't pulled in Ollama. Check `newsroom_graph/config.py` for `LOCAL_EXTRACTION_MODEL` and pull it:
+The configured model isn't pulled in Ollama. Check `investigation_graph/config.py` for `LOCAL_EXTRACTION_MODEL` and pull it:
 
 ```bash
 ollama pull llama3.2:3b
@@ -787,13 +792,13 @@ brew install poppler
 ## File Reference
 
 ```
-open-newsroom-graph/
+investigation-graph/
 ├── ONTOLOGY.md                    # Entity and edge type definitions (you edit this)
 ├── README.md                      # This file
 ├── LICENSE                        # MIT
 ├── requirements.txt               # Python dependencies
 ├── setup.sh                       # One-command setup script
-├── newsroom_graph/
+├── investigation_graph/
 │   ├── __init__.py                # Package init (version 0.1.0)
 │   ├── config.py                  # All configuration (paths, models, thresholds)
 │   ├── ontology.py                # ONTOLOGY.md parser + write-time validator
@@ -821,7 +826,7 @@ open-newsroom-graph/
 
 ## Contributing
 
-Issues and PRs welcome. Keep it simple — this is a tool for journalists, not a framework for developers.
+Issues and PRs welcome. Keep it simple — this is a tool for investigators and researchers, not a framework for developers.
 
 ## License
 
@@ -829,4 +834,4 @@ MIT
 
 ## Contact
 
-Built by [Ben West](https://benwest.blog). Reach out at [benwest.bsky.social](https://bsky.app/profile/benwest.bsky.social) if you want help setting it up for your newsroom.
+Built by [Ben West](https://benwest.blog). Reach out at [benwest.bsky.social](https://bsky.app/profile/benwest.bsky.social) if you want help setting it up for your newsroom, team, or investigation.

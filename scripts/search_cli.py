@@ -1,167 +1,136 @@
 #!/usr/bin/env python3
-"""Search the knowledge graph from the command line."""
+"""
+Search the investigation.
+
+Two surfaces, matching the hybrid architecture:
+  - CONTENT search runs over DuckDB chunks (BM25 + vector + RRF) — this is how
+    you find passages by keyword or meaning. Modes: hybrid (default), fts,
+    semantic.
+  - GRAPH lookups run over the read-only LadybugDB graph:
+      --path FROM TO   typed relationship chains between two entities
+      --entity NAME    find an entity node by name
+
+Both open read-only handles, so search never collides with an ingest/build.
+"""
 import argparse
 import sys
 
 sys.path.insert(0, ".")
 
-from newsroom_graph.graph import Graph
-from newsroom_graph.queries import QUERIES
+from investigation_graph import config
+from investigation_graph.chunk_store import ChunkStore
 
 
-def search_keyword(graph, query, entity_type, limit):
-    """Keyword search via Cypher CONTAINS."""
-    if entity_type:
-        return graph.query(QUERIES["entity_by_label_and_type"],
-                           parameters={"query": query, "etype": entity_type,
-                                       "limit": limit})
-    return graph.query(QUERIES["entity_by_label"],
-                       parameters={"query": query, "limit": limit})
+def _embed(query: str) -> list[float]:
+    """Embed the query for vector/hybrid search (local Ollama)."""
+    from investigation_graph.embed import embed_text
+    return embed_text(query)
 
 
-def search_semantic(graph, query, limit):
-    """Semantic search via embedding similarity."""
-    from newsroom_graph.embed import embed_text
-    query_embedding = embed_text(query)
-    return graph.vector_search(query_embedding, limit=limit)
-
-
-def search_hybrid(graph, query, entity_type, limit):
-    """
-    Merge keyword and semantic results via Reciprocal Rank Fusion (RRF).
-    RRF scores by position (1/(k + rank)) rather than raw scores, making it
-    domain-agnostic — no per-investigation weight tuning needed.
-    """
-    RRF_K = 60  # standard RRF constant
-
-    keyword_results = search_keyword(graph, query, entity_type, limit * 2)
-    semantic_results = search_semantic(graph, query, limit * 2)
-
-    # Assign RRF scores by rank position in each list
-    rrf_scores = {}  # entity_id → cumulative RRF score
-    entity_data = {}  # entity_id → entity dict
-    match_sources = {}  # entity_id → set of sources
-
-    for rank, r in enumerate(keyword_results, start=1):
-        eid = r["id"]
-        rrf_scores[eid] = rrf_scores.get(eid, 0) + 1.0 / (RRF_K + rank)
-        entity_data[eid] = r
-        match_sources.setdefault(eid, set()).add("keyword")
-
-    for rank, r in enumerate(semantic_results, start=1):
-        eid = r["id"]
-        rrf_scores[eid] = rrf_scores.get(eid, 0) + 1.0 / (RRF_K + rank)
-        if eid not in entity_data:
-            entity_data[eid] = r
-        match_sources.setdefault(eid, set()).add("semantic")
-
-    # Build results sorted by RRF score
-    results = []
-    for eid in sorted(rrf_scores, key=lambda x: -rrf_scores[x]):
-        sources = match_sources[eid]
-        match = "both" if len(sources) > 1 else sources.pop()
-        results.append({
-            **entity_data[eid],
-            "match": match,
-            "score": round(rrf_scores[eid], 4),
-        })
-
-    return results[:limit]
-
-
-def display_results(results, mode):
-    """Pretty-print search results."""
+def display_chunks(results: list[dict], mode: str) -> None:
     if not results:
-        print("No results found.")
+        print("No matching passages found.")
         return
-
-    print(f"Found {len(results)} entities:\n")
+    print(f"Found {len(results)} passage(s):\n")
     for r in results:
-        label = r.get("label", "")
-        etype = r.get("type", "")
-        source = r.get("source", r.get("source_url", "")) or "—"
-
-        if mode == "semantic":
-            score = r.get("score", 0)
-            print(f"  [{etype:15}] {label}")
-            print(f"                    similarity: {score:.3f} | source: {source}")
-        elif mode == "hybrid":
-            score = r.get("score", 0)
-            match = r.get("match", "")
-            print(f"  [{etype:15}] {label}")
-            print(f"                    score: {score:.3f} ({match}) | source: {source}")
-        else:
-            conf = r.get("confidence", 0)
-            print(f"  [{etype:15}] {label}")
-            print(f"                    confidence: {conf:.2f} | source: {source}")
+        title = r.get("title") or r.get("source_uri") or r.get("doc_id") or "—"
+        body = (r.get("body") or "").strip().replace("\n", " ")
+        snippet = (body[:200] + "…") if len(body) > 200 else body
+        score = r.get("rrf_score")
+        score_str = f"  (score {score:.4f})" if isinstance(score, (int, float)) else ""
+        print(f"  • {title}{score_str}")
+        print(f"      {snippet}")
+        print(f"      source: {r.get('source_uri', '—')}")
+        print()
 
 
-def display_paths(paths):
-    """Pretty-print path results."""
+def display_paths(paths: list[dict]) -> None:
     if not paths:
         print("No paths found.")
         return
-
-    print(f"Found {len(paths)} paths:\n")
+    print(f"Found {len(paths)} path(s):\n")
     for i, p in enumerate(paths, 1):
-        labels = p["node_labels"]
-        types = p["edge_types"]
-        conf = p["path_confidence"]
-
+        labels, types = p["node_labels"], p["edge_types"]
         chain = []
         for j, label in enumerate(labels):
             chain.append(label)
             if j < len(types):
                 chain.append(f" --[{types[j]}]--> ")
+        print(f"  Path {i} (confidence: {p['path_confidence']:.2f}):")
+        print(f"    {''.join(chain)}\n")
 
-        print(f"  Path {i} (confidence: {conf:.2f}):")
-        print(f"    {''.join(chain)}")
-        print()
+
+def display_entities(rows: list[dict]) -> None:
+    if not rows:
+        print("No entities found.")
+        return
+    print(f"Found {len(rows)} entit(y/ies):\n")
+    for r in rows:
+        print(f"  [{r.get('entity_type', ''):14}] {r.get('label', '')}  "
+              f"(confidence {r.get('confidence', 0):.2f})")
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Search the knowledge graph",
+        description="Search the investigation (content over DuckDB chunks; "
+                    "paths/entities over the graph)",
         epilog="Examples:\n"
-               "  %(prog)s -q 'Robert Chen'\n"
-               "  %(prog)s -q 'corruption' --mode semantic\n"
-               "  %(prog)s -q 'financial fraud' --mode hybrid\n"
-               "  %(prog)s --path 'Chen' 'Meridian'\n",
+               "  %(prog)s -q 'payments to contractors'\n"
+               "  %(prog)s -q 'harbor' --mode fts\n"
+               "  %(prog)s --path 'Chen' 'Meridian'\n"
+               "  %(prog)s --entity 'Acme'\n",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    parser.add_argument("--query", "-q", help="Search query")
+    parser.add_argument("--query", "-q", help="Content query (searches passages)")
+    parser.add_argument("--mode", "-m", choices=["hybrid", "fts", "semantic"],
+                        default="hybrid", help="Content search mode (default: hybrid)")
     parser.add_argument("--path", "-p", nargs=2, metavar=("FROM", "TO"),
-                        help="Find paths between two entities")
-    parser.add_argument("--type", "-t", help="Filter by entity type")
-    parser.add_argument("--limit", "-l", type=int, default=10, help="Max results")
-    parser.add_argument("--mode", "-m", choices=["keyword", "semantic", "hybrid"],
-                        default="keyword", help="Search mode (default: keyword)")
+                        help="Find typed paths between two entities (graph)")
+    parser.add_argument("--entity", "-e", help="Find an entity node by name (graph)")
+    parser.add_argument("--limit", "-l", type=int, default=config.DEFAULT_SEARCH_LIMIT,
+                        help="Max results")
     args = parser.parse_args()
 
-    if not args.query and not args.path:
-        parser.error("Provide --query or --path")
+    if not (args.query or args.path or args.entity):
+        parser.error("Provide --query (content), --path (graph), or --entity (graph)")
 
-    graph = Graph()
+    # ── Graph surfaces (read-only; no writer lock) ─────────────────────────
+    if args.path or args.entity:
+        from investigation_graph.graph import Graph
+        graph = Graph(read_only=True)
+        try:
+            if args.path:
+                src, tgt = args.path
+                print(f"Finding paths: {src} → {tgt}\n")
+                display_paths(graph.find_path(src, tgt))
+            if args.entity:
+                rows = graph.query(
+                    "MATCH (e:Entity) WHERE e.label CONTAINS $q "
+                    "RETURN e.id AS id, e.label AS label, e.entity_type AS entity_type, "
+                    "e.confidence AS confidence LIMIT $limit",
+                    {"q": args.entity, "limit": args.limit},
+                )
+                display_entities(rows)
+        finally:
+            graph.close()
+        return
+
+    # ── Content search over DuckDB chunks ──────────────────────────────────
+    store = ChunkStore(read_only=True)
     try:
-        if args.path:
-            source, target = args.path
-            print(f"Finding paths: {source} → {target}\n")
-            paths = graph.find_path(source, target)
-            display_paths(paths)
-            return
-
-        if args.mode == "keyword":
-            results = search_keyword(graph, args.query, args.type, args.limit)
+        if args.mode == "fts":
+            # BM25 only — hydrate the {id, rank} hits for display.
+            hits = store.search_fts(args.query, limit=args.limit)
+            results = [c for c in (store.get_chunk_by_id(h["id"]) for h in hits) if c]
         elif args.mode == "semantic":
-            results = search_semantic(graph, args.query, args.limit)
-        elif args.mode == "hybrid":
-            results = search_hybrid(graph, args.query, args.type, args.limit)
-        else:
-            results = []
-
-        display_results(results, args.mode)
+            # Vector only — hydrate the {id, rank} hits for display.
+            hits = store.search_vector(_embed(args.query), limit=args.limit)
+            results = [c for c in (store.get_chunk_by_id(h["id"]) for h in hits) if c]
+        else:  # hybrid — already hydrated with an rrf_score
+            results = store.search_hybrid(args.query, _embed(args.query), limit=args.limit)
+        display_chunks(results, args.mode)
     finally:
-        graph.close()
+        store.close()
 
 
 if __name__ == "__main__":

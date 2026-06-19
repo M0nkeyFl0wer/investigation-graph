@@ -1,6 +1,11 @@
 """
-Configuration for open-newsroom-graph.
+Configuration for investigation-graph.
 Edit this file to match your setup. Defaults are fully local — no cloud needed.
+
+The store is always the DuckDB(base) + LadybugDB(graph) hybrid (see SPEC.md):
+chunks, embeddings, and full-text search live in DuckDB at data/chunks.duckdb;
+the entity/edge graph lives in LadybugDB at data/graph.lbug. There is no
+substrate to choose — one well-trodden path, so non-experts get a working tool.
 """
 from pathlib import Path
 
@@ -13,9 +18,6 @@ _PROJECT_ROOT = Path(__file__).resolve().parent.parent
 # Where the graph database lives (LadybugDB directory)
 GRAPH_DIR = _PROJECT_ROOT / "data" / "graph.lbug"
 
-# Embedding dimension (nomic-embed-text output)
-EMBEDDING_DIM = 768
-
 # Where documents go for ingestion
 INGEST_DIR = _PROJECT_ROOT / "ingest"
 
@@ -25,6 +27,14 @@ BRIEFING_DIR = _PROJECT_ROOT / "briefings"
 # Optional: path to your Obsidian vault for briefing delivery
 # Leave empty to skip Obsidian integration
 OBSIDIAN_VAULT = ""  # e.g., "~/obsidian-vault/investigations"
+
+# =============================================================================
+# CHUNK STORE (DuckDB — the base of the hybrid)
+# =============================================================================
+
+# Chunks, embeddings, and BM25 full-text search live here. Single file, easy to
+# back up (plain copy). Path is fixed; there is no substrate choice.
+CHUNK_DB = _PROJECT_ROOT / "data" / "chunks.duckdb"
 
 # =============================================================================
 # PRIVACY MODE
@@ -46,12 +56,28 @@ PRIVACY_MODE = "local"
 # LOCAL MODELS (used in "local" and "hybrid" modes)
 # =============================================================================
 
-# Embedding model (runs via Ollama, ~60ms per chunk)
+# Embedding model (runs via Ollama)
+# Options:
+#   - "nomic-embed-text"    : 768 dimensions. Faster, smaller.
+#   - "qwen3-embedding:8b" : 4096 dimensions. Better quality, slower.
+#   - "nomic-embed-text" is the default for simplicity.
+#   - If you want better retrieval, upgrade to qwen3-embedding:8b
 EMBEDDING_MODEL = "nomic-embed-text"
+
+# Embedding dimension (must match the model)
+# - nomic-embed-text:     768
+# - qwen3-embedding:8b:  4096
 EMBEDDING_DIM = 768
 
 # Local extraction model (runs via Ollama, used in "local" mode)
 LOCAL_EXTRACTION_MODEL = "llama3.2:3b"  # or "mistral", "gemma2"
+
+# Hard wall-clock timeouts (seconds) for Ollama requests. A cold or
+# GPU-saturated daemon can hang; these make a stuck call fail fast so an
+# ingest degrades gracefully (unembedded chunks / skipped extraction) instead
+# of blocking forever.
+EMBED_TIMEOUT = 120
+EXTRACT_TIMEOUT = 180
 
 # =============================================================================
 # REMOTE MODELS (only used in "hybrid" and "remote" modes)
@@ -108,3 +134,20 @@ BRIEFING_SECTIONS = [
     "surprising_connections", # High betweenness on low-frequency entities
     "unlinked_entities",     # Entities needing attention
 ]
+
+# =============================================================================
+# SEARCH / RETRIEVAL
+# =============================================================================
+
+# Default search mode when not specified
+# Options: "fts" (keyword), "semantic" (vector), "hybrid" (combined), "graph" (entity paths)
+DEFAULT_SEARCH_MODE = "hybrid"
+
+# Hybrid retrieval: RRF k parameter (higher = more smoothing between methods)
+RRF_K = 60
+
+# Vector search: number of candidates for reranking
+VECTOR_CANDIDATES = 50
+
+# Maximum results to return
+DEFAULT_SEARCH_LIMIT = 12

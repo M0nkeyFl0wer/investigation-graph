@@ -5,3 +5,14 @@ spacy>=3.7.0
 networkx>=3.2
 ripser>=0.6.0
 ollama>=0.3.0
+
+# DuckDB is the base substrate (chunks + embeddings + BM25 FTS). Not optional:
+# the graph is always the DuckDB(base) + LadybugDB(graph) hybrid. See SPEC.md.
+duckdb>=1.0.0
+
+# Shared KG substrate: GraphWriter (edge-corruption guard), Ontology ABC
+# (grade-locality), entity resolution, grounding gate, provider pool,
+# retrieval, and measurement. kg-common goes public in parallel with this
+# repo; this URL activates then. Until then, install editable from a sibling
+# checkout:  pip install -e "../kg-common[ladybug,ollama,dedup,measure]"
+kg-common @ git+https://github.com/M0nkeyFl0wer/kg-common.git

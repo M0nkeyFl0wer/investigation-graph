@@ -4,6 +4,19 @@ This file defines every entity type and edge type the knowledge graph accepts.
 Edit it for your beat. The system validates all entities against this file at
 write time — types not listed here are rejected and logged.
 
+## Quality Fields
+
+The system tracks quality metadata on entities and edges:
+
+| Field | Where | Description |
+|-------|-------|-------------|
+| `extraction_source` | Entity, Edge | How this was extracted: `deterministic`, `nlp`, `llm`, `human` |
+| `trust_penalty` | Entity | LLM-extracted items get -0.1, human gets 0.0 |
+| `quality_flag` | Entity | `verified`, `needs_review`, `junk` |
+| `evidence` | Edge | Quoted source text justifying the relationship |
+| `valid_from` | Edge | When this edge became true (timestamp) |
+| `valid_until` | Edge | When it stopped being true (0 = still valid) |
+
 ## Entity Types
 
 | Type | Description | Archetypical | Atypical | Exotypical (NOT this type) |

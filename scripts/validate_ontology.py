@@ -4,8 +4,8 @@ import sys
 
 sys.path.insert(0, ".")
 
-from newsroom_graph.ontology import Ontology
-from newsroom_graph.graph import Graph
+from investigation_graph.ontology import Ontology
+from investigation_graph.graph import Graph
 
 
 def main():
@@ -21,11 +21,11 @@ def main():
             missing_examples.append(name)
     if missing_examples:
         print(f"\n  Types missing exotypical examples: {', '.join(missing_examples)}")
-        print(f"  Tip: Add boundary examples to improve extraction accuracy")
+        print("  Tip: Add boundary examples to improve extraction accuracy")
 
     # Check graph health if it exists
     try:
-        graph = Graph(ontology=ontology)
+        graph = Graph(ontology=ontology, read_only=True)
         try:
             entities = graph.entity_count()
             edges = graph.edge_count()
@@ -81,7 +81,7 @@ def main():
                 print(" — critical")
 
             # Distribution details
-            print(f"\n  Type distribution:")
+            print("\n  Type distribution:")
             for r in sorted(type_dist, key=lambda r: -r["c"]):
                 pct = r["c"] / total * 100
                 bar = "█" * int(pct / 2)

@@ -6,12 +6,18 @@ from datetime import datetime
 from pathlib import Path
 sys.path.insert(0, ".")
 
-from newsroom_graph.graph import Graph
-from newsroom_graph.topology import run_topology, run_persistent_homology, build_networkx_graph
+from investigation_graph import config
+from investigation_graph.graph import Graph
+from investigation_graph.topology import build_networkx_graph, run_persistent_homology, run_topology
 
 
 def main():
-    graph = Graph()
+    # Analysis is read-only — open without the writer lock so it never collides
+    # with an ingest/build (and never creates an empty graph by accident).
+    if not config.GRAPH_DIR.exists():
+        print("No graph yet. Ingest documents first:  python scripts/ingest_folder.py")
+        return
+    graph = Graph(read_only=True)
     try:
         entities = graph.entity_count()
         edges = graph.edge_count()
@@ -57,7 +63,7 @@ def main():
             for s in surprising[:10]:
                 print(f"  {s['label']} ({s['type']})")
                 print(f"    Betweenness: {s['betweenness']} | Degree: {s['degree']}")
-                print(f"    → Structurally important despite low frequency")
+                print("    → Structurally important despite low frequency")
                 print()
 
         # Contradictions
@@ -66,7 +72,7 @@ def main():
             print("-" * 60)
             for c in report.contradictions[:5]:
                 print(f"  \"{c['claim_a']}\"")
-                print(f"  contradicts")
+                print("  contradicts")
                 print(f"  \"{c['claim_b']}\"")
                 print()
 

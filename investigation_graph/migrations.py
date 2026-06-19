@@ -7,7 +7,7 @@ Each migration is a function that runs ALTER TABLE or CREATE statements
 to bring the schema up to date without losing existing data.
 
 Usage:
-    from newsroom_graph.migrations import ensure_schema_version
+    from investigation_graph.migrations import ensure_schema_version
     ensure_schema_version(conn)  # called during Graph.__init__
 """
 import logging

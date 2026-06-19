@@ -3,9 +3,9 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "open-newsroom-graph"
+name = "investigation-graph"
 version = "0.1.0"
-description = "Knowledge graph toolkit for investigative journalism"
+description = "Local knowledge-graph toolkit for investigative journalists, OSINT investigators, and researchers"
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.10"
@@ -27,6 +27,12 @@ dependencies = [
     "spacy>=3.7.0",
     "networkx>=3.2",
     "ollama>=0.3.0",
+    # DuckDB is the base substrate (chunks + embeddings + BM25 FTS) — always
+    # present; the graph is the DuckDB(base) + LadybugDB(graph) hybrid.
+    "duckdb>=1.0.0",
+    # Shared KG substrate. Public in parallel with this repo; until then install
+    # editable: pip install -e "../kg-common[ladybug,ollama,dedup,measure]"
+    "kg-common @ git+https://github.com/M0nkeyFl0wer/kg-common.git",
 ]
 
 [project.optional-dependencies]
@@ -34,11 +40,11 @@ topology = ["ripser>=0.6.0"]
 dev = ["pytest>=8.0", "pytest-mock", "pytest-timeout", "ruff"]
 
 [project.scripts]
-nr-ingest = "scripts.ingest_folder:main"
-nr-search = "scripts.search_cli:main"
-nr-analyze = "scripts.run_analysis:main"
-nr-briefing = "scripts.daily_briefing:main"
-nr-validate = "scripts.validate_ontology:main"
+ig-ingest = "scripts.ingest_folder:main"
+ig-search = "scripts.search_cli:main"
+ig-analyze = "scripts.run_analysis:main"
+ig-briefing = "scripts.daily_briefing:main"
+ig-validate = "scripts.validate_ontology:main"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -47,3 +53,7 @@ timeout = 30
 [tool.ruff]
 target-version = "py310"
 line-length = 100
+
+# Required for the direct `kg-common @ git+https://...` reference above.
+[tool.hatch.metadata]
+allow-direct-references = true

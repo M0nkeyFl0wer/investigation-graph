@@ -29,7 +29,7 @@ Embeddings stay local. Entity extraction can optionally use a remote LLM with ze
 **Configuration:**
 
 ```python
-# In newsroom_graph/config.py
+# In investigation_graph/config.py
 PRIVACY_MODE = "hybrid"
 REMOTE_API_BASE = "https://api.anthropic.com/v1"
 REMOTE_MODEL = "claude-haiku-4-5-20251001"
