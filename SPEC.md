@@ -7,7 +7,7 @@
 > libel risk means correctness cannot live behind an optional flag.
 
 Status: **in active build** (see `TODO.md` for the live checklist).
-Repo: `github.com/M0nkeyFl0wer/investigative-journalism-kg` (branch `main`).
+Repo: `github.com/M0nkeyFl0wer/investigation-graph` (branch `main`).
 
 ---
 

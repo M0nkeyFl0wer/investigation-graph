@@ -36,8 +36,8 @@ This toolkit:
 
 ```bash
 # Clone the repo
-git clone https://github.com/M0nkeyFl0wer/investigative-journalism-kg.git
-cd investigative-journalism-kg
+git clone https://github.com/M0nkeyFl0wer/investigation-graph.git
+cd investigation-graph
 
 # Run setup (installs Python packages — including the kg-common substrate — and
 # downloads the local AI models)
