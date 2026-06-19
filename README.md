@@ -1,6 +1,6 @@
 # open-newsroom-graph
 
-A privacy-first knowledge graph toolkit for investigative journalists. Ingest documents, extract entities and relationships, build a searchable graph, and find structural gaps that suggest leads. Runs entirely on your laptop.
+A privacy-first knowledge graph toolkit for **investigative journalists, OSINT investigators, and researchers**. Ingest documents, extract entities and relationships, build a searchable graph, and find structural gaps that suggest leads. Runs entirely on your laptop.
 
 **No cloud required. No accounts. No data leaves your machine.**
 
@@ -8,7 +8,7 @@ A privacy-first knowledge graph toolkit for investigative journalists. Ingest do
 <a href="https://networkx.org"><img src="https://networkx.org/documentation/stable/_static/networkx_logo.svg" alt="NetworkX" height="50"></a>&nbsp;&nbsp;&nbsp;
 <a href="https://ollama.com"><img src="https://ollama.com/public/ollama.png" alt="Ollama" height="50"></a>
 
-> **Research context:** Inspired by [*An Alternative Trajectory for Generative AI*](https://arxiv.org/abs/2603.14147) (Belova et al., Princeton, 2026), which proposes domain-specific superintelligence built on knowledge graphs and formal logic rather than monolithic LLMs. This toolkit applies that vision to investigative journalism: a local, specialized knowledge graph where every entity traces back to a source document, every connection is typed and auditable, and structural gaps — found through topology, not AI guessing — become investigative leads. *"Intelligence arises from manipulating relational symbolic structures, abstracting away low-level sensory details."*
+> **Research context:** Inspired by [*An Alternative Trajectory for Generative AI*](https://arxiv.org/abs/2603.14147) (Belova et al., Princeton, 2026), which proposes domain-specific superintelligence built on knowledge graphs and formal logic rather than monolithic LLMs. This toolkit applies that vision to investigative work — journalism, OSINT, and research: a local, specialized knowledge graph where every entity traces back to a source document, every connection is typed and auditable, and structural gaps — found through topology, not AI guessing — become investigative leads. *"Intelligence arises from manipulating relational symbolic structures, abstracting away low-level sensory details."*
 
 ## What This Does
 
@@ -91,31 +91,33 @@ python scripts/ingest_folder.py
 Output looks like:
 
 ```
-Found 3 documents to ingest.
+Scope: Ontology(8 entity types, 12 edge types)
+Corpus: 3 document(s) in ingest/  →  DuckDB chunks.duckdb
 
 [1/3] harbor-city-expose.txt
-  Extracted: 27 entities, 13 edges
-  Embedded: 2 chunks
+  2 chunks (2 embedded), 24 entities, 6 edges → DuckDB
 [2/3] property-records.md
-  Extracted: 21 entities, 8 edges
-  Embedded: 2 chunks
+  2 chunks (2 embedded), 20 entities, 4 edges → DuckDB
 [3/3] financial-disclosure.html
-  Extracted: 32 entities, 8 edges
-  Embedded: 2 chunks
+  2 chunks (2 embedded), 30 entities, 5 edges → DuckDB
 
-Bulk loading 80 entities...
-  Loaded: 80
-Computing entity embeddings...
-Loading 29 edges...
-  Loaded: 29
+Grounding 74 entities / 15 edges against 6 chunks...
 
-==================================================
-Ingestion complete in 99.3s.
-  Documents processed: 3
-  Total entities:      80
-  Total edges:         28
-  Total documents:     3
+========================================================
+Ingestion complete in 61.4s.
+  Documents:            3
+  Chunks in DuckDB:     6
+  Entities (graph):     41  (merged 12 duplicates)
+  Edges (graph):        9
+  Quarantined:          21 entities (28%), 6 edges (40%) — failed the grounding gate
 ```
+
+Each document is chunked and embedded into DuckDB, then extracted; the **ground**
+stage drops entities/edges that aren't supported by the source text and merges
+duplicate names before the graph is built. The "Quarantined" line is the gate
+doing its job — extracted claims that didn't survive verification never enter the
+graph. (Edge counts come from the local LLM; with Ollama unavailable you'll still
+get the deterministic + spaCy entities and a keyword-searchable corpus.)
 
 ### Search the Graph
 
@@ -233,7 +235,7 @@ Shows how well your ontology matches reality:
 
 ### 1. Ontology — What matters
 
-Edit `ONTOLOGY.md` to define entity types and relationship types for your beat. Ships with a general investigative journalism ontology covering 8 entity types and 14 edge types.
+Edit `ONTOLOGY.md` to define entity types and relationship types for your beat or case. Ships with a general investigative ontology (journalism / OSINT / research) covering 8 entity types and 12 edge types.
 
 The system **rejects entities that don't match your ontology** at write time — no junk accumulates. Rejections are counted and reported, so you know when to expand the ontology.
 
@@ -380,7 +382,7 @@ See `docs/privacy-guide.md` for detailed comparison and provider recommendations
 
 ### Ethics: Identity Ambiguity and Source Protection
 
-Two risks that automated extraction creates for investigative journalists:
+Two risks that automated extraction creates for anyone publishing findings — journalists, OSINT investigators, and researchers alike:
 
 **Identity ambiguity.** The pipeline will extract "John Smith", "J. Smith", and "John S. Smith" as three separate entities. It may also split "BP US" and "British Petroleum" into different organizations. Before publishing any finding based on graph connections, **manually verify that linked entities are actually the same person or organization.** Misattributing connections in an automated graph can falsely accuse individuals. The deduplication threshold in `config.py` (`DEDUP_THRESHOLD = 0.92`) catches some duplicates via embedding similarity, but it is not sufficient for names that are similar but refer to different people.
 
@@ -821,7 +823,7 @@ open-newsroom-graph/
 
 ## Contributing
 
-Issues and PRs welcome. Keep it simple — this is a tool for journalists, not a framework for developers.
+Issues and PRs welcome. Keep it simple — this is a tool for investigators and researchers, not a framework for developers.
 
 ## License
 
@@ -829,4 +831,4 @@ MIT
 
 ## Contact
 
-Built by [Ben West](https://benwest.blog). Reach out at [benwest.bsky.social](https://bsky.app/profile/benwest.bsky.social) if you want help setting it up for your newsroom.
+Built by [Ben West](https://benwest.blog). Reach out at [benwest.bsky.social](https://bsky.app/profile/benwest.bsky.social) if you want help setting it up for your newsroom, team, or investigation.
