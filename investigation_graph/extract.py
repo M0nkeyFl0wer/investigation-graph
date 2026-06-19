@@ -33,6 +33,12 @@ class Extractor:
     def __init__(self, ontology: Ontology):
         self.ontology = ontology
         self.nlp = spacy.load("en_core_web_sm")
+        # Circuit breaker: per-chunk LLM extraction (P0.1) means many calls per
+        # run. If Ollama is down/saturated, one timeout per chunk × N chunks ×
+        # M docs would take forever. Once an LLM call hard-fails, we stop calling
+        # it for the rest of this run and fall back to deterministic + spaCy only
+        # (so an ingest degrades fast instead of hanging). Reset per Extractor.
+        self._llm_disabled = False
 
     def extract_from_text(self, text: str, source_url: str = "",
                           doc_id: str = "") -> dict:
@@ -59,7 +65,7 @@ class Extractor:
         # embeds — and union the results, so a long filing's later-page
         # connections are actually extracted. A per-document cap bounds cost on
         # very large files (raise MAX_LLM_CHUNKS_PER_DOC to cover more).
-        if config.PRIVACY_MODE in ("local", "hybrid", "remote"):
+        if config.PRIVACY_MODE in ("local", "hybrid", "remote") and not self._llm_disabled:
             chunks = chunk_text(text)
             cap = getattr(config, "MAX_LLM_CHUNKS_PER_DOC", 40)
             if len(chunks) > cap:
@@ -70,6 +76,14 @@ class Extractor:
             for chunk in chunks[:cap]:
                 # Pass entities seen so far so cross-chunk edge endpoints resolve.
                 p3 = extract_fn(chunk, source_url, entities, now)
+                if p3 is None:
+                    # Hard failure (timeout/connection) — trip the circuit breaker
+                    # so we don't pay a timeout on every remaining chunk + doc.
+                    self._llm_disabled = True
+                    logger.warning("LLM extraction disabled for the rest of this "
+                                   "run after a failure; continuing with "
+                                   "deterministic + spaCy entities only.")
+                    break
                 entities.extend(p3.get("entities", []))
                 edges.extend(p3.get("edges", []))
 
@@ -191,8 +205,11 @@ Text to analyze:
             )
             result = json.loads(response["message"]["content"])
         except Exception as e:
-            logger.warning("LLM extraction failed (skipping doc's LLM phase): %s", e)
-            return {"entities": [], "edges": []}
+            # Return None (not {}) to signal a HARD failure (timeout/connection)
+            # so the caller can trip the circuit breaker. An empty-but-successful
+            # call still returns {"entities": [], "edges": []} below.
+            logger.warning("LLM extraction failed: %s", e)
+            return None
 
         # Convert LLM output to our format
         entities = []

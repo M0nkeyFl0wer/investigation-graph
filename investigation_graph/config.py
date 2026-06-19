@@ -77,7 +77,10 @@ LOCAL_EXTRACTION_MODEL = "llama3.2:3b"  # or "mistral", "gemma2"
 # ingest degrades gracefully (unembedded chunks / skipped extraction) instead
 # of blocking forever.
 EMBED_TIMEOUT = 120
-EXTRACT_TIMEOUT = 180
+# Per-CHUNK extraction call (chunks are ~1000 chars), so this is well under the
+# old whole-doc value: a healthy 3B model answers in seconds; a contended/cold
+# one hits this ceiling and trips the per-run circuit breaker (see extract.py).
+EXTRACT_TIMEOUT = 90
 
 # =============================================================================
 # REMOTE MODELS (only used in "hybrid" and "remote" modes)

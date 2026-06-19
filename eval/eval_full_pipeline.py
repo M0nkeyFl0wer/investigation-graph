@@ -52,15 +52,25 @@ def main() -> int:
             print(f"  stats: {stats}")
 
             # Grade-locality on REAL edges: every edge must satisfy domain/range.
+            # Grade-locality on REAL edges; also pull labels + evidence to verify
+            # P0.2 (every edge should carry the span that justifies it).
             edge_rows = graph.query(
                 "MATCH (a:Entity)-[r:RELATES_TO]->(b:Entity) "
-                "RETURN a.entity_type AS s, r.edge_type AS e, b.entity_type AS t"
+                "RETURN a.entity_type AS s, r.edge_type AS e, b.entity_type AS t, "
+                "a.label AS sl, b.label AS tl, r.evidence AS ev"
             )
             violations = [r for r in edge_rows
                           if not onto.validate_grade(r["e"], r["s"], r["t"])]
             inv.write_evidence("grade_locality_report.json",
                                {"edges_checked": len(edge_rows),
                                 "violations": violations})
+            with_evidence = [r for r in edge_rows if (r.get("ev") or "").strip()]
+            inv.write_evidence("edges_with_evidence.json", {
+                "edges_total": len(edge_rows),
+                "edges_with_evidence": len(with_evidence),
+                "sample": [{"edge": f"{r['sl']} --[{r['e']}]--> {r['tl']}",
+                            "evidence": r["ev"]} for r in with_evidence[:8]],
+            })
 
             # Search evidence (FTS always; hybrid only if embeddings present).
             fts_hits = store.search_fts("Harbor", limit=5)
@@ -92,6 +102,13 @@ def main() -> int:
             checks.check("error" not in topo, "topology analysis produced a report")
             checks.check("Quarantined" in log,
                          "grounding gate reported a quarantine line")
+            # P0.2: when edges exist, they should carry an evidence span.
+            if edge_rows:
+                checks.check(len(with_evidence) >= 1,
+                             f"edges carry evidence spans "
+                             f"({len(with_evidence)}/{len(edge_rows)})")
+            else:
+                print("  [skip] no LLM edges to evidence-check (Ollama unavailable?)")
         finally:
             graph.close()
             store.close()
