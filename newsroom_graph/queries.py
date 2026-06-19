@@ -30,16 +30,9 @@ QUERIES = {
         ORDER BY e.confidence DESC LIMIT $limit
     """,
 
-    # Vector search
-    "vector_search": """
-        MATCH (e:Entity)
-        WHERE e.embedding IS NOT NULL
-        WITH e, array_cosine_similarity(e.embedding, $qemb) AS score
-        ORDER BY score DESC
-        LIMIT $limit
-        RETURN e.id AS id, e.label AS label,
-               e.entity_type AS type, score
-    """,
+    # NOTE: entity-level vector search was removed — embeddings live on DuckDB
+    # chunks now (one model, one place), so semantic search runs over chunks via
+    # ChunkStore, not over Entity nodes. See SPEC §2.
 
     # Topology support
     "all_entities_for_topology": """
@@ -145,12 +138,6 @@ QUERIES = {
     """,
 
     # Graph health
-    "entities_with_embeddings": """
-        MATCH (e:Entity)
-        WHERE e.embedding IS NOT NULL
-        RETURN count(e) AS cnt
-    """,
-
     "orphaned_entities": """
         MATCH (e:Entity)
         WHERE NOT (e)-[:RELATES_TO]-() AND NOT (e)-[:MENTIONED_IN]-()

@@ -3,11 +3,16 @@
 import sys
 sys.path.insert(0, ".")
 
-from newsroom_graph.graph import Graph
+from newsroom_graph import config
 from newsroom_graph.briefing import generate_briefing
+from newsroom_graph.graph import Graph
 
 def main():
-    graph = Graph()
+    # Read-only: briefings never write the graph.
+    if not config.GRAPH_DIR.exists():
+        print("No graph yet. Ingest documents first:  python scripts/ingest_folder.py")
+        return
+    graph = Graph(read_only=True)
     try:
         entities = graph.entity_count()
         edges = graph.edge_count()
@@ -20,7 +25,7 @@ def main():
         print(f"Analyzing graph ({entities} entities, {edges} edges)...")
         content = generate_briefing(graph)
         print(content)
-        print(f"\nBriefing saved to briefings/ directory.")
+        print("\nBriefing saved to briefings/ directory.")
     finally:
         graph.close()
 
