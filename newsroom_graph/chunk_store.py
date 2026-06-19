@@ -214,6 +214,38 @@ class ChunkStore:
             rw.execute("CREATE INDEX IF NOT EXISTS idx_chunk_doc ON chunk(doc_id);")
             rw.execute("CREATE INDEX IF NOT EXISTS idx_chunk_sensitivity ON chunk(sensitivity);")
 
+            # Record tables — DuckDB is the source of truth for the FULL record
+            # set (documents, entities, edges), so the LadybugDB graph can be
+            # rebuilt as a projection from here on every ingest (SPEC §2.1).
+            # Re-ingesting a document deletes its rows here first (idempotent).
+            rw.execute("""
+                CREATE TABLE IF NOT EXISTS document (
+                    id          VARCHAR PRIMARY KEY,
+                    path        VARCHAR,
+                    title       VARCHAR,
+                    ingested_at TIMESTAMP DEFAULT current_timestamp
+                );
+            """)
+            # No PK on entity/edge: the same surface form across documents gets
+            # distinct extracted ids (entity id hashes in source_url); dedup is
+            # the ground stage's job (entity resolution), not a unique constraint.
+            rw.execute("""
+                CREATE TABLE IF NOT EXISTS entity (
+                    id VARCHAR, doc_id VARCHAR, entity_type VARCHAR, label VARCHAR,
+                    description VARCHAR, confidence DOUBLE, source_url VARCHAR,
+                    provenance VARCHAR, extraction_source VARCHAR
+                );
+            """)
+            rw.execute("""
+                CREATE TABLE IF NOT EXISTS edge (
+                    doc_id VARCHAR, source_id VARCHAR, target_id VARCHAR,
+                    edge_type VARCHAR, confidence DOUBLE, evidence VARCHAR,
+                    source_url VARCHAR, provenance VARCHAR, extraction_source VARCHAR
+                );
+            """)
+            rw.execute("CREATE INDEX IF NOT EXISTS idx_entity_doc ON entity(doc_id);")
+            rw.execute("CREATE INDEX IF NOT EXISTS idx_edge_doc ON edge(doc_id);")
+
             # BM25 full-text index over body + title. Rebuilt after each batch
             # (FTS does not auto-update on INSERT); overwrite=1 makes it idempotent.
             self._build_fts(rw)
@@ -356,6 +388,104 @@ class ChunkStore:
             return len(links)
         finally:
             rw.close()
+
+    # =========================================================================
+    # Record tables — the graph's source of truth (documents / entities / edges)
+    # =========================================================================
+
+    def delete_doc_records(self, doc_id: str) -> None:
+        """Remove a document's chunks + entity/edge records (idempotent re-ingest)."""
+        rw = self._open_rw()
+        try:
+            for table in ("chunk", "entity", "edge"):
+                rw.execute(f"DELETE FROM {table} WHERE doc_id = ?", [doc_id])
+        finally:
+            rw.close()
+
+    def write_documents(self, docs: list[dict]) -> int:
+        """Upsert document records (id, path, title)."""
+        if not docs:
+            return 0
+        rw = self._open_rw()
+        try:
+            rw.executemany(
+                "INSERT OR REPLACE INTO document (id, path, title) VALUES (?, ?, ?)",
+                [[d["id"], d.get("path", ""), d.get("title", "")] for d in docs],
+            )
+            return len(docs)
+        finally:
+            rw.close()
+
+    def write_entities(self, entities: list[dict]) -> int:
+        """Append extracted entity records (raw, pre-resolution)."""
+        if not entities:
+            return 0
+        rw = self._open_rw()
+        try:
+            rw.executemany(
+                """INSERT INTO entity
+                   (id, doc_id, entity_type, label, description, confidence,
+                    source_url, provenance, extraction_source)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                [[e["id"], e.get("doc_id", ""), e.get("entity_type", ""), e.get("label", ""),
+                  e.get("description", ""), float(e.get("confidence", 0.5)),
+                  e.get("source_url", ""), e.get("provenance", "unknown"),
+                  e.get("extraction_source", e.get("provenance", "unknown"))] for e in entities],
+            )
+            return len(entities)
+        finally:
+            rw.close()
+
+    def write_edges(self, edges: list[dict]) -> int:
+        """Append extracted edge records (raw, pre-resolution)."""
+        if not edges:
+            return 0
+        rw = self._open_rw()
+        try:
+            rw.executemany(
+                """INSERT INTO edge
+                   (doc_id, source_id, target_id, edge_type, confidence, evidence,
+                    source_url, provenance, extraction_source)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                [[e.get("doc_id", ""), e["source_id"], e["target_id"], e["edge_type"],
+                  float(e.get("confidence", 0.5)), e.get("evidence", ""),
+                  e.get("source_url", ""), e.get("provenance", "unknown"),
+                  e.get("extraction_source", e.get("provenance", "unknown"))] for e in edges],
+            )
+            return len(edges)
+        finally:
+            rw.close()
+
+    def all_documents(self) -> list[dict]:
+        ro = self._open_ro()
+        rows = ro.execute("SELECT id, path, title FROM document").fetchall()
+        return [{"id": r[0], "path": r[1], "title": r[2]} for r in rows]
+
+    def all_entities(self) -> list[dict]:
+        ro = self._open_ro()
+        rows = ro.execute(
+            """SELECT id, doc_id, entity_type, label, description, confidence,
+                      source_url, provenance, extraction_source FROM entity"""
+        ).fetchall()
+        cols = ["id", "doc_id", "entity_type", "label", "description", "confidence",
+                "source_url", "provenance", "extraction_source"]
+        return [dict(zip(cols, r)) for r in rows]
+
+    def all_edges(self) -> list[dict]:
+        ro = self._open_ro()
+        rows = ro.execute(
+            """SELECT doc_id, source_id, target_id, edge_type, confidence, evidence,
+                      source_url, provenance, extraction_source FROM edge"""
+        ).fetchall()
+        cols = ["doc_id", "source_id", "target_id", "edge_type", "confidence", "evidence",
+                "source_url", "provenance", "extraction_source"]
+        return [dict(zip(cols, r)) for r in rows]
+
+    def all_chunks(self) -> list[dict]:
+        """All chunks as {id, text} — the grounding gate's haystack."""
+        ro = self._open_ro()
+        rows = ro.execute("SELECT id, body FROM chunk").fetchall()
+        return [{"id": r[0], "text": r[1]} for r in rows]
 
     # =========================================================================
     # Reads (BM25 + HNSW + RRF)

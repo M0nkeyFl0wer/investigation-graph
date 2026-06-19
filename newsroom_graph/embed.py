@@ -1,7 +1,12 @@
 """
 Embedding computation via Ollama. Runs locally, nothing leaves the machine.
-Includes timeout protection — if Ollama hangs (model loading, GPU OOM),
-calls fail after 30 seconds rather than blocking forever.
+
+Note on timeouts: the Ollama HTTP client's timeout is governed by the
+``OLLAMA_*`` env / client config, not by a model ``options`` key — passing
+``options={"timeout": ...}`` is a no-op (``options`` carries model params like
+temperature, not transport timeouts), so we don't. If the daemon is cold or the
+GPU is loaded, the FIRST call blocks while the model loads; that's expected.
+Callers that need a hard wall-clock bound should wrap these in their own timeout.
 """
 import logging
 
@@ -11,18 +16,12 @@ from . import config
 
 logger = logging.getLogger(__name__)
 
-# Timeout in seconds for embedding calls. Ollama can hang during model
-# loading or GPU out-of-memory. 30s is generous for a single embed call.
-EMBED_TIMEOUT = 30
-
 
 def embed_text(text: str) -> list[float]:
-    """Compute embedding for a text string using local Ollama.
-    Raises RuntimeError if Ollama is unreachable or times out."""
+    """Compute an embedding for one string via local Ollama.
+    Raises if Ollama is unreachable."""
     try:
-        response = ollama.embed(
-            model=config.EMBEDDING_MODEL, input=text,
-            options={"timeout": EMBED_TIMEOUT})
+        response = ollama.embed(model=config.EMBEDDING_MODEL, input=text)
         return response["embeddings"][0]
     except Exception as e:
         logger.warning("Embedding failed: %s", e)
@@ -30,18 +29,13 @@ def embed_text(text: str) -> list[float]:
 
 
 def embed_batch(texts: list[str], batch_size: int = 50) -> list[list[float]]:
-    """
-    Compute embeddings for multiple texts.
-    Batches internally to avoid overwhelming Ollama on large sets.
-    Raises on first failure — caller should handle partial results.
-    """
+    """Compute embeddings for many texts, batched to avoid overwhelming Ollama.
+    Raises on first failure — the caller decides how to handle partial results."""
     all_embeddings = []
     for i in range(0, len(texts), batch_size):
         batch = texts[i:i + batch_size]
         try:
-            response = ollama.embed(
-                model=config.EMBEDDING_MODEL, input=batch,
-                options={"timeout": EMBED_TIMEOUT})
+            response = ollama.embed(model=config.EMBEDDING_MODEL, input=batch)
             all_embeddings.extend(response["embeddings"])
         except Exception as e:
             logger.warning("Batch embedding failed at offset %d: %s", i, e)

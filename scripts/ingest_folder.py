@@ -1,53 +1,59 @@
 #!/usr/bin/env python3
 """
-Ingest documents from the ingest/ folder into the knowledge graph.
-Supports: .txt, .md, .pdf, .html
-Uses COPY FROM Parquet for bulk entity loading.
+Ingest documents into the investigation — the scope → ingest → extract → ground
+→ build pipeline (see SPEC.md).
 
-Triplet extraction: Phase 3 LLM extracts (entity, relationship, entity) triplets.
-Chunk storage: Documents are chunked and stored in the configured chunk store
-(SQLite, DuckDB, or Postgres) for hybrid retrieval.
+Flow:
+  scope    confirm the ontology + corpus directory.
+  ingest   each document is read, chunked, embedded, and written to DuckDB
+           (the source of truth for chunks + embeddings + records).
+  extract  three-phase extraction emits candidate entities + edges → DuckDB.
+  ground   over the FULL DuckDB record set, the ground stage runs the grounding
+           gate (drop hallucinations) and entity resolution (merge duplicates).
+  build    the LadybugDB graph is rebuilt as a projection of the survivors
+           (reconstruct-and-swap; grade-locality enforced at write).
+
+Re-running is idempotent per document: a document's prior chunks/entities/edges
+are deleted before it is re-ingested. The graph is always rebuilt from the full
+DuckDB record set, so adding documents never corrupts the existing graph.
 """
-import sys
 import hashlib
+import sys
 import time
 from pathlib import Path
 
 sys.path.insert(0, ".")
 
-from newsroom_graph.graph import Graph
-from newsroom_graph.extract import Extractor
-from newsroom_graph.embed import embed_text, embed_batch
-from newsroom_graph.ontology import Ontology
-from newsroom_graph.chunk_store import get_chunk_store
 from newsroom_graph import config
+from newsroom_graph.chunk_store import chunk_id_from_uri, get_chunk_store
+from newsroom_graph.embed import embed_batch
+from newsroom_graph.extract import Extractor
+from newsroom_graph.graph import build_graph
+from newsroom_graph.ontology import Ontology
+from newsroom_graph.pipeline import ground_and_resolve
+
+SUPPORTED = (".txt", ".md", ".pdf", ".html")
 
 
 def read_document(path: Path) -> str:
     """Read document content. Handles txt, md, html. PDF needs pdftotext."""
     suffix = path.suffix.lower()
-
     if suffix in (".txt", ".md"):
         return path.read_text(errors="replace")
-
     if suffix == ".html":
-        try:
-            from html.parser import HTMLParser
+        from html.parser import HTMLParser
 
-            class TextExtractor(HTMLParser):
-                def __init__(self):
-                    super().__init__()
-                    self.text = []
+        class TextExtractor(HTMLParser):
+            def __init__(self):
+                super().__init__()
+                self.text = []
 
-                def handle_data(self, data):
-                    self.text.append(data)
+            def handle_data(self, data):
+                self.text.append(data)
 
-            parser = TextExtractor()
-            parser.feed(path.read_text(errors="replace"))
-            return " ".join(parser.text)
-        except Exception:
-            return path.read_text(errors="replace")
-
+        parser = TextExtractor()
+        parser.feed(path.read_text(errors="replace"))
+        return " ".join(parser.text)
     if suffix == ".pdf":
         try:
             import subprocess
@@ -57,12 +63,11 @@ def read_document(path: Path) -> str:
             )
             return result.stdout
         except FileNotFoundError:
-            print(f"  Warning: pdftotext not found. Install: sudo apt install poppler-utils")
+            print("  Warning: pdftotext not found. Install: sudo apt install poppler-utils")
             return ""
         except Exception as e:
-            print(f"  Warning: Could not read PDF {path.name}: {e}")
+            print(f"  Warning: could not read PDF {path.name}: {e}")
             return ""
-
     print(f"  Skipping unsupported format: {path.name}")
     return ""
 
@@ -74,155 +79,132 @@ def chunk_text(text: str, chunk_size: int = 1000, overlap: int = 200) -> list[st
     chunks = []
     start = 0
     while start < len(text):
-        end = start + chunk_size
-        chunks.append(text[start:end])
-        start = end - overlap
+        chunks.append(text[start:start + chunk_size])
+        start += chunk_size - overlap
     return chunks
 
 
 def main():
+    # ── SCOPE ────────────────────────────────────────────────────────────
     ingest_dir = config.INGEST_DIR
     if not ingest_dir.exists():
         ingest_dir.mkdir(parents=True)
-        print(f"Created ingest directory: {ingest_dir}/")
-        print(f"Add documents there and run again.")
+        print(f"Created ingest directory: {ingest_dir}/\nAdd documents there and run again.")
         return
 
-    files = list(ingest_dir.iterdir())
-    supported = [f for f in files
-                 if f.is_file() and f.suffix.lower() in (".txt", ".md", ".pdf", ".html")]
-
+    supported = [f for f in ingest_dir.iterdir()
+                 if f.is_file() and f.suffix.lower() in SUPPORTED]
     if not supported:
-        print(f"No supported documents in {ingest_dir}/")
-        print(f"Supported formats: .txt, .md, .pdf, .html")
+        print(f"No supported documents in {ingest_dir}/\nSupported: {', '.join(SUPPORTED)}")
         return
-
-    print(f"Found {len(supported)} documents to ingest.\n")
 
     ontology = Ontology()
-    graph = Graph(ontology=ontology)
+    store = get_chunk_store()  # DuckDB; schema (chunks + record tables) ensured
+    extractor = Extractor(ontology)
 
-    # Initialize chunk store (if configured)
-    chunk_store = None
-    if config.CHUNK_SUBSTRATE not in ("ladybug", ""):
-        chunk_store = get_chunk_store()
-        print(f"Chunk store: {chunk_store.substrate}")
+    print(f"Scope: {ontology!r}")
+    print(f"Corpus: {len(supported)} document(s) in {ingest_dir}/  →  DuckDB {store.db_path.name}\n")
 
+    t_start = time.time()
     try:
-        extractor = Extractor(ontology)
-
-        all_entities = []
-        all_edges = []
-        total_chunks = 0
-        t_start = time.time()
-
+        # ── INGEST + EXTRACT (per document → DuckDB source of truth) ───────
         for i, filepath in enumerate(supported, 1):
             print(f"[{i}/{len(supported)}] {filepath.name}")
-
             text = read_document(filepath)
             if not text.strip():
-                print(f"  Empty or unreadable, skipping.")
+                print("  Empty or unreadable, skipping.")
                 continue
 
-            doc_id = hashlib.sha256(str(filepath).encode()).hexdigest()[:16]
             source_url = str(filepath)
+            doc_id = hashlib.sha256(source_url.encode()).hexdigest()[:16]
 
-            # Register document
-            graph.add_document(doc_id, str(filepath), filepath.stem)
+            # Idempotent re-ingest: clear this document's prior records first.
+            store.delete_doc_records(doc_id)
+            store.write_documents([{"id": doc_id, "path": source_url, "title": filepath.stem}])
 
-            # Extract entities and relationships (including triplets)
-            result = extractor.extract_from_text(
-                text, source_url=source_url, doc_id=doc_id)
-            print(f"  Extracted: {len(result['entities'])} entities, "
-                  f"{len(result['edges'])} edges")
-
-            # Process chunks for retrieval
+            # Chunk + embed → DuckDB.
             chunks = chunk_text(text)
+            n_embedded = 0
             if chunks:
-                # Store chunks in chunk store (if enabled)
-                if chunk_store:
-                    for idx, chunk_text_content in enumerate(chunks):
-                        chunk_id = f"{doc_id}_chunk_{idx}"
-                        chunk_store.add_chunk(
-                            chunk_id=chunk_id,
-                            doc_id=doc_id,
-                            body=chunk_text_content,
-                            title=filepath.stem,
-                            doc_path=str(filepath),
-                            chunk_index=idx,
-                        )
-
-                # Compute embeddings for chunks (stored on entities for now)
                 embeddings = embed_batch(chunks)
-                total_chunks += len(chunks)
-                print(f"  Embedded: {len(chunks)} chunks")
+                chunk_rows = [
+                    {
+                        "id": chunk_id_from_uri(source_url, idx),
+                        "doc_id": doc_id,
+                        "source_uri": source_url,
+                        "title": filepath.stem,
+                        "body": body,
+                        "chunk_index": idx,
+                        "embedding": embeddings[idx] if idx < len(embeddings) else None,
+                    }
+                    for idx, body in enumerate(chunks)
+                ]
+                store.write_chunks(chunk_rows)
+                n_embedded = sum(1 for r in chunk_rows if r["embedding"] is not None)
 
-                # Store chunk embeddings in chunk store
-                if chunk_store and embeddings:
-                    for idx, emb in enumerate(embeddings):
-                        chunk_id = f"{doc_id}_chunk_{idx}"
-                        chunk_store.add_embedding(chunk_id, emb)
+            # Extract → DuckDB (tagged with doc_id so re-ingest can target them).
+            result = extractor.extract_from_text(text, source_url=source_url, doc_id=doc_id)
+            for e in result["entities"]:
+                e["doc_id"] = doc_id
+                e.setdefault("extraction_source", e.get("provenance", "unknown"))
+            for ed in result["edges"]:
+                ed["doc_id"] = doc_id
+                ed.setdefault("extraction_source", ed.get("provenance", "unknown"))
+            store.write_entities(result["entities"])
+            store.write_edges(result["edges"])
+            print(f"  {len(chunks)} chunks ({n_embedded} embedded), "
+                  f"{len(result['entities'])} entities, {len(result['edges'])} edges → DuckDB")
 
-            all_entities.extend(result["entities"])
-            all_edges.extend(result["edges"])
+        # ── GROUND (over the FULL record set) ─────────────────────────────
+        all_chunks = store.all_chunks()
+        all_entities = store.all_entities()
+        all_edges = store.all_edges()
+        print(f"\nGrounding {len(all_entities)} entities / {len(all_edges)} edges "
+              f"against {len(all_chunks)} chunks...")
+        build_records, report = ground_and_resolve(all_chunks, all_entities, all_edges)
 
-        # Bulk load entities
-        if all_entities:
-            print(f"\nBulk loading {len(all_entities)} entities...")
-            loaded = graph.bulk_add_entities(all_entities)
-            print(f"  Loaded: {loaded}")
+        # Mentions (entity → its source document) before stripping doc_id.
+        mentions = [{"entity_id": e["id"], "doc_id": e["doc_id"]}
+                    for e in build_records["entities"] if e.get("doc_id")]
+        for e in build_records["entities"]:
+            e.pop("doc_id", None)
+        for ed in build_records["edges"]:
+            ed.pop("doc_id", None)
 
-            # Embed entity descriptions and store vectors
-            print(f"Computing entity embeddings...")
-            for entity in all_entities:
-                embed_text_str = f"{entity['label']}: {entity.get('description', '')}"
-                try:
-                    emb = embed_text(embed_text_str)
-                    graph.set_embedding(entity["id"], emb)
-                except Exception as e:
-                    print(f"  Embedding failed for {entity['label']}: {e}")
-        else:
-            print("\nNo entities extracted.")
+        # ── BUILD (rebuild the graph projection) ──────────────────────────
+        documents = store.all_documents()
+        counts = build_graph(
+            {"documents": documents, "entities": build_records["entities"],
+             "edges": build_records["edges"], "mentions": mentions},
+            ontology=ontology,
+        )
 
-        if all_edges:
-            print(f"Loading {len(all_edges)} edges...")
-            loaded = graph.bulk_add_edges(all_edges)
-            print(f"  Loaded: {loaded}")
-
-        # Rebuild vector indexes after all embeddings are stored
-        graph.rebuild_vector_indexes()
-
-        # Rebuild FTS index for DuckDB if applicable
-        if chunk_store and hasattr(chunk_store, 'rebuild_fts'):
-            chunk_store.rebuild_fts()
-
-        # Summary
+        # ── REPORT ────────────────────────────────────────────────────────
         elapsed = time.time() - t_start
-        print(f"\n{'=' * 50}")
+        qr = report["quarantine_rate"]
+        print(f"\n{'=' * 56}")
         print(f"Ingestion complete in {elapsed:.1f}s.")
-        print(f"  Documents processed: {len(supported)}")
-        print(f"  Chunks embedded:     {total_chunks}")
-        print(f"  Total entities:      {graph.entity_count()}")
-        print(f"  Total edges:         {graph.edge_count()}")
-        print(f"  Total documents:     {graph.document_count()}")
-        if chunk_store:
-            print(f"  Chunks in store:     {chunk_store.chunk_count()}")
-        print(f"\nNext steps:")
-        print(f"  Search:    python scripts/search_cli.py -q 'your query'")
-        print(f"  Analyze:   python scripts/run_analysis.py")
-        print(f"  Briefing:  python scripts/daily_briefing.py")
+        print(f"  Documents:            {counts['documents']}")
+        print(f"  Chunks in DuckDB:     {store.chunk_count()}")
+        print(f"  Entities (graph):     {counts['entities']}  "
+              f"(merged {report['entities_merged']} duplicates)")
+        print(f"  Edges (graph):        {counts['edges']}")
+        print(f"  Quarantined:          {report['entities_quarantined']} entities "
+              f"({qr['entities']:.0%}), {report['edges_quarantined']} edges "
+              f"({qr['edges']:.0%}) — failed the grounding gate")
+        print("\nNext steps:")
+        print("  Search:    python scripts/search_cli.py -q 'your query'")
+        print("  Analyze:   python scripts/run_analysis.py")
+        print("  Briefing:  python scripts/daily_briefing.py")
 
-        # Show ontology rejections
         rejections = ontology.get_rejection_counts()
         if rejections:
-            print(f"\nOntology rejections (types not in ONTOLOGY.md):")
+            print("\nOntology rejections (types not in ONTOLOGY.md):")
             for type_name, count in list(rejections.items())[:10]:
-                print(f"  {type_name}: {count} rejections")
-            print(f"  Tip: Consider adding frequently rejected types to ONTOLOGY.md")
+                print(f"  {type_name}: {count}")
+            print("  Tip: add frequently rejected types to ONTOLOGY.md")
     finally:
-        graph.close()
-        if chunk_store:
-            chunk_store.close()
+        store.close()
 
 
 if __name__ == "__main__":
