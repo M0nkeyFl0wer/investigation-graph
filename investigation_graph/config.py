@@ -1,5 +1,5 @@
 """
-Configuration for open-newsroom-graph.
+Configuration for investigation-graph.
 Edit this file to match your setup. Defaults are fully local — no cloud needed.
 
 The store is always the DuckDB(base) + LadybugDB(graph) hybrid (see SPEC.md):

@@ -24,13 +24,13 @@ from pathlib import Path
 
 sys.path.insert(0, ".")
 
-from newsroom_graph import config
-from newsroom_graph.chunk_store import chunk_id_from_uri, get_chunk_store
-from newsroom_graph.embed import embed_batch
-from newsroom_graph.extract import Extractor
-from newsroom_graph.graph import build_graph
-from newsroom_graph.ontology import Ontology
-from newsroom_graph.pipeline import ground_and_resolve
+from investigation_graph import config
+from investigation_graph.chunk_store import chunk_id_from_uri, get_chunk_store
+from investigation_graph.embed import embed_batch
+from investigation_graph.extract import Extractor
+from investigation_graph.graph import build_graph
+from investigation_graph.ontology import Ontology
+from investigation_graph.pipeline import ground_and_resolve
 
 SUPPORTED = (".txt", ".md", ".pdf", ".html")
 

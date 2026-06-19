@@ -17,13 +17,13 @@ import sys
 
 sys.path.insert(0, ".")
 
-from newsroom_graph import config
-from newsroom_graph.chunk_store import ChunkStore
+from investigation_graph import config
+from investigation_graph.chunk_store import ChunkStore
 
 
 def _embed(query: str) -> list[float]:
     """Embed the query for vector/hybrid search (local Ollama)."""
-    from newsroom_graph.embed import embed_text
+    from investigation_graph.embed import embed_text
     return embed_text(query)
 
 
@@ -96,7 +96,7 @@ def main():
 
     # ── Graph surfaces (read-only; no writer lock) ─────────────────────────
     if args.path or args.entity:
-        from newsroom_graph.graph import Graph
+        from investigation_graph.graph import Graph
         graph = Graph(read_only=True)
         try:
             if args.path:

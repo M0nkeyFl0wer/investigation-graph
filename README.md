@@ -1,4 +1,4 @@
-# open-newsroom-graph
+# investigation-graph
 
 A privacy-first knowledge graph toolkit for **investigative journalists, OSINT investigators, and researchers**. Ingest documents, extract entities and relationships, build a searchable graph, and find structural gaps that suggest leads. Runs entirely on your laptop.
 
@@ -44,13 +44,13 @@ cd investigative-journalism-kg
 bash setup.sh
 
 # Verify everything works
-python -m newsroom_graph.check
+python -m investigation_graph.check
 ```
 
 You should see:
 
 ```
-open-newsroom-graph system check
+investigation-graph system check
 ========================================
   LadybugDB: 0.15.3
   PyArrow: 23.0.1
@@ -366,7 +366,7 @@ Everything runs on your machine. No network connections. No API keys. No account
 Embeddings stay local. Entity extraction can optionally use a remote LLM with zero-data-retention (ZDR) for non-sensitive documents. Better extraction quality on complex documents.
 
 ```python
-# In newsroom_graph/config.py
+# In investigation_graph/config.py
 PRIVACY_MODE = "hybrid"
 REMOTE_API_BASE = "https://api.anthropic.com/v1"
 REMOTE_MODEL = "claude-haiku-4-5-20251001"
@@ -401,7 +401,7 @@ Two risks that automated extraction creates for anyone publishing findings — j
 
 ## Configuration
 
-All configuration lives in `newsroom_graph/config.py`:
+All configuration lives in `investigation_graph/config.py`:
 
 ### Paths
 
@@ -533,7 +533,7 @@ Your investigation data — leaked documents, source identities, financial recor
 ONTOLOGY.md                    ← You edit this
     │
     ▼
-newsroom_graph/ontology.py     ← Parses types, validates at write time
+investigation_graph/ontology.py     ← Parses types, validates at write time
     │
     ▼
 ingest/ ──► extract.py         ← Three-phase extraction
@@ -572,7 +572,7 @@ ingest/ ──► extract.py         ← Three-phase extraction
 
 ### Query safety
 
-**All Cypher queries are pre-built and parameterized** in `newsroom_graph/queries.py`. No dynamic Cypher generation anywhere in the codebase. This means:
+**All Cypher queries are pre-built and parameterized** in `investigation_graph/queries.py`. No dynamic Cypher generation anywhere in the codebase. This means:
 
 - No query injection
 - No LLM hallucinating Cypher syntax
@@ -626,7 +626,7 @@ In practice: expose `search_cli.py` and `run_analysis.py` as tools with short de
 
 ```bash
 mkdir my-investigation && cd my-investigation
-cp -r /path/to/open-newsroom-graph/* .
+cp -r /path/to/investigation-graph/* .
 bash setup.sh
 # Edit ONTOLOGY.md for your beat
 mkdir ingest && cp /path/to/documents/* ingest/
@@ -670,8 +670,8 @@ When your graph has thousands of edges, direct visualization is unusable — a "
 
 ```python
 # In a Python script or REPL
-from newsroom_graph.graph import Graph
-from newsroom_graph.topology import export_skeleton_json
+from investigation_graph.graph import Graph
+from investigation_graph.topology import export_skeleton_json
 import json
 
 graph = Graph()
@@ -756,7 +756,7 @@ python -m spacy download en_core_web_sm
 
 ### "LLM extraction failed: model not found"
 
-The configured model isn't pulled in Ollama. Check `newsroom_graph/config.py` for `LOCAL_EXTRACTION_MODEL` and pull it:
+The configured model isn't pulled in Ollama. Check `investigation_graph/config.py` for `LOCAL_EXTRACTION_MODEL` and pull it:
 
 ```bash
 ollama pull llama3.2:3b
@@ -792,13 +792,13 @@ brew install poppler
 ## File Reference
 
 ```
-open-newsroom-graph/
+investigation-graph/
 ├── ONTOLOGY.md                    # Entity and edge type definitions (you edit this)
 ├── README.md                      # This file
 ├── LICENSE                        # MIT
 ├── requirements.txt               # Python dependencies
 ├── setup.sh                       # One-command setup script
-├── newsroom_graph/
+├── investigation_graph/
 │   ├── __init__.py                # Package init (version 0.1.0)
 │   ├── config.py                  # All configuration (paths, models, thresholds)
 │   ├── ontology.py                # ONTOLOGY.md parser + write-time validator

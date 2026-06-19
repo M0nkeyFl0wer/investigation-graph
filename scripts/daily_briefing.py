@@ -3,9 +3,9 @@
 import sys
 sys.path.insert(0, ".")
 
-from newsroom_graph import config
-from newsroom_graph.briefing import generate_briefing
-from newsroom_graph.graph import Graph
+from investigation_graph import config
+from investigation_graph.briefing import generate_briefing
+from investigation_graph.graph import Graph
 
 def main():
     # Read-only: briefings never write the graph.

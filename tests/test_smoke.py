@@ -9,7 +9,7 @@ against a real corpus.
 """
 import pytest
 
-from newsroom_graph.ontology import Ontology
+from investigation_graph.ontology import Ontology
 
 
 # ── Ontology: grade-locality + alias normalization ───────────────────────────
@@ -42,7 +42,7 @@ def test_alias_normalization():
 # ── Ground stage: grounding gate + entity resolution ─────────────────────────
 
 def test_ground_quarantines_hallucination_and_merges_duplicate():
-    from newsroom_graph.pipeline import ground_and_resolve
+    from investigation_graph.pipeline import ground_and_resolve
 
     chunks = [
         {"id": "c1", "text": "Jane Smith works at Acme Corp."},
@@ -72,7 +72,7 @@ def test_ground_quarantines_hallucination_and_merges_duplicate():
 # ── Graph projection: build + grade-locality at write + read ─────────────────
 
 def test_build_graph_projection_rejects_grade_violation(tmp_path):
-    from newsroom_graph.graph import Graph, build_graph
+    from investigation_graph.graph import Graph, build_graph
 
     gdir = tmp_path / "g.lbug"
     onto = Ontology()
@@ -105,7 +105,7 @@ def test_build_graph_projection_rejects_grade_violation(tmp_path):
 # ── Chunk store: write + retrieval (vector legs skip if vss unavailable) ──────
 
 def test_chunk_store_write_and_fts(tmp_path):
-    from newsroom_graph.chunk_store import ChunkStore, chunk_id_from_uri
+    from investigation_graph.chunk_store import ChunkStore, chunk_id_from_uri
 
     s = ChunkStore(db_path=tmp_path / "chunks.duckdb", embedding_dim=4)
     s.init_schema()
@@ -125,7 +125,7 @@ def test_chunk_store_write_and_fts(tmp_path):
 
 
 def test_chunk_store_vector_search(tmp_path):
-    from newsroom_graph.chunk_store import ChunkStore, chunk_id_from_uri
+    from investigation_graph.chunk_store import ChunkStore, chunk_id_from_uri
 
     s = ChunkStore(db_path=tmp_path / "chunks.duckdb", embedding_dim=4)
     s.init_schema()

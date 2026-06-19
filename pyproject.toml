@@ -3,9 +3,9 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "open-newsroom-graph"
+name = "investigation-graph"
 version = "0.1.0"
-description = "Knowledge graph toolkit for investigative journalism"
+description = "Local knowledge-graph toolkit for investigative journalists, OSINT investigators, and researchers"
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.10"
@@ -40,11 +40,11 @@ topology = ["ripser>=0.6.0"]
 dev = ["pytest>=8.0", "pytest-mock", "pytest-timeout", "ruff"]
 
 [project.scripts]
-nr-ingest = "scripts.ingest_folder:main"
-nr-search = "scripts.search_cli:main"
-nr-analyze = "scripts.run_analysis:main"
-nr-briefing = "scripts.daily_briefing:main"
-nr-validate = "scripts.validate_ontology:main"
+ig-ingest = "scripts.ingest_folder:main"
+ig-search = "scripts.search_cli:main"
+ig-analyze = "scripts.run_analysis:main"
+ig-briefing = "scripts.daily_briefing:main"
+ig-validate = "scripts.validate_ontology:main"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

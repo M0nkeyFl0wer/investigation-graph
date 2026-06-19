@@ -4,8 +4,8 @@ import sys
 
 sys.path.insert(0, ".")
 
-from newsroom_graph.ontology import Ontology
-from newsroom_graph.graph import Graph
+from investigation_graph.ontology import Ontology
+from investigation_graph.graph import Graph
 
 
 def main():

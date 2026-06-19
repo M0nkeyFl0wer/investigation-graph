@@ -75,7 +75,7 @@ def run():
     except Exception:
         checks.append("  Ollama: NOT RUNNING (install from ollama.com, then: ollama serve)")
 
-    print("open-newsroom-graph system check")
+    print("investigation-graph system check")
     print("=" * 40)
     for c in checks:
         print(c)

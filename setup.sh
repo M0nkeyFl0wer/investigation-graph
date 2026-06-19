@@ -1,10 +1,10 @@
 #!/bin/bash
-# Setup script for open-newsroom-graph
+# Setup script for investigation-graph
 # Run: bash setup.sh
 
 set -e
 
-echo "=== open-newsroom-graph setup ==="
+echo "=== investigation-graph setup ==="
 echo ""
 
 # Check Python
@@ -76,4 +76,4 @@ echo "  4. Run: python scripts/run_analysis.py"
 echo "  5. Run: python scripts/daily_briefing.py"
 echo ""
 echo "Edit ONTOLOGY.md to customize entity types for your beat."
-echo "Edit newsroom_graph/config.py to configure paths and privacy mode."
+echo "Edit investigation_graph/config.py to configure paths and privacy mode."

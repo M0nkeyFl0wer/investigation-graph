@@ -6,9 +6,9 @@ from datetime import datetime
 from pathlib import Path
 sys.path.insert(0, ".")
 
-from newsroom_graph import config
-from newsroom_graph.graph import Graph
-from newsroom_graph.topology import build_networkx_graph, run_persistent_homology, run_topology
+from investigation_graph import config
+from investigation_graph.graph import Graph
+from investigation_graph.topology import build_networkx_graph, run_persistent_homology, run_topology
 
 
 def main():

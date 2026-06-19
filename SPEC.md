@@ -1,4 +1,4 @@
-# SPEC — Investigative Journalism Knowledge Graph
+# SPEC — Investigation Knowledge Graph (investigation-graph)
 
 > A guided, local, hybrid-graph toolkit for an investigator or researcher who
 > **could not stand one up themselves**. Manual document ingestion, a
@@ -113,14 +113,14 @@ re-implementation is a bug — correctness fixes won't flow in). We import:
 
 | Concern | kg-common API | Replaces (today's home-grown) |
 |---------|---------------|-------------------------------|
-| Typed, graded ontology | `kg_common.ontology.Ontology` (ABC subclass) | `newsroom_graph/ontology.py` (markdown regex) |
-| Corruption-guarded writes | `kg_common.write.GraphWriter` | `newsroom_graph/graph.py` `add_edge`/`bulk_add_edges` |
+| Typed, graded ontology | `kg_common.ontology.Ontology` (ABC subclass) | `investigation_graph/ontology.py` (markdown regex) |
+| Corruption-guarded writes | `kg_common.write.GraphWriter` | `investigation_graph/graph.py` `add_edge`/`bulk_add_edges` |
 | Entity resolution | `kg_common.write.dedup.resolve_or_create_semantic` | *(absent today)* |
 | Grounding gate | `kg_common.write.grounding.ground` | *(absent today)* |
 | Grade-locality | `Ontology.validate_edge` + `EDGE_DOMAIN_RANGE` | type-only check |
-| Provider pool | `kg_common.provider` (Ollama/Anthropic) | `newsroom_graph/embed.py` |
-| Retrieval primitives | `kg_common.retrieval` (PathRAG) | `newsroom_graph/queries.py` paths |
-| Measurement | `kg_common.measure` (centrality/bridge/coverage) | `newsroom_graph/topology.py` |
+| Provider pool | `kg_common.provider` (Ollama/Anthropic) | `investigation_graph/embed.py` |
+| Retrieval primitives | `kg_common.retrieval` (PathRAG) | `investigation_graph/queries.py` paths |
+| Measurement | `kg_common.measure` (centrality/bridge/coverage) | `investigation_graph/topology.py` |
 
 **Distribution:** kg-common is private + not on PyPI today. A sanitized public
 export exists (`~/Projects/kg-common-public-staging`) and the export tooling

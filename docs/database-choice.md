@@ -57,12 +57,12 @@ tar czf investigation-$(date +%Y%m%d).tar.gz data/ ONTOLOGY.md
 
 One model, fixed per graph (default `nomic-embed-text`, 768-dim — runs locally
 via Ollama). Mixing embedding models corrupts retrieval, so the dimension is set
-once in `newsroom_graph/config.py` (`EMBEDDING_DIM`) and used everywhere. To
+once in `investigation_graph/config.py` (`EMBEDDING_DIM`) and used everywhere. To
 switch models, change the model + dimension together and re-ingest.
 
 ## Extending
 
-The store lives in `newsroom_graph/chunk_store.py` (DuckDB) and
-`newsroom_graph/graph.py` (the LadybugDB projection). Both build on the shared
+The store lives in `investigation_graph/chunk_store.py` (DuckDB) and
+`investigation_graph/graph.py` (the LadybugDB projection). Both build on the shared
 `kg-common` library, which supplies the corruption-guarded graph writer, the
 ontology contract, entity resolution, and the grounding gate.
