@@ -37,9 +37,10 @@ This toolkit:
 ```bash
 # Clone the repo
 git clone https://github.com/M0nkeyFl0wer/investigative-journalism-kg.git
-cd open-newsroom-graph
+cd investigative-journalism-kg
 
-# Run setup (installs Python packages + downloads local AI models)
+# Run setup (installs Python packages — including the kg-common substrate — and
+# downloads the local AI models)
 bash setup.sh
 
 # Verify everything works
@@ -60,7 +61,7 @@ open-newsroom-graph system check
   Ollama: OK (2 models)
   Embedding model: nomic-embed-text OK
 
-Ontology: Ontology(8 entity types, 14 edge types)
+Ontology: Ontology(8 entity types, 12 edge types)
   All checks passed.
 ```
 
@@ -68,12 +69,22 @@ If anything says NOT INSTALLED or MISSING, the check tells you exactly what to r
 
 ### Ingest Your First Documents
 
-```bash
-# Drop documents into the ingest folder
-cp /path/to/your/documents/*.pdf ingest/
-cp /path/to/your/documents/*.txt ingest/
+Try the bundled sample investigation first (a small fictional Harbor City graft
+case — the one this README's examples walk through):
 
-# Run ingestion
+```bash
+mkdir -p ingest
+cp examples/sample-investigation/* ingest/
+python scripts/ingest_folder.py
+```
+
+Then swap in your own documents:
+
+```bash
+# Drop documents into the ingest folder (PDF, text, markdown, HTML)
+cp /path/to/your/documents/* ingest/
+
+# Re-run ingestion (idempotent — re-processes each document cleanly)
 python scripts/ingest_folder.py
 ```
 
@@ -240,7 +251,7 @@ The exotypical examples prevent the most common extraction error: everything get
 
 Documents are chunked (1000 characters with 200-character overlap) and converted to 768-dimensional vectors using a local AI model (Ollama + nomic-embed-text). These power semantic search — finding documents by meaning, not just keywords.
 
-Embeddings are stored directly in the graph database as `FLOAT[768]` columns. No separate vector database. One database for everything.
+Chunks, embeddings, and full-text (BM25) search live in **DuckDB** (a single file, `data/chunks.duckdb`) — the base of the hybrid. The entity/edge **graph** lives in LadybugDB and is rebuilt from those records. See [`docs/database-choice.md`](docs/database-choice.md) for why the two-part store, and `SPEC.md` for the architecture. If Ollama is unavailable, ingestion still completes — chunks are stored unembedded (keyword search keeps working) and semantic search simply skips them.
 
 ### 3. Extraction — Three-phase entity extraction
 
@@ -485,8 +496,10 @@ All open source. All installable with pip (except Ollama).
 
 | Tool | Version | Purpose | Why this one |
 |------|---------|---------|-------------|
-| [LadybugDB](https://ladybugdb.com) | 0.15.3 | Graph database + vector storage | Embedded columnar graph DB. Cypher queries. Native `FLOAT[768]` vector columns with `array_cosine_similarity`. No server. One directory = one investigation. Continuation of KuzuDB. |
-| [PyArrow](https://arrow.apache.org) | 23.0+ | Bulk data loading | LadybugDB's `COPY FROM` Parquet is 25x faster than iterative inserts. PyArrow writes the Parquet files. |
+| [DuckDB](https://duckdb.org) | 1.0+ | Chunks + embeddings + FTS (the base) | Single-file columnar DB. BM25 full-text + HNSW vector search fused with RRF. Source of truth for chunk text, embeddings, and the record set. |
+| [LadybugDB](https://ladybugdb.com) | 0.15.3 | Graph database (the projection) | Embedded graph DB, Cypher queries, typed edges. Rebuilt from the DuckDB records each ingest. No server. Continuation of KuzuDB. |
+| [kg-common](https://github.com/M0nkeyFl0wer/kg-common) | pinned | Shared KG substrate | GraphWriter (edge-corruption guard), the Ontology contract (grade-locality), entity resolution, and the grounding gate — imported, not reinvented. |
+| [PyArrow](https://arrow.apache.org) | 15.0+ | Bulk data loading | `COPY FROM` Parquet is far faster than row-by-row inserts; PyArrow writes the Parquet files for both DuckDB and LadybugDB. |
 | [Pandas](https://pandas.pydata.org) | 3.0+ | Data manipulation | DataFrame operations for bulk entity preparation before Parquet export. |
 | [spaCy](https://spacy.io) | 3.8+ | NLP extraction (Phase 2) | Named entity recognition. `en_core_web_sm` model — small, fast, good enough for people/orgs/locations. |
 | [NetworkX](https://networkx.org) | 3.6+ | Graph analysis | Louvain communities, betweenness centrality, bridge detection, connected components. Runs on the extracted graph. |
@@ -494,13 +507,14 @@ All open source. All installable with pip (except Ollama).
 | [Ollama](https://ollama.com) | 0.3+ | Local AI models | Runs embedding + extraction models on your hardware. No API keys. No cloud. |
 | [Obsidian](https://obsidian.md) | any | Reading/writing (optional) | If configured, daily briefings auto-copy to your Obsidian vault inbox. |
 
-### Why LadybugDB instead of Neo4j/SQLite/etc?
+### Why DuckDB + LadybugDB (and no choice to make)?
 
-- **Embedded**: No server process. The database is a directory on disk. Copy it, back it up, encrypt it.
-- **Cypher**: Industry-standard graph query language. Transferable knowledge.
-- **Native vectors**: `FLOAT[768]` columns with `array_cosine_similarity` — no separate vector database needed.
-- **Bulk loading**: `COPY FROM` Parquet files is 25x faster than row-by-row inserts. Matters when ingesting 200+ documents.
-- **Single database**: Graph + vectors + metadata in one place. One directory = one investigation.
+You don't pick a database — it's always this hybrid, so there's nothing to misconfigure:
+
+- **DuckDB does retrieval**: BM25 full-text + HNSW vector search out of the box, fused with Reciprocal Rank Fusion. One file, no server, easy to back up.
+- **LadybugDB does structure**: a real graph DB (Cypher, typed edges) for the investigative payoff — paths, gaps, bridges, communities.
+- **The graph is a rebuilt projection** of the DuckDB records, not an incrementally-mutated store. This sidesteps a LadybugDB edge-write corruption mode and keeps re-ingestion safe (see `SPEC.md` §2.1).
+- **Embedded**: both are files/dirs under `data/` — copy, back up, or encrypt the whole investigation as a unit.
 
 ### Why not a cloud graph database?
 
@@ -561,47 +575,33 @@ ingest/ ──► extract.py         ← Three-phase extraction
 
 ### Database schema
 
+**DuckDB (`data/chunks.duckdb`) — the source of truth.**
+
 ```
-Entity (Node Table)
-├── id: STRING (primary key, SHA256 hash)
-├── entity_type: STRING (validated against ONTOLOGY.md)
-├── label: STRING
-├── description: STRING
-├── confidence: DOUBLE (0.0-1.0)
-├── source_url: STRING (which document)
-├── provenance: STRING (which extraction phase)
-├── created_at: INT64 (unix timestamp)
-├── updated_at: INT64
-├── embedding: FLOAT[768] (nomic-embed-text vector)
-└── layer: STRING (reserved for future semantic layering)
-
-Document (Node Table)
-├── id: STRING (primary key)
-├── path: STRING
-├── title: STRING
-├── ingested_at: INT64
-└── chunk_count: INT32
-
-Chunk (Node Table)
-├── id: STRING (primary key)
-├── doc_id: STRING
-├── text: STRING
-├── chunk_index: INT32
-├── created_at: INT64
-└── embedding: FLOAT[768]
-
-RELATES_TO (Edge Table: Entity → Entity)
-├── edge_type: STRING (EMPLOYED_BY, FUNDED_BY, etc.)
-├── weight: DOUBLE
-├── confidence: DOUBLE
-├── source_url: STRING
-├── provenance: STRING
-├── created_at: INT64
-└── expired_at: INT64 (reserved for future soft-expiry)
-
-MENTIONED_IN (Edge Table: Entity → Document)
-CHUNK_OF (Edge Table: Chunk → Document)
+chunk        id, doc_id, source_uri, title, body, chunk_index,
+             entity_ids, embedding FLOAT[N], sensitivity, embedded_at   (+ BM25 FTS index)
+document     id, path, title, ingested_at        ← the full record set, so the
+entity       id, doc_id, entity_type, label, ...   graph can be rebuilt from here
+edge         doc_id, source_id, target_id, edge_type, evidence, ...
 ```
+
+**LadybugDB (`data/graph.lbug`) — the rebuilt projection.** Schema comes from
+the kg-common `Ontology` (so it stays consistent with the writer's validation):
+
+```
+Entity (Node)      id (PK), entity_type, label, description, confidence,
+                   source_url, provenance, extraction_source, quality_flag, ...
+Document (Node)    id (PK), path, title, ingested_at
+RELATES_TO (Edge)  edge_type, weight, confidence, evidence, provenance,
+                   valid_at_ms, invalid_at_ms, expired_at_ms   (bi-temporal trio)
+MENTIONED_IN (Edge: Entity → Document)
+CHUNK_OF (Edge: Chunk → Document)
+```
+
+Entities carry no embedding column — semantic search runs over the DuckDB
+chunks, not over graph nodes (one embedding model, one place). Edge writes go
+through kg-common's corruption-guarded `GraphWriter`; the graph is rebuilt in a
+single reconstruct-and-swap pass per ingest.
 
 ### Integration with AI assistants (MCP / Claude Code)
 
