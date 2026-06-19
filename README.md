@@ -57,9 +57,12 @@ open-newsroom-graph system check
   spaCy: 3.8.14
   spaCy model: en_core_web_sm OK
   NetworkX: 3.6.1
-  Ripser: not installed (optional, pip install ripser)
-  Ollama: OK (2 models)
-  Embedding model: nomic-embed-text OK
+  Ripser: OK
+  DuckDB: 1.5.4
+  kg-common: 0.0.1
+
+  Ollama: OK (5 models)
+  Embedding model (nomic-embed-text, 768d): OK
 
 Ontology: Ontology(8 entity types, 12 edge types)
   All checks passed.

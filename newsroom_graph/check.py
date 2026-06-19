@@ -42,34 +42,21 @@ def run():
     except ImportError:
         checks.append("  Ripser: not installed (optional, pip install ripser)")
 
-    # Chunk substrate checks
-    substrate = config.CHUNK_SUBSTRATE
-    checks.append(f"\n  Chunk substrate: {substrate}")
+    # DuckDB — the base of the hybrid (chunks + embeddings + FTS). Required.
+    try:
+        import duckdb
+        checks.append(f"  DuckDB: {duckdb.__version__}")
+    except ImportError:
+        checks.append("  DuckDB: NOT INSTALLED (pip install duckdb)")
 
-    if substrate == "sqlite":
-        try:
-            import sqlite3
-            checks.append("  SQLite: OK")
-        except ImportError:
-            checks.append("  SQLite: NOT AVAILABLE (built-in)")
-
-    elif substrate == "duckdb":
-        try:
-            import duckdb
-            checks.append(f"  DuckDB: {duckdb.__version__}")
-        except ImportError:
-            checks.append("  DuckDB: NOT INSTALLED (pip install duckdb)")
-
-    elif substrate == "postgres":
-        try:
-            import psycopg2
-            checks.append("  Postgres client: OK")
-        except ImportError:
-            checks.append("  Postgres client: NOT INSTALLED (pip install psycopg2-binary)")
-        checks.append("  NOTE: Requires Postgres server running")
-
-    elif substrate == "ladybug":
-        checks.append("  (Using graph-only, no chunk substrate)")
+    # kg-common — the shared substrate (GraphWriter, Ontology, ER, grounding).
+    try:
+        import kg_common
+        ver = getattr(kg_common, "__version__", "OK")
+        checks.append(f"  kg-common: {ver}")
+    except ImportError:
+        checks.append("  kg-common: NOT INSTALLED "
+                      '(pip install -e "../kg-common[ladybug,ollama,dedup,measure]")')
 
     # Embedding model
     try:
