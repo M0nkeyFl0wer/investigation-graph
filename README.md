@@ -22,6 +22,26 @@ This toolkit:
 4. **Analyzes** the graph structure to find gaps, contradictions, and surprising connections
 5. **Briefs** you daily with a markdown summary of what the graph found
 
+### Why an investigator would use this
+
+Search answers *"where's the word 'Meridian'?"* It doesn't answer *"who connects
+Chen to Meridian, and what document am I missing that should link these two
+clusters?"* Those are **relationship and structure** questions — and the
+**holes in the structure are leads**. This tool turns a pile of documents into a
+typed, source-traced graph so you can see the shape of a case, find the quiet
+connectors, and spot the gap that points to the next records request.
+
+It's deliberately a **lead-generator and structure-finder, not a source of
+findings** — every connection is yours to verify against the original document
+before you publish. The safety machinery (it *quarantines* claims the source text
+doesn't support, and merges duplicate names) exists because an automated graph
+that invents a connection is a libel risk.
+
+> **📖 Read [`docs/FOR-INVESTIGATORS.md`](docs/FOR-INVESTIGATORS.md) — the field
+> guide.** Why a graph beats a folder of PDFs, how to work each stage, how to
+> read gaps/bridges as leads, the verification discipline, OPSEC, and the honest
+> limitations. Start there if you're an investigator, not a developer.
+
 ---
 
 ## Quick Start
