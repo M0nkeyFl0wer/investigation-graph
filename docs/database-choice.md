@@ -1,91 +1,68 @@
-# Choosing Your Database Substrate
+# The Database: a DuckDB + LadybugDB Hybrid
 
-This guide helps you pick the right database for your needs. The graph (relationships between entities) always lives in LadybugDB, but you have choices for where to store document chunks and embeddings.
-
----
-
-## Quick Decision
-
-| You want... | Choose |
-|-------------|--------|
-| Simple, reliable, just works | **SQLite** |
-| More power, future flexibility | **DuckDB** |
-| Multiple people sharing | **Postgres** |
-| Prototyping, very small data | **Ladybug only** |
+You don't choose a database. The toolkit always uses the same two-part store, so
+there's one well-trodden path and nothing to misconfigure. This note explains
+what the two parts are and why — useful if you're curious or extending the tool.
 
 ---
 
-## Option Comparison
+## The two parts
 
-### SQLite — The Simple Choice
-
-**Best for:** Single user, retrieval-focused, want things to just work
-
-| Pros | Cons |
-|------|------|
-| FTS5 is extremely reliable | Not designed for complex analytics |
-| sqlite-vec handles vectors well | Less flexibility for future needs |
-| No extra setup required | |
-| One file, easy to backup | |
-
-**Setup:** Just works. No server needed.
-
----
-
-### DuckDB — The Flexible Choice
-
-**Best for:** Want analytical power, comfortable with slight technical complexity
-
-| Pros | Cons |
-|------|------|
-| ATTACH from Cypher — seamless graph integration | Vector search (HNSW) needs experimental flag |
-| Excellent for bulk operations | Slightly more complex |
-| COPY FROM Parquet is extremely fast | Some features still maturing |
-
-**Setup:** Requires enabling experimental features for vector search.
-
----
-
-### Postgres — The Team Choice
-
-**Best for:** Multiple users, larger investigations, need concurrent access
-
-| Pros | Cons |
-|------|------|
-| Most powerful search (tsvector + pgvector) | Requires server setup |
-| Handles concurrent reads/writes well | More maintenance |
-| Mature tooling (scheduled jobs, monitoring) | Not "copy folder and go" |
-
-**Setup:** Requires installing and configuring PostgreSQL.
-
----
-
-### Ladybug Only — The Legacy Choice
-
-**Best for:** Prototyping, very small datasets (<100 documents)
-
-| Pros | Cons |
-|------|------|
-| Simplest setup | Limited FTS and vector search |
-| Everything in one place | Not recommended for production |
-
-**Note:** Not recommended for new projects. Choose SQLite, DuckDB, or Postgres instead.
-
----
-
-## How to Change
-
-Edit `newsroom_graph/config.py`:
-
-```python
-# Change this line:
-CHUNK_SUBSTRATE = "sqlite"  # or "duckdb", "postgres", "ladybug"
+```
+            your documents
+                  │
+                  ▼
+   ┌──────────────────────────┐
+   │  DuckDB  (the base)      │   data/chunks.duckdb  — a single file
+   │  • document text chunks  │
+   │  • embeddings (vectors)  │   keyword (BM25) + semantic (vector) search
+   │  • full-text search      │   live here; this is the source of truth
+   │  • the record set        │   (documents, entities, edges)
+   └───────────┬──────────────┘
+               │ rebuilt into ▼
+   ┌──────────────────────────┐
+   │ LadybugDB (the graph)    │   data/graph.lbug  — a directory
+   │ • entities (people, orgs)│
+   │ • typed relationships    │   path-finding and topology (gaps, bridges,
+   │ • provenance edges       │   communities) run here
+   └──────────────────────────┘
 ```
 
-If you switch substrates later, you'll need to re-run ingestion to populate the new chunk store. The graph data (entities and relationships) will be preserved.
+- **DuckDB is the source of truth.** Every chunk, embedding, and extracted
+  record lives here. It's one file — back it up with a plain copy.
+- **The graph is a rebuilt projection.** Each ingest rebuilds `graph.lbug` from
+  the DuckDB records. You never edit the graph directly; it's derived. (This also
+  sidesteps a LadybugDB edge-write corruption mode — see `../SPEC.md` §2.1.)
 
----
+## Why this pairing
 
-## Need Help?
+- **DuckDB** gives fast, reliable hybrid retrieval out of the box: BM25
+  full-text + HNSW vector search, fused with Reciprocal Rank Fusion. One
+  embedded file, no server.
+- **LadybugDB** is a real graph database (Cypher queries, typed edges). The
+  investigative payoff — "how is X connected to Y", "what's structurally
+  missing" — is graph-shaped, and that's what it's good at.
 
-If you're not sure, start with **SQLite**. You can always switch to DuckDB or Postgres later if your needs change. The retrieval improvements (hybrid search combining keyword and vector) will make a big difference regardless of which you pick.
+Using both means each does what it's best at, and the whole investigation is two
+files/directories under `data/` that you can encrypt, copy, or move as a unit.
+
+## Backup
+
+```bash
+# The entire investigation state:
+tar czf investigation-$(date +%Y%m%d).tar.gz data/ ONTOLOGY.md
+```
+
+## Embedding model
+
+One model, fixed per graph (default `nomic-embed-text`, 768-dim — runs locally
+via Ollama). Mixing embedding models corrupts retrieval, so the dimension is set
+once in `newsroom_graph/config.py` (`EMBEDDING_DIM`) and used everywhere. To
+switch models, change the model + dimension together and re-ingest.
+
+## Extending
+
+The store lives in `newsroom_graph/chunk_store.py` (DuckDB) and
+`newsroom_graph/graph.py` (the LadybugDB projection). Both build on the shared
+`kg-common` library, which supplies the corruption-guarded graph writer, the
+ontology contract, entity resolution, and the grounding gate.

@@ -36,7 +36,7 @@ This toolkit:
 
 ```bash
 # Clone the repo
-git clone https://github.com/M0nkeyFl0wer/open-newsroom-graph.git
+git clone https://github.com/M0nkeyFl0wer/investigative-journalism-kg.git
 cd open-newsroom-graph
 
 # Run setup (installs Python packages + downloads local AI models)

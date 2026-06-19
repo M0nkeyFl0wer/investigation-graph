@@ -367,7 +367,11 @@ class ChunkStore:
         table = pa.Table.from_pylist(rows)
         with tempfile.NamedTemporaryFile(suffix=".parquet", delete=False) as f:
             pq.write_table(table, f.name)
-            rw.execute("INSERT INTO chunk BY NAME SELECT * FROM read_parquet(?)", [f.name])
+            # OR REPLACE makes the bulk load idempotent: re-writing a chunk id
+            # (deterministic UUID5) upserts instead of raising a PK violation, so
+            # a re-ingest is safe even if delete_doc_records was skipped.
+            rw.execute("INSERT OR REPLACE INTO chunk BY NAME SELECT * FROM read_parquet(?)",
+                       [f.name])
             Path(f.name).unlink()
 
     def set_entity_ids(self, links: dict[str, list[str]]) -> int:
