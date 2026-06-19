@@ -161,14 +161,18 @@ Text to analyze:
 {text[:4000]}"""
 
         try:
-            response = ollama.chat(
+            # Timed client: a cold/saturated Ollama raises on timeout instead of
+            # hanging the whole ingest. The except below turns any failure into a
+            # skipped extraction for this doc (deterministic + spaCy phases stand).
+            client = ollama.Client(timeout=config.EXTRACT_TIMEOUT)
+            response = client.chat(
                 model=config.LOCAL_EXTRACTION_MODEL,
                 messages=[{"role": "user", "content": prompt}],
                 format="json",
             )
             result = json.loads(response["message"]["content"])
         except Exception as e:
-            logger.warning("LLM extraction failed: %s", e)
+            logger.warning("LLM extraction failed (skipping doc's LLM phase): %s", e)
             return {"entities": [], "edges": []}
 
         # Convert LLM output to our format

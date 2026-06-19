@@ -72,6 +72,13 @@ EMBEDDING_DIM = 768
 # Local extraction model (runs via Ollama, used in "local" mode)
 LOCAL_EXTRACTION_MODEL = "llama3.2:3b"  # or "mistral", "gemma2"
 
+# Hard wall-clock timeouts (seconds) for Ollama requests. A cold or
+# GPU-saturated daemon can hang; these make a stuck call fail fast so an
+# ingest degrades gracefully (unembedded chunks / skipped extraction) instead
+# of blocking forever.
+EMBED_TIMEOUT = 120
+EXTRACT_TIMEOUT = 180
+
 # =============================================================================
 # REMOTE MODELS (only used in "hybrid" and "remote" modes)
 # =============================================================================
