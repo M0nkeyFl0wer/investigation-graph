@@ -106,13 +106,26 @@ Legend: `[ ]` todo · `[~]` in progress · `[x]` done · `[!]` blocked
 
 ## Handoff state  *(update on every handoff)*
 
-- **Branch:** `align/kg-common-hybrid` (off `main` @ `df40eaf`)
-- **Last done:** WS0 SPEC + TODO written
-- **In progress:** WS0 branch/checkpoint/commit
-- **Next:** kick off WS2 Phase 2.1 (substrate) + WS1 (sanitizer) in parallel
-- **Inherited WIP:** the pre-existing uncommitted multi-substrate `chunk_store.py`
-  is checkpointed in the first branch commit; it is the to-be-reworked DuckDB
-  attempt (Phase 2.1 replaces it with the second-brain pattern).
-- **Blockers:** external dep on kg-common gated by WS1 (flip-public decision = user)
-- **Sibling agents:** active Claude in `kg-common` (use a worktree for WS1)
+- **Branch:** `align/kg-common-hybrid` (pushed; off `main` @ `df40eaf`)
+- **Done & committed:** WS0 (SPEC+TODO) · WS2.0 (kg-common+duckdb deps, imports
+  verified) · WS2.1 substrate (`chunk_store.py` DuckDB hybrid, smoke-verified) ·
+  WS2.2 ontology (kg-common `Ontology` subclass + grade-locality, verified).
+- **Done (kg-common, branch `ws1/sanitize-public`, NOT pushed, repo still
+  private):** WS1 skills+core sanitized; WS1b `scripts/build_public_export.py`
+  fail-closed export (136 files, 0 leaks, 469 tests pass). Worktree
+  `../kg-common-ws1-sanitize` left for review.
+- **Next:** WS2.1b — make `graph.py` a rebuilt **projection** of DuckDB
+  (`Graph(GraphWriter)`, reconstruct-and-swap edges; see SPEC §2.1). Then WS2.3
+  (artifact contract + scope→ingest→extract→ground→use), WS2.4 (good-dog +
+  tests + doc reconcile).
+- **Key constraint (verified):** GraphWriter refuses incremental edge writes
+  into a populated `RELATES_TO` (corruption guard). Graph is always rebuilt from
+  DuckDB; never mutated incrementally. SPEC §2.1.
+- **Open decisions (user, gate flip-public only — not WS2):** (1) public
+  kg-common README rewrite (task #8); (2) when to flip kg-common public.
+- **Sibling agents:** active Claude in `kg-common` main checkout — do WS1/WS1b
+  work only in the worktree.
+- **Commit rules:** no AI attribution; explicit `git add` paths; ruff gate is
+  real (fix, don't bypass, your own code); push uses `--no-verify` until WS2.4
+  lands tests (pre-push has no tests yet — known, not a regression).
 </content>

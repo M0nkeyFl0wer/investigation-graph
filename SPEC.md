@@ -76,6 +76,33 @@ clean, well-commented CLI steps that the wizard will later orchestrate.
   `nomic-embed-text`, 768-d). Mixing models corrupts retrieval — see the
   `kg-ingestion` skill. Dimension is parameterized, never hardcoded in DDL.
 
+### 2.1 The graph is a rebuilt projection, not an incremental store
+
+Verified at source (`kg-common/kg_common/write/ladybug.py:603-645`, the
+2026-06-16 corruption guard): on this LadybugDB build, **any incremental edge
+write into a *populated* `RELATES_TO` table permutes a column's values across
+unrelated rows** on the next checkpoint/reopen. `GraphWriter.add_edge` therefore
+*refuses* incremental edge writes once the REL table holds rows; the only safe
+path is **reconstruct-and-swap** — drop the REL table and bulk-insert the full
+edge set into the empty table in one pass.
+
+Consequence for this design:
+
+- **DuckDB is the source of truth for entities and edges too**, not just chunks.
+  Extraction + grounding write the surviving `entity`/`edge` records to DuckDB.
+- **The LadybugDB graph is a disposable materialized view**, fully rebuilt from
+  the DuckDB record set on each build: fresh graph dir → schema from
+  `ontology.schema_ddl()` → bulk-load all entities → load all edges in one pass
+  into the freshly-emptied REL table (`_allow_inplace_edge_writes=True` is safe
+  *only* here — empty table, single bulk pass) → checkpoint → close.
+- Incremental edge writes never happen, so the guard never trips and no
+  corruption window exists. Adding documents = append records to DuckDB, then
+  rebuild the graph (fast at single-investigator scale).
+
+(Note: `second-brain-hybrid-graph`'s `bulk_add_edges` writes raw MERGE directly
+on the connection, bypassing the guard — it predates the guard and relies on
+full-rebuild semantics. We adopt the guard-correct reconstruct-and-swap.)
+
 ---
 
 ## 3. Dependency on kg-common (the standardized substrate)
