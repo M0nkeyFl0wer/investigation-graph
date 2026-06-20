@@ -8,11 +8,16 @@ skill to consult before coding.
 
 Legend: `[ ]` todo · `[~]` in progress · `[x]` done
 
-**Done (2026-06-19):** P0.1 (per-chunk extraction), P0.2 (edge evidence), P0.3
-(OCR for scanned PDFs + images), P1.1 (ER semantic/embedding tier + DEDUP_THRESHOLD
-wired), P1.2 (whole-word grounding), P1.3 (merge-review `merges.jsonl`). Plus a
-per-run LLM circuit breaker (graceful degradation). **Next:** P1.4–P1.6 (LadybugDB
-hardening), then P2.1 (visual subsystem).
+**Done (2026-06-19/20):** P0.1 (per-chunk extraction), P0.2 (edge evidence), P0.3
+(OCR), P1.1 (ER embedding tier), P1.2 (whole-word grounding), P1.3 (merge review),
+P1.4 (`find_path` id-anchored + explicit limit), P1.5 (WAL/sidecar cleanup),
+P1.6 (pin `real_ladybug==0.15.3`), P1.8 (path scores labeled model-estimated),
+**P2.1 scaffold** (`media/` processor interface + DocumentProcessor). Plus: LLM
+circuit breaker; **a real re-ingest crash fixed** (single-file graph); the §4
+**corruption-claim correction** (SPEC §2.1). 24/24 tests.
+**Next:** P1.7 (incremental — optional, revisit at scale), **P2.1 implementation**
+(ColQwen visual retrieval + VLM — needs GPU/controlled compute + the kg-common
+promotion decision).
 
 ---
 
