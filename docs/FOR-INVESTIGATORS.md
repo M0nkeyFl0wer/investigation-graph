@@ -32,6 +32,45 @@ LLM" argument): **structure you can audit beats an AI that confidently summarize
 
 ---
 
+## This isn't theoretical — it's how the big investigations were done
+
+Knowledge graphs are the standard tool behind the most consequential document-leak
+investigations of the last decade. This toolkit puts the same *method* on your
+laptop, at a scale one person can run.
+
+- **The Panama / Paradise Papers (ICIJ).** The International Consortium of
+  Investigative Journalists loaded a **2.9 TB, ~11.9-million-record** leak into a
+  graph database (Neo4j) to trace offshore shell companies, their officers, and
+  beneficial owners across jurisdictions. The work won a **Pulitzer**. ICIJ's own
+  framing: *"relationships are all important… understanding relationships at huge
+  scale is where graph techniques excel."* They later baked graph-building into
+  [Datashare](https://www.icij.org/inside-icij/2024/02/datashares-new-plug-in-helps-investigative-journalists-connect-the-dots-with-graphs/),
+  their free leak-analysis platform. ([ICIJ × Neo4j](https://neo4j.com/customer-stories/icij/) ·
+  [Paradise Papers](https://www.prnewswire.com/news-releases/the-international-consortium-of-investigative-journalists-uses-neo4js-native-graph-platform-to-unlock-explosive-13-million-files-paradise-papers-leak-300555204.html) ·
+  [open Panama Papers graph dataset](https://github.com/neo4j-graph-examples/icij-panama-papers))
+- **The Azerbaijani Laundromat.** A money-laundering scheme that moved hundreds of
+  billions through **~500 shell companies**, surfaced from **~17,000 leaked
+  documents** — wire transfers and fabricated invoices. The investigative move was
+  exactly ours: **resolve entities** (the same company/person under many spellings)
+  and **connect them by typed relationships** so the structure of the scheme
+  becomes visible. ([Paco Nathan on entity resolution for anti-fraud graphs](https://odsc.medium.com/paco-nathan-on-entity-resolution-graphs-and-the-future-of-anti-fraud-ai-8766b80b7e85))
+- **Entity resolution is the backbone.** Practitioners like **Paco Nathan**
+  (Senzing) make the case that *entity-resolved* graphs are what make downstream
+  anti-fraud / intelligence work possible — because "J. Smith", "John Smith", and
+  "Smith Holdings Ltd." have to collapse to the right nodes before any pattern is
+  real. That's why this tool bakes entity resolution and a grounding gate into the
+  core, not as add-ons.
+
+**What's different here:** those teams had data engineers, a Neo4j cluster, and
+months. This toolkit gives a solo investigator the same primitives —
+source-traced entities, typed relationships, entity resolution, gap/topology
+analysis — **locally, privately, on one machine.** You won't process 2.9 TB on a
+laptop, but the *method* is identical, and most real cases (a scam operator, a
+procurement conflict, a local corruption story) are far smaller than the Panama
+Papers and well within reach.
+
+---
+
 ## The mental model
 
 - **Entities** — the things: `person`, `organization`, `transaction`, `asset`,
