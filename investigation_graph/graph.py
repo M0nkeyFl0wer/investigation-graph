@@ -131,24 +131,55 @@ class Graph:
         r = self.query("MATCH (d:Document) RETURN count(d) AS n")
         return r[0]["n"] if r else 0
 
-    def find_path(self, source_label: str, target_label: str, max_hops: int = 4) -> list:
-        """Find typed paths between two entities matched by label substring.
+    def find_path(self, source_label: str, target_label: str, max_hops: int = 4,
+                  limit: int = 25, endpoint_cap: int = 25) -> list:
+        """Find typed paths between two entities matched by label substring (P1.4).
 
-        Returns paths with their node labels, edge types, and a confidence that
-        is the product of edge confidences (lower = more uncertain chain). The
-        max_hops bound is interpolated as an int literal (LadybugDB does not
-        accept a parameter inside the variable-length bound) — never user input.
+        Two-step for performance + honesty:
+
+        1. Resolve the source/target *labels* to entity **ids** first. The path
+           traversal then anchors on ``id IN $set`` — and ``id`` is the PRIMARY
+           KEY, so it's indexed — instead of doing a ``CONTAINS`` label scan at
+           every hop of the variable-length expansion.
+        2. Enumerate paths between the resolved id sets, fetching one more than
+           ``limit`` so we can tell the caller when results were **truncated**
+           (the old code silently capped at 5).
+
+        Returns paths sorted by confidence (product of edge confidences — note:
+        this is model-estimated, not ground truth; see ROADMAP P1.8). ``max_hops``
+        is interpolated as an int literal (LadybugDB can't parameterize the
+        variable-length bound) — never user input.
         """
         hops = int(max_hops)
+        cap = int(endpoint_cap)  # int literal in LIMIT (LadybugDB can't param it)
+        # 1. Resolve endpoints to ids (two cheap single-property scans).
+        srcs = self.query(
+            f"MATCH (a:Entity) WHERE a.label CONTAINS $q RETURN a.id AS id LIMIT {cap}",
+            {"q": source_label})
+        tgts = self.query(
+            f"MATCH (b:Entity) WHERE b.label CONTAINS $q RETURN b.id AS id LIMIT {cap}",
+            {"q": target_label})
+        if not srcs or not tgts:
+            return []
+        src_ids = [r["id"] for r in srcs]
+        tgt_ids = [r["id"] for r in tgts]
+
+        # 2. Paths between the indexed id anchors; +1 to detect truncation.
         raw = self.query(
             f"""
             MATCH p = (a:Entity)-[r:RELATES_TO*1..{hops}]->(b:Entity)
-            WHERE a.label CONTAINS $src AND b.label CONTAINS $tgt
+            WHERE a.id IN $src AND b.id IN $tgt
             RETURN nodes(p) AS path_nodes, rels(p) AS path_rels
-            LIMIT 5
+            LIMIT {int(limit) + 1}
             """,
-            {"src": source_label, "tgt": target_label},
+            {"src": src_ids, "tgt": tgt_ids},
         )
+        if len(raw) > limit:
+            logger.warning("find_path: more than %d paths between %r and %r; "
+                           "showing %d (raise limit to see more).",
+                           limit, source_label, target_label, limit)
+            raw = raw[:limit]
+
         results = []
         for row in raw:
             labels = [n["label"] for n in row["path_nodes"]]
