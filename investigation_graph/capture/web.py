@@ -27,6 +27,7 @@ Playwright is an optional dependency; install with ``pip install -e '.[capture]'
 
 from __future__ import annotations
 
+import os
 from importlib.metadata import version as _pkg_version
 
 from investigation_graph.capture.manifest import Artifact, EvidenceManifest
@@ -88,9 +89,19 @@ def capture_url(
 
     recorded: list[Artifact] = []
 
+    # CDP_ENDPOINT (e.g. http://127.0.0.1:9222) routes capture through an already-running
+    # real-profile browser (the osint-browser) — needed for bot-walled sites that block
+    # headless Playwright. Empty = launch our own throwaway headless chromium.
+    cdp = os.environ.get("CDP_ENDPOINT", "")
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
-        context = browser.new_context(user_agent=_DESKTOP_UA, viewport={"width": 1366, "height": 1000})
+        if cdp:
+            browser = p.chromium.connect_over_cdp(cdp)
+            context = browser.contexts[0] if browser.contexts else browser.new_context()
+            owns_browser = False  # shared real-profile browser — never close it
+        else:
+            browser = p.chromium.launch(headless=True)
+            context = browser.new_context(user_agent=_DESKTOP_UA, viewport={"width": 1366, "height": 1000})
+            owns_browser = True
         page = context.new_page()
         try:
             # networkidle gives JS-heavy pages time to settle; fall back to a plain
@@ -122,8 +133,9 @@ def capture_url(
                 source_url=url,
                 http_status=http_status,
                 redirect_chain=redirects,
-                tool_version=f"playwright {pw_version} / chromium",
-                notes=(f"final_url={final_url}; headless chromium; UA={_DESKTOP_UA}."
+                tool_version=f"playwright {pw_version} / chromium" + (" / cdp-osint-browser" if cdp else ""),
+                notes=(f"final_url={final_url}; "
+                       + ("real-profile browser via CDP." if cdp else f"headless chromium; UA={_DESKTOP_UA}.")
                        + (f" {notes}" if notes else "")),
                 captured_at_utc=captured_at,
             )
@@ -162,7 +174,11 @@ def capture_url(
                 except Exception as e:  # pragma: no cover
                     print(f"  ! pdf capture failed for {url}: {e}")
         finally:
-            context.close()
-            browser.close()
+            page.close()
+            # In CDP mode the browser/context are shared (the osint-browser) — leave them
+            # running; only tear down a browser we launched ourselves.
+            if owns_browser:
+                context.close()
+                browser.close()
 
     return recorded
