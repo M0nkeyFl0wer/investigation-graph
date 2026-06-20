@@ -33,7 +33,8 @@ from investigation_graph.graph import build_graph
 from investigation_graph.ontology import Ontology
 from investigation_graph.pipeline import ground_and_resolve
 
-from investigation_graph.media import SUPPORTED_SUFFIXES, process_media
+from investigation_graph.media_setup import configure_media
+from kg_common.media import SUPPORTED_SUFFIXES, process_media
 
 # Formats any registered media processor can read (text/HTML/PDF+OCR/image-OCR
 # today; visual processors register here later — see media/ + P2.1).
@@ -75,6 +76,9 @@ def main():
 
     print(f"Scope: {ontology!r}")
     print(f"Corpus: {len(supported)} document(s) in {ingest_dir}/  →  DuckDB {store.db_path.name}\n")
+
+    # Wire our config into the shared kg_common.media subsystem (visual backend).
+    configure_media()
 
     t_start = time.time()
     try:

@@ -34,7 +34,9 @@ dependencies = [
     "duckdb>=1.0.0",
     # Shared KG substrate. Public in parallel with this repo; until then install
     # editable: pip install -e "../kg-common[ladybug,ollama,dedup,measure]"
-    "kg-common @ git+https://github.com/M0nkeyFl0wer/kg-common.git",
+    # [media] pulls the optional media subsystem extras (OCR/vision) — images +
+    # scanned PDFs. Drop the extra if a deployment doesn't need visual ingestion.
+    "kg-common[media] @ git+https://github.com/M0nkeyFl0wer/kg-common.git",
 ]
 
 [project.optional-dependencies]
