@@ -43,3 +43,6 @@ osint-toolkit/
 # trainer draft). Private — for the operator/instructor. The PUBLIC, minimized,
 # public-records-sourced version is examples/fedfiling-case/CASE-STUDY.md (tracked).
 examples/fedfiling-case/report-private/
+
+# Minimization denylist lists private PII tokens — never commit it (gate fail-closes if absent).
+scripts/minimization_denylist.txt

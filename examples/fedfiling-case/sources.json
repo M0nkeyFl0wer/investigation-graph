@@ -21,7 +21,7 @@
     "artifact_id": "federalfiling-sam-renewal-blog",
     "url": "https://www.federalfiling.com/how-to-renew-sam-gov-registration/",
     "type": "web",
-    "notes": "Company blog post (Dana Lee byline w/ photo per draft). Backs operator-foit path + the SAM-renewal pitch."
+    "notes": "Company blog post (byline per draft; name unverified, redacted). Backs operator-foit path + the SAM-renewal pitch."
   },
   {
     "artifact_id": "zoominfo-federal-filing",
@@ -59,5 +59,35 @@
     "url": "https://opencorporates.com/companies/us_fl?q=Valor+Media+Group",
     "type": "web",
     "notes": "SECONDARY source for Valor Media Group LLC (OpenCorporates FL search). Backs network-valor pending Sunbiz PRIMARY. Flag as secondary."
+  },
+  {
+    "artifact_id": "samgov-free-notice",
+    "url": "https://justicegrants.usdoj.gov/resources/system-for-award-management",
+    "type": "web",
+    "notes": "PRIMARY .gov statement 'There is no cost to register with SAM.gov.' = the impersonation basis (G4 mechanism). DOJ OJP (sam.gov/FSD were JS-walled)."
+  },
+  {
+    "artifact_id": "bbb-fed-filing-tampa",
+    "url": "https://www.bbb.org/us/fl/tampa/profile/business-opportunities/fed-filing-llc-0653-90422345",
+    "type": "web",
+    "notes": "BBB profile for the actual subject (Fed Filing LLC, 701 S Howard Ave Tampa). NOT accredited, Not Rated, file opened 6/2/2022. Harm context."
+  },
+  {
+    "artifact_id": "bbb-fed-filing-complaints",
+    "url": "https://www.bbb.org/us/fl/tampa/profile/business-opportunities/fed-filing-llc-0653-90422345/complaints",
+    "type": "web",
+    "notes": "BBB complaints tab — showed 0 complaints at research time. Harm-scale evidence (conservative)."
+  },
+  {
+    "artifact_id": "tina-federal-filing-brand",
+    "url": "https://truthinadvertising.org/brands/federal-filing/",
+    "type": "web",
+    "notes": "TINA brand hub for Federal Filing ('deceptively disguises itself as SAM.gov'). Corroborates mechanism."
+  },
+  {
+    "artifact_id": "scampulse-fedfiling",
+    "url": "https://www.scampulse.com/fedfilingcom-reviews",
+    "type": "web",
+    "notes": "ScamPulse consumer reports on fedfiling.com (source of the $499 figure + 'Government Agency Imposter'). WebFetch got 410; try browser capture; if it fails = documented gap."
   }
 ]
