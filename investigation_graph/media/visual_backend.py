@@ -68,9 +68,14 @@ class StubBackend(VisualBackend):
 class OllamaVisionBackend(VisualBackend):
     """Local Ollama vision model (e.g. a multimodal gemma/llava/qwen-vl)."""
 
-    def __init__(self, model: str | None = None, timeout: int | None = None):
+    def __init__(self, model: str | None = None, timeout: int | None = None,
+                 host: str | None = None):
         self.model = model or config.VISUAL_MODEL
         self.timeout = timeout or getattr(config, "VISUAL_TIMEOUT", 120)
+        # Ollama host: an operator can point this at a controlled GPU box (e.g. a
+        # self-hosted server, reached over SSH tunnel / VPN) via VISUAL_ENDPOINT —
+        # kept in local config, not committed. Empty → local Ollama (localhost).
+        self.host = host or getattr(config, "VISUAL_ENDPOINT", "") or None
 
     def available(self) -> bool:
         try:
@@ -84,7 +89,7 @@ class OllamaVisionBackend(VisualBackend):
             return ""
         try:
             import ollama
-            client = ollama.Client(timeout=self.timeout)
+            client = ollama.Client(host=self.host, timeout=self.timeout)
             resp = client.chat(
                 model=self.model,
                 messages=[{
