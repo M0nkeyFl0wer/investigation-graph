@@ -1,0 +1,45 @@
+[
+  {
+    "artifact_id": "tina-federal-filing",
+    "url": "https://truthinadvertising.org/articles/federal-filing-government-imposter-scam/",
+    "type": "web",
+    "notes": "TINA (Truth in Advertising) advisory: Federal Filing government-imposter scam. Primary regulator-style source for company-tina."
+  },
+  {
+    "artifact_id": "federalfiling-home",
+    "url": "https://www.federalfiling.com/",
+    "type": "web",
+    "notes": "Company's own site. Backs company-sites; footer/identity."
+  },
+  {
+    "artifact_id": "federalfiling-naics-blog",
+    "url": "https://www.federalfiling.com/what-is-a-naics-code/",
+    "type": "web",
+    "notes": "Company blog post bylined 'Gabriel' with photo (the reverse-image lead to Hernandez). Backs operator-hernandez path."
+  },
+  {
+    "artifact_id": "federalfiling-sam-renewal-blog",
+    "url": "https://www.federalfiling.com/how-to-renew-sam-gov-registration/",
+    "type": "web",
+    "notes": "Company blog post (Dana Lee byline w/ photo per draft). Backs operator-foit path + the SAM-renewal pitch."
+  },
+  {
+    "artifact_id": "zoominfo-federal-filing",
+    "url": "https://www.zoominfo.com/c/federal-filing/540257838",
+    "type": "web",
+    "notes": "Business directory listing (CEO = Hernandez per draft). May be bot-walled; documented either way."
+  },
+  {
+    "artifact_id": "linkedin-federal-filing-company",
+    "url": "https://www.linkedin.com/company/federal-filing/",
+    "type": "web",
+    "notes": "Company LinkedIn page (David Holland NOT listed = persona corroboration). Likely login-walled; capture attempt documents that."
+  },
+  {
+    "artifact_id": "sunbiz-fedfiling-annual-report-2026",
+    "url": "https://search.sunbiz.org/Inquiry/CorporationSearch/GetDocument?aggregateId=flal-l19000306788-d50840fb-2d29-46d7-8222-6039ed6f7f77&transactionId=l19000306788-da3e4d96-6a62-4054-8543-5b2ef8e26754&formatType=PDF",
+    "type": "download",
+    "kind": "registry_pdf",
+    "notes": "FL Sunbiz 2026 annual report PDF for FED FILING LLC (L19000306788). Authoritative: registered agent + authorized persons (the two trusts). Backs company-annualreport-2026. URL transcribed from the trainer draft OneTab; if it 404s, redo a live Sunbiz lookup."
+  }
+]
