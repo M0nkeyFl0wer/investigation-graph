@@ -98,11 +98,16 @@ hardening), then P2.1 (visual subsystem).
 - **Fix:** pin to the exact version reconstruct-and-swap was validated against;
   document why. **Skill:** `ladybug`.
 
-### P1.7 — Full graph rebuild every ingest = scaling cliff  (LadybugDB lens)
-- **Problem:** re-ingesting one doc re-writes the whole corpus (safe, but O(corpus)).
-- **Fix (later):** design `build_graph` to diff DuckDB records vs the graph and
-  rebuild only when the REL set changed; adopt incremental REL writes once
-  kg-common/LadybugDB ship the fixed path. **Skill:** `ladybug-surgery`.
+### P1.7 — Full graph rebuild every ingest = O(corpus)  (LadybugDB lens)
+- **Problem:** re-ingesting one doc re-writes the whole corpus. The rebuild is a
+  *conservative choice*, not a corruption necessity — the "incremental writes
+  corrupt" claim was **disproven standalone on 2026-06-19** (30 trials, 0
+  collateral; see SPEC §2.1). So incremental edge writes are *likely safe*.
+- **Fix (later, only if scale demands):** `build_graph` diffs DuckDB records vs
+  the graph and writes incrementally instead of rebuilding — **but first**
+  re-measure corruption with exact per-edge intended-state tracking on a copy
+  (the discipline that caught the original mis-measurement). **Skill:**
+  `ladybug-surgery`, verification.md §4.
 
 ### P1.8 — Path "confidence" is false precision
 - **Problem:** product of 3B-model edge confidences presented as a score.
@@ -142,8 +147,11 @@ These belong in the shared library, not just this consumer (per `BOUNDARY.md`):
 - **PUB.2 — typed REL tables option** in the Ontology ABC, so consumers can opt
   out of the single-`RELATES_TO`+`edge_type`-property anti-idiom (enables P1.4
   performance + reduces the blast radius the corruption guard must cover).
-- **PUB.3 — incremental REL write** once the LadybugDB corruption is fixed
-  upstream (unblocks P1.7).
+- **PUB.3 — relax the `add_edge` corruption guard** — the 2026-06-19 standalone
+  repro falsified the "incremental REL write corrupts" claim (kg-common's own
+  conclusion: keep as conservative defense, not a real bug). If re-measurement
+  on real consumers confirms safety, the guard could become opt-in rather than
+  default-refuse, unblocking P1.7 incremental writes across consumers.
 - **PUB.4 — edge `evidence` as a first-class, validated field** in the writer
   (supports P0.2 across consumers).
 - Public-export note: any new `media` extras (docling, ocrmypdf, colpali-engine)

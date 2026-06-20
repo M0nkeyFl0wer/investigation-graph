@@ -78,30 +78,42 @@ clean, well-commented CLI steps that the wizard will later orchestrate.
 
 ### 2.1 The graph is a rebuilt projection, not an incremental store
 
-Verified at source (`kg-common/kg_common/write/ladybug.py:603-645`, the
-2026-06-16 corruption guard): on this LadybugDB build, **any incremental edge
-write into a *populated* `RELATES_TO` table permutes a column's values across
-unrelated rows** on the next checkpoint/reopen. `GraphWriter.add_edge` therefore
-*refuses* incremental edge writes once the REL table holds rows; the only safe
-path is **reconstruct-and-swap** — drop the REL table and bulk-insert the full
-edge set into the empty table in one pass.
+> **Correction (2026-06-19).** An earlier version of this section asserted, as
+> established fact, that *any* incremental edge write into a populated
+> `RELATES_TO` table corrupts unrelated rows. **That claim is not substantiated.**
+> A standalone, single-process, exact-per-edge-intended-state repro on pristine
+> DBs (ladybug 0.17.1) ran **30 trials across 6 mechanisms — including the exact
+> `MERGE … ON MATCH SET` op — with zero collateral corruption**
+> (`kg-common/docs/issue-drafts/2026-06-19-ladybug-incremental-rel-write-corruption/`).
+> The original 2026-06-16 report was **most likely a mis-measured dedup-merge
+> effect** (a legitimate edge re-point read as corruption). It is **not a fileable
+> engine bug**, and incremental edge writes are *probably* safe.
 
-Consequence for this design:
+So why does this project still rebuild the graph rather than mutate it? **As cheap,
+conservative defense** — which is exactly what kg-common's own post-mortem
+concluded (keep the `add_edge` guard + reconstruct-and-swap). A production anomaly
+*was* observed once; the cause is unconfirmed (one un-ruled-out hypothesis is
+HNSW/FTS indexes on the graph — which this project deliberately does *not* put on
+the graph). The rebuild costs us nothing at single-investigator scale and removes
+a class of risk we can't yet fully characterize. It is a **choice, not a forced
+necessity.**
+
+The design, then:
 
 - **DuckDB is the source of truth for entities and edges too**, not just chunks.
   Extraction + grounding write the surviving `entity`/`edge` records to DuckDB.
-- **The LadybugDB graph is a disposable materialized view**, fully rebuilt from
-  the DuckDB record set on each build: fresh graph dir → schema from
+- **The LadybugDB graph is a disposable materialized view**, rebuilt from the
+  DuckDB record set on each build: fresh graph dir → schema from
   `ontology.schema_ddl()` → bulk-load all entities → load all edges in one pass
-  into the freshly-emptied REL table (`_allow_inplace_edge_writes=True` is safe
-  *only* here — empty table, single bulk pass) → checkpoint → close.
-- Incremental edge writes never happen, so the guard never trips and no
-  corruption window exists. Adding documents = append records to DuckDB, then
-  rebuild the graph (fast at single-investigator scale).
+  → checkpoint → close. (`GraphWriter` still refuses incremental edge writes by
+  default — the conservative guard — so we bulk-load with
+  `_allow_inplace_edge_writes=True` into the freshly-emptied table.)
+- Adding documents = append records to DuckDB, then rebuild the graph.
 
-(Note: `second-brain-hybrid-graph`'s `bulk_add_edges` writes raw MERGE directly
-on the connection, bypassing the guard — it predates the guard and relies on
-full-rebuild semantics. We adopt the guard-correct reconstruct-and-swap.)
+**Revisit at scale (see ROADMAP P1.7):** the full rebuild is O(corpus); if a large
+corpus makes it costly, incremental edge writes are the likely-safe alternative —
+but only after re-measuring corruption with exact per-edge intended-state tracking
+on a copy first (the discipline that caught the original mis-measurement).
 
 ---
 
