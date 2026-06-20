@@ -197,7 +197,10 @@ Text to analyze:
             # Timed client: a cold/saturated Ollama raises on timeout instead of
             # hanging the whole ingest. The except below turns any failure into a
             # skipped extraction for this doc (deterministic + spaCy phases stand).
-            client = ollama.Client(timeout=config.EXTRACT_TIMEOUT)
+            # host=None falls back to the default local Ollama; a non-empty
+            # EXTRACT_ENDPOINT routes extraction to a remote GPU box (via tunnel).
+            client = ollama.Client(host=config.EXTRACT_ENDPOINT or None,
+                                   timeout=config.EXTRACT_TIMEOUT)
             response = client.chat(
                 model=config.LOCAL_EXTRACTION_MODEL,
                 messages=[{"role": "user", "content": prompt}],

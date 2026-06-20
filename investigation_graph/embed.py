@@ -21,8 +21,10 @@ logger = logging.getLogger(__name__)
 EMBED_TIMEOUT = getattr(config, "EMBED_TIMEOUT", 120)
 
 # One client with the timeout baked in (httpx transport-level, the real knob —
-# unlike a model `options` key, which does nothing for timeouts).
-_client = ollama.Client(timeout=EMBED_TIMEOUT)
+# unlike a model `options` key, which does nothing for timeouts). host=None uses the
+# local Ollama; EMBED_ENDPOINT (defaults to EXTRACT_ENDPOINT) routes to a remote GPU box.
+_client = ollama.Client(host=getattr(config, "EMBED_ENDPOINT", "") or None,
+                        timeout=EMBED_TIMEOUT)
 
 
 def embed_text(text: str) -> list[float]:

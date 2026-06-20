@@ -7,6 +7,7 @@ chunks, embeddings, and full-text search live in DuckDB at data/chunks.duckdb;
 the entity/edge graph lives in LadybugDB at data/graph.lbug. There is no
 substrate to choose — one well-trodden path, so non-experts get a working tool.
 """
+import os
 from pathlib import Path
 
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -62,15 +63,25 @@ PRIVACY_MODE = "local"
 #   - "qwen3-embedding:8b" : 4096 dimensions. Better quality, slower.
 #   - "nomic-embed-text" is the default for simplicity.
 #   - If you want better retrieval, upgrade to qwen3-embedding:8b
-EMBEDDING_MODEL = "nomic-embed-text"
+EMBEDDING_MODEL = os.environ.get("EMBED_MODEL", "nomic-embed-text")
+# Optional remote Ollama host for EMBEDDINGS — defaults to EXTRACT_ENDPOINT so a
+# single tunnel serves both. Env-only (see EXTRACT_ENDPOINT in the extraction section).
+EMBED_ENDPOINT = os.environ.get("EMBED_ENDPOINT", os.environ.get("EXTRACT_ENDPOINT", ""))
 
 # Embedding dimension (must match the model)
 # - nomic-embed-text:     768
 # - qwen3-embedding:8b:  4096
 EMBEDDING_DIM = 768
 
-# Local extraction model (runs via Ollama, used in "local" mode)
-LOCAL_EXTRACTION_MODEL = "llama3.2:3b"  # or "mistral", "gemma2"
+# Local extraction model (runs via Ollama, used in "local" mode).
+# Override via the EXTRACT_MODEL env var (e.g. a bigger model on a GPU host).
+LOCAL_EXTRACTION_MODEL = os.environ.get("EXTRACT_MODEL", "llama3.2:3b")  # or "mistral", "gemma2"
+
+# Optional remote Ollama host for EXTRACTION (e.g. an operator GPU box reached over
+# an SSH tunnel). Empty = use the local Ollama. Set via env, NEVER hardcode here —
+# operator endpoints stay out of this public repo (mirrors VISUAL_ENDPOINT).
+#   e.g.  ssh -N -L 11436:localhost:11434 <gpuhost>  →  EXTRACT_ENDPOINT=http://localhost:11436
+EXTRACT_ENDPOINT = os.environ.get("EXTRACT_ENDPOINT", "")
 
 # Hard wall-clock timeouts (seconds) for Ollama requests. A cold or
 # GPU-saturated daemon can hang; these make a stuck call fail fast so an
