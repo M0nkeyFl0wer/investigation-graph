@@ -102,6 +102,34 @@ def test_build_graph_projection_rejects_grade_violation(tmp_path):
         g.close()
 
 
+def test_rebuild_is_idempotent(tmp_path):
+    # Re-ingest path: build_graph over an EXISTING graph must not crash (the
+    # graph is a single file on real_ladybug 0.15.3, so rmtree-as-dir failed),
+    # and must not mutate the caller's records (so it's re-callable).
+    from investigation_graph.graph import Graph, build_graph
+
+    gdir = tmp_path / "g.lbug"
+    onto = Ontology()
+    records = {
+        "documents": [{"id": "d1", "title": "t", "path": "p"}],
+        "entities": [{"id": "a", "entity_type": "person", "label": "Ann"},
+                     {"id": "b", "entity_type": "organization", "label": "Acme"}],
+        "edges": [{"source_id": "a", "target_id": "b", "edge_type": "EMPLOYED_BY"}],
+        "mentions": [],
+    }
+    c1 = build_graph(records, graph_dir=gdir, ontology=onto)
+    c2 = build_graph(records, graph_dir=gdir, ontology=onto)  # re-ingest, same input
+    assert c1 == c2 == {"documents": 1, "entities": 2, "edges": 1, "mentions": 0}
+    # input untouched (ids still present) → re-callable
+    assert records["documents"][0]["id"] == "d1"
+    assert records["entities"][0]["id"] == "a"
+    g = Graph(graph_dir=gdir, ontology=onto, read_only=True)
+    try:
+        assert g.entity_count() == 2 and g.edge_count() == 1
+    finally:
+        g.close()
+
+
 # ── Chunk store: write + retrieval (vector legs skip if vss unavailable) ──────
 
 def test_chunk_store_write_and_fts(tmp_path):

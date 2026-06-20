@@ -214,6 +214,29 @@ class Graph:
         self._db = None
 
 
+def _wipe_graph(graph_dir: Path) -> None:
+    """Remove a LadybugDB graph + its sidecars before a rebuild.
+
+    real_ladybug 0.15.3 stores the graph as a single FILE (``g.lbug``), while
+    other builds use a directory. ``shutil.rmtree`` only handles a directory, so
+    a naive wipe crashed on the second ingest (the re-ingest path) when the graph
+    was a file. This handles either shape, and also clears sidecars
+    (``g.lbug.wal`` / ``.shadow`` / ``.lock`` / ``.tmp``): that lets the rebuild
+    start clean AND quarantines any WAL a crashed builder left behind — a
+    poisoned WAL would otherwise SEGV the next open (P1.5).
+    """
+    p = Path(graph_dir)
+    if p.is_dir():
+        shutil.rmtree(p, ignore_errors=True)
+    elif p.exists() or p.is_symlink():
+        p.unlink(missing_ok=True)
+    for sidecar in p.parent.glob(p.name + ".*"):
+        if sidecar.is_dir():
+            shutil.rmtree(sidecar, ignore_errors=True)
+        else:
+            sidecar.unlink(missing_ok=True)
+
+
 def build_graph(records: dict, graph_dir: Path | None = None,
                 ontology: Ontology | None = None) -> dict:
     """Rebuild the whole graph projection from DuckDB records (reconstruct-and-swap).
@@ -240,8 +263,7 @@ def build_graph(records: dict, graph_dir: Path | None = None,
     ontology = ontology or Ontology()
 
     # Wipe — the graph is a disposable projection of the DuckDB source of truth.
-    if graph_dir.exists():
-        shutil.rmtree(graph_dir)
+    _wipe_graph(graph_dir)
 
     documents = records.get("documents", [])
     entities = records.get("entities", [])
@@ -252,19 +274,24 @@ def build_graph(records: dict, graph_dir: Path | None = None,
     # bulk pass, one checkpoint at close (see module + SPEC §2.1).
     writer = GraphWriter(graph_dir, ontology, allow_inplace_edge_writes=True)
     counts = {"documents": 0, "entities": 0, "edges": 0, "mentions": 0}
+    # Copy each record before popping keys — never mutate the caller's records
+    # (so build_graph is re-callable / idempotent on the same input).
     try:
         for d in documents:
+            d = dict(d)
             did = d.pop("id")
             if writer.add_document(did, **d):
                 counts["documents"] += 1
 
         for e in entities:
+            e = dict(e)
             eid, etype, label = e.pop("id"), e.pop("entity_type"), e.pop("label")
             if writer.add_entity(eid, etype, label, **e):
                 counts["entities"] += 1
 
         # All edges in ONE pass — no flush/checkpoint between them.
         for ed in edges:
+            ed = dict(ed)
             src, tgt, etype = ed.pop("source_id"), ed.pop("target_id"), ed.pop("edge_type")
             if writer.add_edge(src, tgt, etype, **ed):
                 counts["edges"] += 1
