@@ -41,5 +41,23 @@
     "type": "download",
     "kind": "registry_pdf",
     "notes": "FL Sunbiz 2026 annual report PDF for FED FILING LLC (L19000306788). Authoritative: registered agent + authorized persons (the two trusts). Backs company-annualreport-2026. URL transcribed from the trainer draft OneTab; if it 404s, redo a live Sunbiz lookup."
+  },
+  {
+    "artifact_id": "tina-usa-filing",
+    "url": "https://truthinadvertising.org/articles/usa-filing-government-imposter-scam/",
+    "type": "web",
+    "notes": "TINA advisory on 'USA Filing' (samfiling.com) — the sibling SAM-imposter TINA named. Grounds network-usafiling; note USA Filing is San Diego CA (NOT proven same operator as Fed Filing)."
+  },
+  {
+    "artifact_id": "valor-bizprofile",
+    "url": "https://www.bizprofile.net/fl/tampa/valor-media-group-llc",
+    "type": "web",
+    "notes": "SECONDARY source for Valor Media Group LLC (aggregator). Backs network-valor pending Sunbiz PRIMARY (Cloudflare-walled). Flag as secondary."
+  },
+  {
+    "artifact_id": "valor-opencorporates",
+    "url": "https://opencorporates.com/companies/us_fl?q=Valor+Media+Group",
+    "type": "web",
+    "notes": "SECONDARY source for Valor Media Group LLC (OpenCorporates FL search). Backs network-valor pending Sunbiz PRIMARY. Flag as secondary."
   }
 ]
