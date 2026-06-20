@@ -56,8 +56,13 @@ def display_paths(paths: list[dict]) -> None:
             chain.append(label)
             if j < len(types):
                 chain.append(f" --[{types[j]}]--> ")
-        print(f"  Path {i} (confidence: {p['path_confidence']:.2f}):")
+        # P1.8: this score is the product of per-edge LLM confidences — a rough,
+        # MODEL-ESTIMATED signal, not a measured probability. Label it honestly so
+        # it isn't over-trusted; use it only to rank, and verify the edges.
+        print(f"  Path {i} (model-estimated score: {p['path_confidence']:.2f}):")
         print(f"    {''.join(chain)}\n")
+    print("  (scores are rough model estimates for ranking — verify each edge "
+          "against its source before relying on a path.)\n")
 
 
 def display_entities(rows: list[dict]) -> None:
