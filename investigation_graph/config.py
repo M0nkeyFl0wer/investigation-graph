@@ -83,6 +83,22 @@ EMBED_TIMEOUT = 120
 EXTRACT_TIMEOUT = 90
 
 # =============================================================================
+# VISUAL BACKEND (optional — image captioning / visual retrieval, P2.1)
+# =============================================================================
+# Heavy vision models (VLM captioning; ColQwen page retrieval) need a real GPU,
+# so the backend is PLUGGABLE and OFF by default. WHICH machine/endpoint does the
+# work is the operator's deployment choice — keep specific endpoints/keys in local
+# config (env / keyring), NOT committed (this repo is public).
+#   "none"   : disabled — images fall back to OCR only (default; nothing extra).
+#   "ollama" : a local Ollama vision model (VISUAL_MODEL), if you have the GPU.
+#   "remote" : an operator-controlled endpoint (VISUAL_ENDPOINT) — your own box.
+#   "api"    : an external inference API — NON-SENSITIVE material only.
+VISUAL_BACKEND = "none"
+VISUAL_MODEL = "gemma3:12b"   # Ollama vision model when VISUAL_BACKEND="ollama"
+VISUAL_ENDPOINT = ""          # remote/api URL — set via env, never hardcode here
+VISUAL_TIMEOUT = 120          # hard wall-clock for a vision call
+
+# =============================================================================
 # REMOTE MODELS (only used in "hybrid" and "remote" modes)
 # =============================================================================
 

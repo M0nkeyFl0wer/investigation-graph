@@ -16,10 +16,12 @@ from pathlib import Path
 
 from .base import BaseProcessor, ProcessorResult
 from .document import DocumentProcessor
+from .image import ImageProcessor
 
-# Ordered registry. Later/more-specialized processors (visual, image-VLM) go
-# BEFORE DocumentProcessor when they should win for a given type.
-_PROCESSORS: list[BaseProcessor] = [DocumentProcessor()]
+# Ordered registry: ImageProcessor wins for image files (OCR + optional VLM
+# caption); DocumentProcessor handles text/HTML/PDF (and images too, as a pure-OCR
+# fallback if ImageProcessor were removed). More-specialized processors go first.
+_PROCESSORS: list[BaseProcessor] = [ImageProcessor(), DocumentProcessor()]
 
 # Suffixes any registered processor will handle (drives ingest's file filter).
 SUPPORTED_SUFFIXES: tuple[str, ...] = (
@@ -43,5 +45,8 @@ def process_media(path: str | Path) -> ProcessorResult:
     return ProcessorResult(metadata={"kind": "unsupported"})
 
 
-__all__ = ["BaseProcessor", "ProcessorResult", "DocumentProcessor",
+from .visual_backend import VisualBackend, get_visual_backend  # noqa: E402
+
+__all__ = ["BaseProcessor", "ProcessorResult", "DocumentProcessor", "ImageProcessor",
+           "VisualBackend", "get_visual_backend",
            "process_media", "register_processor", "SUPPORTED_SUFFIXES"]
