@@ -24,3 +24,12 @@ Thumbs.db
 
 # Eval evidence artifacts
 eval/evidence/
+
+# Fed Filing case: trainer-provided inputs stay local (not for the public repo)
+examples/fedfiling-case/inputs/*.pdf
+examples/fedfiling-case/inputs/*.mp4
+
+# Fed Filing case: raw captured evidence artifacts contain third-party PII and are
+# not republished. Integrity is provable from the committed manifest.jsonl SHA-256
+# hashes; the capture is reproducible from the committed code + the source URLs.
+examples/fedfiling-case/evidence/artifacts/
