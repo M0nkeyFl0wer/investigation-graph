@@ -29,6 +29,7 @@ The system tracks quality metadata on entities and edges:
 | event | A dated occurrence, meeting, filing, vote, or incident | "Board meeting 2024-01-20" | "Undated dinner referenced in emails" | "Monthly board meetings" → use multiple event entities |
 | asset | Property, vehicle, account, financial instrument, or valuable | "Parcel 44-201" | "Cryptocurrency wallet 0x3f..." | "The property management company" → organization |
 | claim | A factual assertion from a source, quote, or statement | "No money was exchanged" (press release) | Implied claim from document absence | "The press release" → document |
+| domain | A registered internet domain or website (identity = the FQDN) | "fedfiling.com" | "a parked/defunct domain referenced in a filing" | "the hosting company" → organization; "the web page's content" → document |
 
 ## Edge Types
 
@@ -47,6 +48,9 @@ The system tracks quality metadata on entities and edges:
 | OCCURRED_ON | event/transaction → *(date as property)* | Temporal ordering | Timeline construction |
 | CONTRADICTS | claim → claim | Two claims from different sources conflict | Inconsistencies, potential deception |
 | SUPPORTS | claim → claim | One claim corroborates another | Evidence strength, corroboration |
+| OPERATED_BY | organization → person | De-facto operational control of an entity, distinct from formal ownership/employment | Who actually runs a shell whose ownership is obscured (e.g. behind trusts) |
+| REGISTERED_AGENT_OF | person/organization → organization | Statutory registered agent named on a corporate filing | Links a named human/firm to a shell company via the corporate registry |
+| IMPERSONATES | organization/domain → organization | Poses as or mimics another (often official) entity | Core of imposter/scam schemes; maps the deception target |
 | ASSOCIATED_WITH | any → any | Unspecified relationship | **Use sparingly** — prefer a typed edge |
 
 ## Extending This Ontology
