@@ -33,3 +33,8 @@ examples/fedfiling-case/inputs/*.mp4
 # not republished. Integrity is provable from the committed manifest.jsonl SHA-256
 # hashes; the capture is reproducible from the committed code + the source URLs.
 examples/fedfiling-case/evidence/artifacts/
+
+# Private OSINT toolkit: course tools/techniques + SpiderFoot/etc. skills. NEVER
+# committed to this public repo. Self-contained so it can be zipped and shared with
+# the course instructor privately.
+osint-toolkit/
