@@ -44,6 +44,11 @@ topology = ["ripser>=0.6.0"]
 # OCR for scanned PDFs + image files (P0.3). Also needs system binaries:
 #   tesseract-ocr (the OCR engine) and poppler-utils (pdftoppm, pdftotext).
 ocr = ["pytesseract>=0.3", "pillow>=10"]
+# Evidentiary web capture: headless-browser screenshot + rendered HTML + print-PDF
+# with SHA-256 provenance (investigation_graph/capture). After install, fetch the
+# browser binary once: `python -m playwright install chromium`. ffmpeg (video
+# keyframes) and the manifest core are stdlib/system-binary, so they need no extra.
+capture = ["playwright>=1.40"]
 dev = ["pytest>=8.0", "pytest-mock", "pytest-timeout", "ruff"]
 
 [project.scripts]
