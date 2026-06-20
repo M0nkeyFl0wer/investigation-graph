@@ -38,3 +38,8 @@ examples/fedfiling-case/evidence/artifacts/
 # committed to this public repo. Self-contained so it can be zipped and shared with
 # the course instructor privately.
 osint-toolkit/
+
+# Fed Filing FULL report (contains operators' personal details carried from the
+# trainer draft). Private — for the operator/instructor. The PUBLIC, minimized,
+# public-records-sourced version is examples/fedfiling-case/CASE-STUDY.md (tracked).
+examples/fedfiling-case/report-private/
