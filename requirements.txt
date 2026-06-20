@@ -1,4 +1,7 @@
-real_ladybug>=0.15.0
+# Pinned to the exact version this project's tests + eval were validated against.
+# Graph behaviors differ across builds (e.g. 0.15.3 stores the graph as a single
+# file; the 2026-06-19 corruption repro ran on 0.17.1, not this). See SPEC §2.1.
+real_ladybug==0.15.3
 pyarrow>=15.0.0
 pandas>=2.0.0
 spacy>=3.7.0

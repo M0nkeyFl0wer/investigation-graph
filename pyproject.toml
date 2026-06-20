@@ -21,7 +21,9 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Information Analysis",
 ]
 dependencies = [
-    "real_ladybug>=0.15.0",
+    # Pinned to the validated build (graph behaviors differ across versions; see
+    # SPEC §2.1 and the 2026-06-19 corruption-repro note).
+    "real_ladybug==0.15.3",
     "pyarrow>=15.0.0",
     "pandas>=2.0.0",
     "spacy>=3.7.0",
