@@ -73,12 +73,18 @@ body {
 }
 .brand { display: flex; align-items: baseline; gap: 0.55rem; }
 .brand .mark { font-size: 1.3rem; transform: translateY(2px); filter: saturate(0.85); }
+.brand .headline { display: flex; flex-direction: column; gap: 0.05rem; }
 .brand .title {
   font-family: var(--serif);
   font-size: 1.22rem; font-weight: 600; letter-spacing: 0.01em;
-  color: var(--ink);
+  color: var(--ink); line-height: 1.1;
 }
 .brand .amp { font-style: italic; color: var(--muted); font-weight: 400; padding: 0 0.05em; }
+/* the one-line thesis — the investigation, stated. Text as data. */
+.brand .thesis {
+  font-family: var(--serif); font-style: italic; font-size: 0.82rem;
+  color: var(--ink-soft); letter-spacing: 0.005em;
+}
 .counts { font-family: var(--mono); color: var(--muted); font-size: 0.72rem; margin-left: 0.3rem; align-self: center; }
 
 /* view tabs */
@@ -106,6 +112,9 @@ body {
 
 /* the BEFORE/AFTER loop switch */
 .loop { display: flex; align-items: center; gap: 0.5rem; }
+.loop[hidden] { display: none; }       /* breed-panic-only; hidden attr must win */
+/* inside the spine rail the bridge toggle gets a quiet divider before it */
+.spine-rail .loop { margin-left: 0.4rem; padding-left: 0.7rem; border-left: 1px solid var(--rule); }
 .loop-cap { font-size: 0.78rem; color: var(--ink-soft); }
 .loop-state {
   font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.06em;
@@ -127,6 +136,51 @@ body {
 .switch input:checked + .track { background: var(--bridge); border-color: var(--bridge); }
 .switch input:checked + .track .thumb { transform: translateX(18px); background: #fff; }
 .switch input:checked ~ * { }
+
+/* ===================== the three fears — narrative spine ===================== */
+/* A small-multiples SELECTOR: one segmented control, three comparable states
+ * plus "All". Same grammar each time; only the lit arc changes. The band is a
+ * flex child between topbar and stage, so it never overlaps the canvas. */
+#story-spine {
+  flex: 0 0 auto;
+  padding: 0.5rem 1.15rem 0.55rem;
+  background: linear-gradient(180deg, var(--bg-2), var(--bg));
+  border-bottom: 1px solid var(--line);
+  position: relative; z-index: 22;
+}
+.spine-rail { display: flex; align-items: center; gap: 0.45rem; flex-wrap: wrap; }
+.spine-eyebrow {
+  font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--muted); margin-right: 0.35rem;
+}
+/* the segmented control — each fear a tab; identical grammar (Tufte parallelism) */
+.fear {
+  font: inherit; font-family: var(--serif); font-size: 0.86rem;
+  display: inline-flex; align-items: baseline; gap: 0.4rem;
+  padding: 0.3rem 0.8rem;
+  border: 1.5px solid var(--rule); border-radius: 2px;
+  background: var(--panel-bg); color: var(--ink-soft);
+  cursor: pointer; transition: background 0.16s, color 0.16s, border-color 0.16s;
+}
+.fear:hover { background: var(--bg-2); color: var(--ink); }
+.fear.active {
+  background: var(--ink); color: var(--bg); border-color: var(--ink);
+}
+.fear .fear-n {
+  font-family: var(--mono); font-size: 0.66rem; color: var(--muted);
+}
+.fear.active .fear-n { color: var(--faint); }
+/* the bridge before/after — only present inside the breed panic */
+.spine-caption {
+  margin: 0.4rem 0 0; max-width: 92ch;
+  font-family: var(--serif); font-size: 0.84rem; line-height: 1.45;
+  color: var(--ink-soft);
+}
+.spine-caption b { color: var(--ink); font-weight: 600; }
+/* the lit arc's accent reflects which fear is active (a quiet left rule) */
+#story-spine[data-story="grain_free"] .spine-caption { border-left: 2.5px solid var(--d-nutri); padding-left: 0.7rem; }
+#story-spine[data-story="breed"]      .spine-caption { border-left: 2.5px solid var(--d-policy); padding-left: 0.7rem; }
+#story-spine[data-story="dominance"]  .spine-caption { border-left: 2.5px solid var(--d-behav); padding-left: 0.7rem; }
 
 /* ===================== stage ===================== */
 /* Flex child fills the height left by the (variable) topbar — NO hardcoded
@@ -157,6 +211,65 @@ body {
 }
 #story.bridged { border-color: var(--bridge); color: var(--bridge); }
 #story.empty { opacity: 0; }
+
+/* ===================== takeaways card (the argument, up front) ===================== */
+/* Text AS data — three findings, no decoration. Anchored top-right; dismissible
+ * so it never fights the graph. A close reduces it to a quiet re-open tab. */
+#takeaways {
+  position: absolute; top: 14px; right: 14px; z-index: 24;
+  width: 330px; max-width: calc(100vw - 28px);
+  background: var(--panel-bg);
+  border: 1.5px solid var(--rule); border-left: 3px solid var(--ink);
+  border-radius: 3px; padding: 0.85rem 1rem 0.9rem;
+  box-shadow: 0 3px 16px rgba(60,44,20,0.12);
+  transition: opacity 0.22s, transform 0.22s;
+}
+#takeaways.gone { opacity: 0; transform: translateY(-8px); pointer-events: none; }
+#takeaways h2 {
+  margin: 0 0 0.5rem; font-family: var(--serif); font-size: 1.02rem;
+  font-weight: 600; color: var(--ink); letter-spacing: 0.005em;
+}
+#takeaways .findings {
+  margin: 0; padding: 0; list-style: none;
+  counter-reset: tk;
+}
+#takeaways .findings li {
+  counter-increment: tk;
+  position: relative; padding: 0.3rem 0 0.45rem 1.6rem;
+  font-size: 0.82rem; line-height: 1.42; color: var(--ink-soft);
+  border-top: 1px solid var(--line);
+}
+#takeaways .findings li:first-child { border-top: none; }
+#takeaways .findings li::before {
+  content: counter(tk); position: absolute; left: 0; top: 0.32rem;
+  width: 1.05rem; height: 1.05rem; line-height: 1.05rem; text-align: center;
+  font-family: var(--mono); font-size: 0.66rem; color: var(--bg);
+  background: var(--ink); border-radius: 50%;
+}
+#takeaways .findings b { color: var(--ink); font-weight: 600; }
+#takeaways .tk-contra { color: var(--contra); font-style: italic; }
+#takeaways .tk-super  { color: var(--ink); font-style: italic; }
+#takeaways .tk-foot {
+  margin: 0.6rem 0 0; font-family: var(--serif); font-style: italic;
+  font-size: 0.74rem; color: var(--muted); line-height: 1.4;
+}
+#takeaways .linkish {
+  font: inherit; font-style: normal; border: none; background: none;
+  color: var(--bridge); cursor: pointer; padding: 0; font-weight: 600;
+}
+#takeaways .linkish:hover { text-decoration: underline; }
+#takeaways-close {
+  position: absolute; top: 0.3rem; right: 0.45rem; border: none; background: none;
+  font-size: 1.3rem; line-height: 1; cursor: pointer; color: var(--muted);
+}
+#takeaways-close:hover { color: var(--ink); }
+#takeaways-reopen {
+  position: absolute; top: 14px; right: 14px; z-index: 23;
+  font: inherit; font-family: var(--serif); font-size: 0.78rem;
+  padding: 0.3rem 0.7rem; border: 1.5px solid var(--rule); border-radius: 2px;
+  background: var(--panel-bg); color: var(--ink-soft); cursor: pointer;
+}
+#takeaways-reopen:hover { background: var(--bg-2); color: var(--ink); }
 
 /* ===================== legend ===================== */
 #legend {
@@ -193,6 +306,8 @@ body {
 .g-event       { border-radius: 50% 50% 50% 0; transform: rotate(45deg); } /* teardrop */
 .g-product     { border-radius: 3px; clip-path: polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%); border: none; background: var(--ink); }
 .g-location    { border-radius: 50% 50% 50% 0; transform: rotate(45deg); border-style: solid; opacity: 0.7; }
+/* protagonist swatch: a circle with the soft indigo halo the hubs carry */
+.g-protagonist { border-radius: 50%; box-shadow: 0 0 0 3px rgba(58,90,140,0.20); }
 
 /* domain colour ramp */
 .domains li { gap: 0.5rem; }
@@ -240,8 +355,11 @@ body {
   font-family: var(--sans);
 }
 #panel .badge.contra { background: #f3ddd5; color: var(--contra); border: 1px solid #e0b3a5; }
+#panel .badge.super  { background: var(--bg-2); color: var(--ink-soft); border: 1px solid var(--rule); }
 #panel .badge.bridge { background: #d9eae8; color: var(--bridge); border: 1px solid #a8cfca; }
+#panel .badge.hub    { background: #e3e8f1; color: var(--hl); border: 1px solid #b8c3da; }
 #panel .badge.dom { background: var(--bg-2); color: var(--ink-soft); border: 1px solid var(--line); }
+#panel .fact.hub { border-left-color: var(--hl); background: #eef1f7; }
 #panel .domchip { display: inline-flex; align-items: center; gap: 0.35rem; }
 #panel .domchip .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
 #panel .conf-bar {

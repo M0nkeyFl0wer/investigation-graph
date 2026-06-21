@@ -18,7 +18,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Rudolf Schenkel",
       "domain": "behavioral_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "dominance"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "pub_schenkel_1947_wolf_expression",
@@ -26,7 +31,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Expression Studies on Wolves (Schenkel 1947, Behaviour 1:81-129)",
       "domain": "behavioral_research",
       "year": 1947,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "dominance"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_dominance_theory",
@@ -34,7 +44,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Dominance theory (canine behavior)",
       "domain": "behavioral_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "dominance"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "org_basel_zoo",
@@ -42,7 +57,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Basel Zoo",
       "domain": "veterinary_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "dominance"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "person_l_david_mech",
@@ -50,7 +70,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "L. David Mech",
       "domain": "behavioral_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "dominance"
+      ],
+      "protagonist": true,
+      "protagonistNote": "recanted his own 'alpha wolf' myth"
     },
     {
       "id": "pub_mech_1999_alpha_status",
@@ -58,7 +83,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Alpha status, dominance, and division of labor in wolf packs (Mech 1999, CJZ 77:1196-1203)",
       "domain": "behavioral_research",
       "year": 1999,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "dominance"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "org_usgs_npwrc",
@@ -66,7 +96,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "U.S. Geological Survey Northern Prairie Wildlife Research Center",
       "domain": "veterinary_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "dominance"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_alpha_wolf",
@@ -74,7 +109,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Alpha wolf concept",
       "domain": "behavioral_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "dominance"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "org_avsab",
@@ -82,7 +122,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "American Veterinary Society of Animal Behavior",
       "domain": "behavioral_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "dominance"
+      ],
+      "protagonist": true,
+      "protagonistNote": "retired dominance-based training"
     },
     {
       "id": "pub_avsab_2008_dominance_position",
@@ -90,7 +135,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "AVSAB Position Statement on the Use of Dominance Theory in Behavior Modification of Animals (2008)",
       "domain": "behavioral_research",
       "year": 2008,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "dominance"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_positive_reinforcement_training",
@@ -98,7 +148,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Positive reinforcement training (animal behavior modification)",
       "domain": "behavioral_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "dominance"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "person_kelly_bollen",
@@ -106,7 +161,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Kelly S. Bollen",
       "domain": "behavioral_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "pub_bollen_horowitz_2012_safer_validity",
@@ -114,7 +172,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Investigating behavior assessment instruments to predict aggression in dogs (Bollen & Horowitz 2012, Applied Animal Behaviour Science 141:139-148)",
       "domain": "behavioral_research",
       "year": 2012,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_shelter_behavior_assessment",
@@ -122,7 +183,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Shelter dog behavior assessment instruments",
       "domain": "behavioral_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "org_aspca",
@@ -130,7 +194,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "American Society for the Prevention of Cruelty to Animals",
       "domain": "veterinary_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_safer_assessment",
@@ -138,7 +205,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "SAFER (Safety Assessment for Evaluating Rehoming) behavior evaluation",
       "domain": "behavioral_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_cbaraq",
@@ -146,7 +216,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Canine Behavioral Assessment and Research Questionnaire (C-BARQ)",
       "domain": "behavioral_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_behavior_assessment_limitations",
@@ -154,7 +227,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Shelter behavior assessment reliability and validity limitations",
       "domain": "behavioral_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "person_ana_catarina_vieira_de_castro",
@@ -162,7 +238,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Ana Catarina Vieira de Castro",
       "domain": "behavioral_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "dominance"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "pub_vieira_de_castro_2020_plos",
@@ -170,7 +251,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Does training method matter? Evidence for the negative impact of aversive-based methods on companion dog welfare (Vieira de Castro et al. 2020, PLOS ONE 15(12):e0225023)",
       "domain": "behavioral_research",
       "year": 2020,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "dominance"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_aversive_training",
@@ -178,7 +264,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Aversive-based dog training methods",
       "domain": "behavioral_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "dominance"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "person_marina_watowich",
@@ -186,7 +277,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Marina M. Watowich",
       "domain": "behavioral_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "pub_watowich_2020_cognition_lifespan",
@@ -194,7 +288,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Age influences domestic dog cognitive performance independent of average breed lifespan (Watowich et al. 2020, Animal Cognition 23:795-805)",
       "domain": "behavioral_research",
       "year": 2020,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_cognitive_aging",
@@ -202,7 +299,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Age-related cognitive decline in dogs",
       "domain": "behavioral_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_dognition_project",
@@ -210,7 +310,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Dognition citizen science cognitive assessment project",
       "domain": "behavioral_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "org_ear institute",
@@ -218,7 +321,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "University of Arizona Evolutionary Anthropology (EvoAmy lab)",
       "domain": "veterinary_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_breed_lifespan_cognitive_tradeoff",
@@ -226,7 +332,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Breed lifespan vs cognitive aging rate hypothesis",
       "domain": "behavioral_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_dog_aging_project",
@@ -234,7 +343,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Dog Aging Project",
       "domain": "behavioral_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "breed_american_staffordshire_terrier",
@@ -242,7 +354,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "American Staffordshire Terrier",
       "domain": "breed_standards",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "breed_amstaff_abbreviation",
@@ -250,7 +367,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "AmStaff",
       "domain": "breed_standards",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "pub_akc_amstaff_standard",
@@ -258,7 +380,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Official Standard of the American Staffordshire Terrier (AKC)",
       "domain": "breed_standards",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "event_akc_amstaff_recognized_1936",
@@ -266,7 +393,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "AKC recognizes Staffordshire Terrier as a distinct registered breed",
       "domain": "breed_standards",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "breed_german_shepherd_dog",
@@ -274,7 +406,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "German Shepherd Dog",
       "domain": "breed_standards",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "breed_gsd_abbreviation",
@@ -282,7 +417,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "GSD",
       "domain": "breed_standards",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "org_akc",
@@ -290,7 +428,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "American Kennel Club",
       "domain": "breed_standards",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "pub_akc_gsd_standard",
@@ -298,7 +439,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Official Standard of the German Shepherd Dog (AKC)",
       "domain": "breed_standards",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "org_fci",
@@ -306,7 +450,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Fédération Cynologique Internationale",
       "domain": "veterinary_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "org_tkc",
@@ -314,7 +461,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "The Kennel Club (UK)",
       "domain": "breed_standards",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "org_ukc",
@@ -322,7 +472,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "United Kennel Club",
       "domain": "breed_standards",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_closed_stud_book",
@@ -330,7 +483,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Closed stud book",
       "domain": "breed_standards",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_open_registry",
@@ -338,7 +494,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Open registry",
       "domain": "breed_standards",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "breed_group_fci_system",
@@ -346,7 +505,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "FCI breed group taxonomy",
       "domain": "breed_standards",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "breed_group_akc_system",
@@ -354,7 +516,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "AKC breed group taxonomy",
       "domain": "breed_standards",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "breed_alsatian",
@@ -362,7 +527,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Alsatian",
       "domain": "breed_standards",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "org_rkc",
@@ -370,7 +538,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "The Royal Kennel Club (UK)",
       "domain": "breed_standards",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "pub_rkc_gsd_standard",
@@ -378,7 +549,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Royal Kennel Club Breed Standard: German Shepherd Dog (Pastoral Group)",
       "domain": "breed_standards",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "breed_american_pit_bull_terrier",
@@ -386,7 +560,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "American Pit Bull Terrier",
       "domain": "breed_standards",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "breed_apbt_abbreviation",
@@ -394,7 +573,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "APBT",
       "domain": "breed_standards",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "breed_pit_bull_colloquial",
@@ -402,7 +586,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Pit Bull",
       "domain": "breed_standards",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "pub_ukc_apbt_standard",
@@ -410,7 +599,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "American Pit Bull Terrier — Official UKC Breed Standard (Revised May 1, 2017)",
       "domain": "breed_standards",
       "year": 2017,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "event_ukc_apbt_first_registration_1898",
@@ -418,7 +610,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "UKC issues first registration for American Pit Bull Terrier (Bennett's Ring, registration #1)",
       "domain": "breed_standards",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "pub_nbc_grain_free_dcm_continuing_2020",
@@ -426,7 +621,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "FDA investigation continues into dog heart damage associated with grain-free food",
       "domain": "nutrition_safety",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "org_nbc_news",
@@ -434,7 +634,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "NBC News",
       "domain": "community_journalism",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "pub_npr_shelter_adoption_pace_2024_01",
@@ -442,7 +645,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Pet adoptions are not keeping pace with the number of animals coming in (NPR, 2024-01-10)",
       "domain": "community_journalism",
       "year": 2024,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "org_npr",
@@ -450,7 +656,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "NPR (National Public Radio)",
       "domain": "community_journalism",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "org_shelter_animals_count",
@@ -458,7 +667,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Shelter Animals Count",
       "domain": "community_journalism",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "org_humane_rescue_alliance",
@@ -466,7 +678,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Humane Rescue Alliance",
       "domain": "veterinary_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "person_stephanie_filer",
@@ -474,7 +689,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Stephanie Filer",
       "domain": "behavioral_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "person_julie_depenbrock",
@@ -482,7 +700,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Julie Depenbrock",
       "domain": "behavioral_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "loc_washington_dc",
@@ -490,7 +711,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Washington, D.C.",
       "domain": "municipal_policy",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "event_shelter_intake_adoption_gap_2023",
@@ -498,7 +722,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Post-pandemic shelter intake-vs-adoption gap (2023)",
       "domain": "community_journalism",
       "year": 2023,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_post_pandemic_adoption_decline",
@@ -506,7 +733,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Post-pandemic shelter adoption decline",
       "domain": "community_journalism",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "pub_cpr_aurora_pit_bull_repeal_2024",
@@ -514,7 +744,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Aurora voters agree to repeal 20-year-old ban on pit bull dogs (CPR News, 2024-11-06)",
       "domain": "municipal_policy",
       "year": 2024,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "org_cpr_news",
@@ -522,7 +757,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Colorado Public Radio (CPR News)",
       "domain": "community_journalism",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "loc_aurora_colorado",
@@ -530,7 +768,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Aurora, Colorado",
       "domain": "municipal_policy",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "org_aurora_city_council",
@@ -538,7 +781,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Aurora City Council",
       "domain": "municipal_policy",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "event_aurora_question_3a_2024_11_05",
@@ -546,7 +794,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Aurora ballot Question 3A (pit bull ban repeal)",
       "domain": "municipal_policy",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "breed_staffordshire_bull_terrier",
@@ -554,7 +807,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Staffordshire Bull Terrier",
       "domain": "breed_standards",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "pub_colorado_dog_fanciers_v_denver_1991",
@@ -562,7 +820,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Colorado Dog Fanciers Association, Inc. v. City and County of Denver, 814 P.2d 646 (Colo. 1991)",
       "domain": "municipal_policy",
       "year": 1991,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "pub_toledo_v_tellings_2007",
@@ -570,7 +833,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Toledo v. Tellings, 114 Ohio St.3d 278, 871 N.E.2d 1152 (Ohio 2007)",
       "domain": "municipal_policy",
       "year": 2007,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "pub_danker_v_council_bluffs_2022",
@@ -578,7 +846,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Danker v. City of Council Bluffs, 57 F.4th 583 (8th Cir. 2023)",
       "domain": "municipal_policy",
       "year": 2023,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "pub_aurora_v_acf",
@@ -586,7 +859,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "American Canine Foundation v. City of Aurora (D. Colo. 2020)",
       "domain": "municipal_policy",
       "year": 2020,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "event_colorado_dog_fanciers_decision",
@@ -594,7 +872,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Colorado Supreme Court decision in Colorado Dog Fanciers v. Denver",
       "domain": "municipal_policy",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "event_toledo_v_tellings_decision",
@@ -602,7 +885,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Ohio Supreme Court decision in Toledo v. Tellings",
       "domain": "municipal_policy",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "event_danker_council_bluffs_decision",
@@ -610,7 +898,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "8th Circuit decision in Danker v. City of Council Bluffs",
       "domain": "municipal_policy",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_due_process",
@@ -618,7 +911,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Procedural due process (legal concept)",
       "domain": "behavioral_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_equal_protection",
@@ -626,7 +924,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Equal protection (legal concept)",
       "domain": "behavioral_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_vagueness_doctrine",
@@ -634,7 +937,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Vagueness doctrine (legal concept)",
       "domain": "behavioral_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_rational_basis",
@@ -642,7 +950,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Rational basis review (legal concept)",
       "domain": "behavioral_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "org_city_of_calgary",
@@ -650,7 +963,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "City of Calgary",
       "domain": "municipal_policy",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "loc_calgary_ab",
@@ -658,7 +976,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Calgary, AB, Canada",
       "domain": "municipal_policy",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "pub_calgary_rpob_47m2021",
@@ -666,7 +989,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "City of Calgary Responsible Pet Ownership Bylaw 47M2021",
       "domain": "municipal_policy",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "pub_calgary_rpob_23m2006",
@@ -674,7 +1002,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "City of Calgary Responsible Pet Ownership Bylaw 23M2006 (predecessor, 2006)",
       "domain": "municipal_policy",
       "year": 2006,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "event_calgary_rpob_in_force_2022",
@@ -682,7 +1015,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Calgary Responsible Pet Ownership Bylaw 47M2021 takes effect",
       "domain": "municipal_policy",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "org_city_and_county_of_denver",
@@ -690,7 +1028,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "City and County of Denver",
       "domain": "municipal_policy",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "loc_denver_co",
@@ -698,7 +1041,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Denver, CO, USA",
       "domain": "municipal_policy",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "pub_denver_rmc_sec_8_55_1989",
@@ -706,7 +1054,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Denver Revised Municipal Code Sec. 8-55, Ordinance No. 404, Series of 1989",
       "domain": "municipal_policy",
       "year": 1989,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "pub_denver_ballot_measure_2j_2020",
@@ -714,7 +1067,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Denver Ballot Measure 2J (2020)",
       "domain": "municipal_policy",
       "year": 2020,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "event_denver_ban_enacted_1989",
@@ -722,7 +1080,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Denver city council adoption of pit bull ban (Ordinance No. 404, Series of 1989)",
       "domain": "municipal_policy",
       "year": 1989,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "event_denver_ballot_measure_2j_2020",
@@ -730,7 +1093,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Denver voters approve Ballot Measure 2J repealing pit bull ban",
       "domain": "municipal_policy",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "event_denver_ban_repeal_effective",
@@ -738,7 +1106,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Denver pit bull ban repeal takes effect",
       "domain": "municipal_policy",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "org_city_of_montreal",
@@ -746,7 +1119,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "City of Montreal",
       "domain": "municipal_policy",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "loc_montreal_qc",
@@ -754,7 +1132,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Montreal, QC, Canada",
       "domain": "municipal_policy",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_pit_bull",
@@ -762,7 +1145,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Pit Bull",
       "domain": "behavioral_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_bsl",
@@ -770,7 +1158,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Breed-specific legislation",
       "domain": "municipal_policy",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "event_montreal_bsl_lifecycle",
@@ -778,7 +1171,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Montreal breed-specific-legislation lifecycle (2016 enactment through 2018 repeal)",
       "domain": "municipal_policy",
       "year": 2016,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "event_montreal_council_vote_16_060",
@@ -786,7 +1184,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Montreal city council adoption of Animal Control By-Law 16-060",
       "domain": "municipal_policy",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "pub_montreal_2016_bsl_bylaw",
@@ -794,7 +1197,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Montreal By-Law Concerning Animal Control 16-060 (2016)",
       "domain": "municipal_policy",
       "year": 2016,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "pub_montreal_2018_repeal_bylaw",
@@ -802,7 +1210,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Montreal replacement animal-control bylaw (2018, post-repeal of 16-060)",
       "domain": "municipal_policy",
       "year": 2018,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "event_montreal_bsl_repeal_2018",
@@ -810,7 +1223,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Montreal city council adoption of replacement animal-control bylaw replacing 16-060",
       "domain": "municipal_policy",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_calgary_model",
@@ -818,7 +1236,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Calgary model (responsible-pet-ownership / behaviour-based dangerous-dog framework)",
       "domain": "municipal_policy",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": true,
+      "protagonistNote": "the evidence-based answer to breed bans"
     },
     {
       "id": "org_government_of_ontario",
@@ -826,7 +1249,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Government of Ontario",
       "domain": "municipal_policy",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "loc_ontario_ca",
@@ -834,7 +1262,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Ontario, Canada",
       "domain": "municipal_policy",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "pub_ontario_dola_statute",
@@ -842,7 +1275,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Dog Owners' Liability Act, R.S.O. 1990, c. D.16 (Ontario)",
       "domain": "municipal_policy",
       "year": 1990,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "pub_ontario_bill_132_2005",
@@ -850,7 +1288,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Public Safety Related to Dogs Statute Law Amendment Act, 2005 (Ontario Bill 132)",
       "domain": "municipal_policy",
       "year": 2005,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "event_ontario_pit_bull_ban_in_force",
@@ -858,7 +1301,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Ontario pit-bull restrictions take effect under DOLA as amended by Bill 132",
       "domain": "municipal_policy",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "event_ontario_bill_132_royal_assent",
@@ -866,7 +1314,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Bill 132 receives Royal Assent (Ontario)",
       "domain": "municipal_policy",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "org_menu_foods",
@@ -874,7 +1327,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Menu Foods Inc.",
       "domain": "veterinary_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "org_us_fda",
@@ -882,7 +1338,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "U.S. Food and Drug Administration",
       "domain": "veterinary_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ],
+      "protagonist": true,
+      "protagonistNote": "the recall watchdog — biggest hub"
     },
     {
       "id": "org_chemnutra",
@@ -890,7 +1351,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "ChemNutra LLC",
       "domain": "veterinary_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "org_wilbur_ellis",
@@ -898,7 +1362,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Wilbur-Ellis Company",
       "domain": "veterinary_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "org_hills_pet_nutrition",
@@ -906,7 +1373,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Hill's Pet Nutrition",
       "domain": "nutrition_safety",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "org_del_monte",
@@ -914,7 +1384,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Del Monte Pet Products",
       "domain": "veterinary_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "org_nestle_purina",
@@ -922,7 +1395,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Nestlé Purina PetCare Company",
       "domain": "veterinary_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_melamine_contamination",
@@ -930,7 +1406,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Melamine contamination of pet food (2007)",
       "domain": "nutrition_safety",
       "year": 2007,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_cyanuric_acid",
@@ -938,7 +1417,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Cyanuric acid co-contamination with melamine",
       "domain": "nutrition_safety",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "event_melamine_2007_recall",
@@ -946,7 +1428,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "2007 melamine pet food recall",
       "domain": "nutrition_safety",
       "year": 2007,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "pub_melamine_2007_initial_recall",
@@ -954,7 +1439,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "FDA 2007 Melamine Pet Food Recall — Initial Announcement and Investigation (2007-03-16)",
       "domain": "nutrition_safety",
       "year": 2007,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_raw_pet_food_safety",
@@ -962,7 +1452,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Raw pet food safety risk",
       "domain": "nutrition_safety",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_salmonella_petfood",
@@ -970,7 +1463,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Salmonella contamination in pet food",
       "domain": "behavioral_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_listeria_petfood",
@@ -978,7 +1474,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Listeria monocytogenes contamination in pet food",
       "domain": "behavioral_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "event_fda_raw_food_study_2010_2012",
@@ -986,7 +1485,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "FDA CVM raw pet food pathogen study (2010-2012)",
       "domain": "nutrition_safety",
       "year": 2010,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "event_performance_dog_recall_2019",
@@ -994,7 +1498,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Bravo Packing Performance Dog raw pet food recall (2019)",
       "domain": "nutrition_safety",
       "year": 2019,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "pub_fda_raw_pet_food_factsheet_2018",
@@ -1002,7 +1509,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "FDA Raw Pet Food Diets can be Dangerous to You and Your Pet (2018-02-22)",
       "domain": "nutrition_safety",
       "year": 2018,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "org_bravo_packing",
@@ -1010,7 +1522,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Bravo Packing Inc.",
       "domain": "behavioral_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "product_performance_dog_raw",
@@ -1018,7 +1533,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Performance Dog frozen raw pet food",
       "domain": "nutrition_safety",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "pub_fda_raw_meat_guidance_2004",
@@ -1026,7 +1544,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "FDA Guidance for Industry #122 — Manufacture and Labeling of Raw Meat Foods for Companion Animals (2004)",
       "domain": "nutrition_safety",
       "year": 2004,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "brand_hills_science_diet",
@@ -1034,7 +1557,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Hill's Science Diet",
       "domain": "nutrition_safety",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "brand_hills_prescription_diet",
@@ -1042,7 +1570,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Hill's Prescription Diet",
       "domain": "nutrition_safety",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_vitamin_d_toxicity",
@@ -1050,7 +1583,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Vitamin D toxicity in dogs",
       "domain": "nutrition_safety",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "event_hills_vitd_recall_2019",
@@ -1058,7 +1594,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Hill's Pet Nutrition vitamin D recall (2019)",
       "domain": "nutrition_safety",
       "year": 2019,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "pub_hills_vitd_announcement_2019_01",
@@ -1066,7 +1605,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Hill's Pet Nutrition Voluntarily Recalls Select Canned Dog Food for Excessive Vitamin D (2019-01-31)",
       "domain": "nutrition_safety",
       "year": 2019,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "pub_hills_vitd_expansion_2019_03",
@@ -1074,7 +1616,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Hill's Pet Nutrition Expands Voluntary Recall of Select Canned Dog Food for Elevated Vitamin D (2019-03-20)",
       "domain": "nutrition_safety",
       "year": 2019,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "pub_hills_vitd_expansion_2019_05",
@@ -1082,7 +1627,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Hill's Pet Nutrition Additionally Expands Voluntary Recall of Select Canned Dog Food for Elevated Vitamin D (2019-05-20)",
       "domain": "nutrition_safety",
       "year": 2019,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "pub_hills_warning_letter_2019_11",
@@ -1090,7 +1638,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "FDA Warning Letter to Hill's Pet Nutrition Inc., MARCS-CMS 576564 (2019-11-20)",
       "domain": "nutrition_safety",
       "year": 2019,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "event_hills_warning_letter_2019_11",
@@ -1098,7 +1651,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "FDA Warning Letter issued to Hill's Pet Nutrition (regulatory followup to 2019 vitamin D recall)",
       "domain": "nutrition_safety",
       "year": 2019,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "pub_brourman_1996_gdv_mortality",
@@ -1106,7 +1664,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Factors associated with perioperative mortality in dogs with surgically managed gastric dilatation-volvulus: 137 cases (1988–1993)",
       "domain": "veterinary_research",
       "year": 1988,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "person_jeff_brourman",
@@ -1114,7 +1675,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Jeff D. Brourman",
       "domain": "veterinary_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_gdv",
@@ -1122,7 +1686,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Gastric dilatation-volvulus",
       "domain": "behavioral_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_gastric_necrosis",
@@ -1130,7 +1697,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Gastric necrosis secondary to GDV",
       "domain": "veterinary_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_prophylactic_gastropexy",
@@ -1138,7 +1708,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Prophylactic gastropexy",
       "domain": "behavioral_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "breed_great_dane",
@@ -1146,7 +1719,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Great Dane",
       "domain": "breed_standards",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "breed_st_bernard",
@@ -1154,7 +1730,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Saint Bernard",
       "domain": "breed_standards",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_dcm",
@@ -1162,7 +1741,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Canine Dilated Cardiomyopathy",
       "domain": "behavioral_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_grain_free_diet",
@@ -1170,7 +1754,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Grain-free pet diet",
       "domain": "nutrition_safety",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "event_fda_dcm_investigation_open_2018_07",
@@ -1178,7 +1767,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "FDA opens investigation into diet-DCM link",
       "domain": "nutrition_safety",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "pub_fda_dcm_investigation_main",
@@ -1186,7 +1780,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "FDA Investigation into Potential Link between Certain Diets and Canine Dilated Cardiomyopathy",
       "domain": "nutrition_safety",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "pub_cdc_brucellosis_canis_2018",
@@ -1194,7 +1793,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Brucellosis in Dogs and Public Health Risk",
       "domain": "veterinary_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "org_cdc",
@@ -1202,7 +1804,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Centers for Disease Control and Prevention",
       "domain": "veterinary_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "org_usda_aphis",
@@ -1210,7 +1815,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "U.S. Department of Agriculture Animal and Plant Health Inspection Service",
       "domain": "veterinary_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_brucellosis_canis",
@@ -1218,7 +1826,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Canine brucellosis (Brucella canis)",
       "domain": "behavioral_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_brucellosis_treatment",
@@ -1226,7 +1837,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Antimicrobial treatment of canine brucellosis",
       "domain": "behavioral_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_brucellosis_testing",
@@ -1234,7 +1848,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Diagnostic testing for canine brucellosis",
       "domain": "behavioral_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "pub_tufts_petfoodology_beg_2018",
@@ -1242,7 +1859,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "It's Not Just Grain-Free: An Update on Diet-Associated Dilated Cardiomyopathy",
       "domain": "nutrition_safety",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_beg_diet",
@@ -1250,7 +1872,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "BEG diet (boutique, exotic-ingredient, or grain-free)",
       "domain": "nutrition_safety",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "pub_fda_dcm_third_status_report_2019",
@@ -1258,7 +1885,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "FDA Third Status Report on Investigation into Potential Connection Between Certain Diets and Cases of Canine Heart Disease",
       "domain": "nutrition_safety",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "event_fda_dcm_third_status_report_2019_06",
@@ -1266,7 +1898,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "FDA issues Third Status Report on diet-DCM investigation",
       "domain": "nutrition_safety",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_pulses",
@@ -1274,7 +1911,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Pulses (peas, lentils, and other legume seeds)",
       "domain": "nutrition_safety",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "pub_freeman_2022_jvim_prospective",
@@ -1282,7 +1924,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Prospective study of dilated cardiomyopathy in dogs eating nontraditional or traditional diets and in dogs with subclinical cardiac abnormalities",
       "domain": "nutrition_safety",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "person_lisa_freeman",
@@ -1290,7 +1937,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Lisa M. Freeman",
       "domain": "nutrition_safety",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ],
+      "protagonist": true,
+      "protagonistNote": "chased the grain-free/DCM signal honestly"
     },
     {
       "id": "person_john_rush",
@@ -1298,7 +1950,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "John E. Rush",
       "domain": "behavioral_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "person_darcy_adin",
@@ -1306,7 +1963,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Darcy Adin",
       "domain": "behavioral_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "org_tufts_cummings",
@@ -1314,7 +1976,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Cummings School of Veterinary Medicine at Tufts University",
       "domain": "veterinary_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_nontraditional_diet",
@@ -1322,7 +1989,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Nontraditional pet diet",
       "domain": "nutrition_safety",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "pub_fda_dcm_qa_non_hereditary",
@@ -1330,7 +2002,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Questions & Answers: FDA's Work on Potential Causes of Non-Hereditary DCM in Dogs",
       "domain": "nutrition_safety",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_non_hereditary_dcm",
@@ -1338,7 +2015,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Non-hereditary canine dilated cardiomyopathy",
       "domain": "behavioral_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "pub_acvim_leptospirosis_consensus_2023",
@@ -1346,7 +2028,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "ACVIM consensus statement on leptospirosis in dogs",
       "domain": "veterinary_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "person_jane_sykes",
@@ -1354,7 +2039,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Jane E. Sykes",
       "domain": "behavioral_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "org_acvim",
@@ -1362,7 +2050,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "American College of Veterinary Internal Medicine",
       "domain": "veterinary_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_leptospirosis",
@@ -1370,7 +2061,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Canine leptospirosis",
       "domain": "veterinary_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_leptospirosis_vaccine",
@@ -1378,7 +2072,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Leptospirosis vaccination in dogs",
       "domain": "veterinary_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_leptospiral_bacterin",
@@ -1386,7 +2083,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Leptospiral bacterin vaccine",
       "domain": "veterinary_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_4_serovar_vaccine",
@@ -1394,7 +2094,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "Four-serovar leptospirosis vaccine",
       "domain": "veterinary_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "pub_avma_2014_breed_bite_risk",
@@ -1402,7 +2105,12 @@ const GOOD_DOGS_GRAPH = {
       "label": "Literature Review on the Welfare Implications of The Role of Breed in Dog Bite Risk and Prevention (AVMA, 2014)",
       "domain": "veterinary_research",
       "year": 2014,
-      "bridge": true
+      "bridge": true,
+      "stories": [
+        "breed"
+      ],
+      "protagonist": true,
+      "protagonistNote": "weighed breed vs. bite risk — and bridged the gap"
     },
     {
       "id": "pub_legacy_lepto_vaccine_reaction_consensus",
@@ -1410,7 +2118,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "pub_legacy_lepto_vaccine_reaction_consensus",
       "domain": "veterinary_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     },
     {
       "id": "concept_breed_group_fci_system",
@@ -1418,7 +2129,10 @@ const GOOD_DOGS_GRAPH = {
       "label": "concept_breed_group_fci_system",
       "domain": "behavioral_research",
       "year": null,
-      "bridge": false
+      "bridge": false,
+      "stories": [],
+      "protagonist": false,
+      "protagonistNote": ""
     }
   ],
   "edges": [
@@ -1429,7 +2143,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "AUTHORED",
       "evidence": "Sole author of the 1947 Behaviour paper; cited by name on davemech.org's announcement of the English translation.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "dominance"
+      ]
     },
     {
       "id": "e1",
@@ -1438,7 +2155,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "ABOUT",
       "evidence": "davemech.org states the study 'gave rise to the now outmoded notion of alpha wolves' and that wolves were observed to 'fight within a pack to gain dominance and that the winner is the alpha wolf' — i.e., the publication's primary subject is the dominance/alpha-wolf framing later imported into dog training.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "dominance"
+      ]
     },
     {
       "id": "e2",
@@ -1447,7 +2167,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "LOCATED_AT",
       "evidence": "Search-engine summaries of the paper consistently state the observations were of captive wolves at Basel Zoo, Switzerland (the paper's study site).",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "dominance"
+      ]
     },
     {
       "id": "e3",
@@ -1456,7 +2179,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Basel Zoo is named as the study site in derivative summaries of the paper.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "dominance"
+      ]
     },
     {
       "id": "e4",
@@ -1465,7 +2191,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "AUTHORED",
       "evidence": "Sole author byline on the Canadian Journal of Zoology article; confirmed by USGS Digital Commons record for the same paper (citation: Mech, L. David. 1999. CJZ 77:1196-1203).",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "dominance"
+      ]
     },
     {
       "id": "e5",
@@ -1474,7 +2203,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "AFFILIATED_WITH",
       "evidence": "USGS NPWRC hosts the Digital Commons record for this paper, identifying Mech as a USGS scientist; the paper itself was prepared in that capacity (the public-domain status under 17 USC 105 follows from this affiliation).",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "dominance"
+      ]
     },
     {
       "id": "e6",
@@ -1483,7 +2215,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "ABOUT",
       "evidence": "Title of the paper is 'Alpha status, dominance, and division of labor in wolf packs'; the 'alpha concept' is one of its three named subjects per the abstract.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "dominance"
+      ]
     },
     {
       "id": "e7",
@@ -1492,7 +2227,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "ABOUT",
       "evidence": "Abstract: 'The prevailing view of a wolf pack is that of a group of individuals ever vying for dominance but held in check by the alpha pair' — the paper's central subject is dominance theory as applied to wolf packs.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "dominance"
+      ]
     },
     {
       "id": "e8",
@@ -1501,7 +2239,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "CONTRADICTS",
       "evidence": "Mech 1999 explicitly identifies the captive-wolf basis as inadequate: 'most research on the social dynamics of wolf packs has been conducted on non-natural assortments of captive wolves' (abstract). His Ellesmere Island wild-pack data lead to the opposite conclusion: 'the typical wolf pack is a family, with the adult parents guiding the activities of the group in a division-of-labor system.' This directly contradicts the captive-wolf alpha/dominance framing of Schenkel 1947 (",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "dominance"
+      ]
     },
     {
       "id": "e9",
@@ -1510,7 +2251,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "SUPERSEDES",
       "evidence": "Mech reframes the alpha/dominance basis derived from Schenkel-style captive observations as no longer accurate for natural packs. Per ontology.yaml#supersedes evidence_rule, this requires explicit temporal-replacement framing; Mech's abstract supplies it ('Most research ... has been conducted on non-natural assortments') and concludes with the family-pack model that replaces the captive-wolf hierarchy.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "dominance"
+      ]
     },
     {
       "id": "e10",
@@ -1519,7 +2263,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "AUTHORED",
       "evidence": "Position statement is an institutional publication of AVSAB; byline is the society itself, with the document hosted on avsab.org.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "dominance"
+      ]
     },
     {
       "id": "e11",
@@ -1528,7 +2275,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "ABOUT",
       "evidence": "The document title names dominance theory as its primary subject: 'Position Statement on the Use of Dominance Theory in Behavior Modification of Animals.'",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "dominance"
+      ]
     },
     {
       "id": "e12",
@@ -1537,7 +2287,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "The position statement contrasts dominance-based training with reward-based / positive-reinforcement methods, recommending the latter; the AVSAB position page identifies positive-reinforcement training as the recommended alternative.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "dominance"
+      ]
     },
     {
       "id": "e13",
@@ -1546,7 +2299,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "CONTRADICTS",
       "evidence": "AVSAB's 2008 statement directly opposes the dominance-hierarchy framing whose academic foundation is Schenkel 1947. The statement's load-bearing claim — 'most undesirable behaviors in our pets are not related to priority access to resources; rather, they are due to accidental rewarding of the undesirable behavior' — repudiates the priority-access / dominance-hierarchy explanatory framework that Schenkel-derived training advice rests on.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "dominance"
+      ]
     },
     {
       "id": "e14",
@@ -1555,7 +2311,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "SUPERSEDES",
       "evidence": "AVSAB 2008 supersedes dominance-theory-derived clinical guidance (whose origin is Schenkel 1947) by formally recommending against its use in behavior modification. Per ontology.yaml#supersedes, this is a normative-replacement rather than literal-marker case; flagged for human grounding.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "dominance"
+      ]
     },
     {
       "id": "e15",
@@ -1564,7 +2323,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "REGULATES",
       "evidence": "AVSAB is the professional veterinary-behavior body whose position statements set clinical guidance for the field. While AVSAB is not a statutory regulator (is_regulatory: false), within ontology terms its position statements carry professional-jurisdictional authority over behavior-modification practice.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "dominance"
+      ]
     },
     {
       "id": "e16",
@@ -1573,7 +2335,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "AUTHORED",
       "evidence": "First author byline on the Applied Animal Behaviour Science paper; co-author is Horowitz.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e17",
@@ -1582,7 +2345,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "ABOUT",
       "evidence": "The paper's title names SAFER as one of two behavior assessment instruments under evaluation for aggression prediction.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e18",
@@ -1591,7 +2355,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "ABOUT",
       "evidence": "Abstract: study evaluated 'the ability of two behavior assessment instruments commonly used in American shelters to predict aggression' — SAFER and modified Assess-A-Pet.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e19",
@@ -1600,7 +2365,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "The C-BARQ was used as the validated reference standard against which SAFER and modified Assess-A-Pet scores were compared.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e20",
@@ -1609,7 +2375,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "CONTRADICTS",
       "evidence": "This note's content: Bollen & Horowitz 2012 found SAFER sensitivity = 0.60 and specificity = 0.50 for binary aggression classification — well below thresholds for a high-stakes screening tool. The ASPCA's own later position statement acknowledges that assessment results are not predictive of home behavior. This study provides the empirical basis for that conclusion.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e21",
@@ -1618,7 +2385,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "CONTRADICTS",
       "evidence": "Not directly related. This study concerns assessment instrument validity, not training methodology. The contradicts edge here is to the broader conceptual claim that standardized short-format behavior tests can reliably predict long-term behavioral prognosis in shelter dogs.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e22",
@@ -1627,7 +2395,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "AUTHORED",
       "evidence": "Vieira de Castro is the lead (first) author of the PLOS ONE article; full author list per the canonical PLOS record: Vieira de Castro AC, Fuchs D, Morello GM, Pastur S, de Sousa L, Olsson IAS.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "dominance"
+      ]
     },
     {
       "id": "e23",
@@ -1636,7 +2407,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "ABOUT",
       "evidence": "Title and abstract identify aversive- vs reward-based training methods as the study's primary subject; 'aversive-based methods' appears in the title.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "dominance"
+      ]
     },
     {
       "id": "e24",
@@ -1645,7 +2419,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Abstract describes recruitment from 'three reward-based schools (Group Reward, n = 42)' and contrasts reward-based training with aversive and mixed approaches throughout.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "dominance"
+      ]
     },
     {
       "id": "e25",
@@ -1654,7 +2431,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "CONTRADICTS",
       "evidence": "Vieira de Castro 2020 supplies modern empirical evidence that the training tradition descended from dominance theory (whose academic foundation is Schenkel 1947) is harmful to dog welfare: 'Dogs from Group Aversive displayed more stress-related behaviors ... exhibited higher post-training increases in cortisol levels ... were more pessimistic in the cognitive bias task than dogs from Group Reward.' Conclusion: 'aversive-based training methods, especially if used in high propo",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "dominance"
+      ]
     },
     {
       "id": "e26",
@@ -1663,7 +2443,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "CITES",
       "evidence": "Modern dog-training-welfare literature in this lineage routinely cites the AVSAB position statements as the clinical-guidance backdrop for empirical work on aversive methods. The exact citation of AVSAB 2008 in Vieira de Castro 2020's references list was not verified by direct PDF fetch in this authoring session; flagged for human grounding.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "dominance"
+      ]
     },
     {
       "id": "e27",
@@ -1672,7 +2455,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "AUTHORED",
       "evidence": "First author byline; Watowich is a researcher in the EvoAmy lab at University of Arizona per the PMC record.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e28",
@@ -1681,7 +2465,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "AFFILIATED_WITH",
       "evidence": "PMC/NLM catalog record and crossREF indicate EvoAmy lab, University of Arizona Evolutionary Anthropology as institutional affiliation; confirmed by search excerpt of Watowich's research profile.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e29",
@@ -1690,7 +2475,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "ABOUT",
       "evidence": "Title explicitly names the subject: 'Age influences domestic dog cognitive performance.'",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e30",
@@ -1699,7 +2485,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "ABOUT",
       "evidence": "The study explicitly tests two hypotheses about breed lifespan and cognitive aging rate: the truncation hypothesis vs the compression hypothesis.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e31",
@@ -1708,7 +2495,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Data source was the Dognition citizen science project; the Dognition dataset is named in the abstract and methods.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e32",
@@ -1717,7 +2505,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "CONTRADICTS",
       "evidence": "The compression hypothesis predicted that larger breeds (shorter lifespan) would show accelerated cognitive aging compared to smaller breeds (longer lifespan). Watowich et al. found that all breeds follow the same quadratic cognitive trajectory regardless of size or lifespan — they rejected the compression hypothesis. This directly contradicts the predicted pattern of lifespan-scaled cognitive aging.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e33",
@@ -1726,7 +2515,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "SUPERSEDES",
       "evidence": "By testing and rejecting the lifespan-compression hypothesis with >4000 dogs across 66 breeds, Watowich 2020 supersedes the prior assumption (documented in the primate and comparative aging literature) that faster life histories produce compressed cognitive trajectories. The study provides the first large-scale empirical test of this hypothesis in companion dogs.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e34",
@@ -1735,7 +2525,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "AUTHORED",
       "evidence": "Document is published by the American Kennel Club; AKC logo appears on the standard PDF.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e35",
@@ -1744,7 +2535,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Title: 'Official Standard of the American Staffordshire Terrier'. Canonical breed name appears throughout the standard text.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e36",
@@ -1753,7 +2547,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "ABOUT",
       "evidence": "Standard's footer reads: 'Approved June 10, 1936'. Per AKC's own breed history coverage, on this date approximately 50 dogs from the UKC American Pit Bull Terrier stud book were entered into the AKC stud book under the new name 'Staffordshire Terrier'; the word 'American' was added to the name in 1972.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e37",
@@ -1762,7 +2559,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "ALIAS_OF",
       "evidence": "AmStaff is the conventional abbreviation for American Staffordshire Terrier in breeder and registry usage.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e38",
@@ -1771,7 +2571,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "REGULATES",
       "evidence": "AKC is the breed registry authority that recognized the American Staffordshire Terrier in 1936 and publishes its official standard.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e39",
@@ -1780,7 +2581,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "AUTHORED",
       "evidence": "Document is published by the American Kennel Club; AKC logo and 'AMERICAN KENNEL CLUB' appear on each page of the standard PDF.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e40",
@@ -1789,7 +2591,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Title: 'Official Standard of the German Shepherd Dog'. Canonical name 'German Shepherd Dog' appears throughout the standard text (e.g., 'A German Shepherd Dog is a trotting dog').",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e41",
@@ -1798,7 +2601,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "ALIAS_OF",
       "evidence": "GSD is the conventional English abbreviation for German Shepherd Dog as registered by AKC. Registered in ontology.yaml#aliases.german_shepherd.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e42",
@@ -1807,7 +2611,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "REGULATES",
       "evidence": "AKC is the breed registry authority that issues and maintains the official standard for the German Shepherd Dog in the United States.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e43",
@@ -1816,7 +2621,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "REGULATES",
       "evidence": "FCI publishes and maintains the official breed group taxonomy (10 groups) for all breeds recognized by its 98 member national clubs. The nomenclature page at fci.be/nomenclature.aspx lists every breed under its assigned group and section.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e44",
@@ -1825,7 +2631,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "REGULATES",
       "evidence": "AKC assigns each of its ~200 recognized breeds to one of seven groups and publishes the group taxonomy at akc.org/dog-breeds/groups/. The Herding Group was the last group added in 1983.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e45",
@@ -1834,7 +2641,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "REGULATES",
       "evidence": "FCI coordinates breed standards across member national clubs, all of which maintain their own stud books. FCI itself does not issue pedigrees; that function belongs to each national club, most of which operate closed stud books. The FCI system of breed ownership (each breed 'owned' by a specific country) reinforces closed-registry norms.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e46",
@@ -1843,7 +2651,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "CONTRADICTS",
       "evidence": "The open vs closed registry debate is documented in multiple sources as a substantive disagreement. Proponents of open registries (e.g., JoAnn Teems, GDC advocates) argue closed stud books cause inbreeding depression and genetic disease accumulation. Closed registry advocates argue open registries dilute breed type and compromise conformation standards. This is a genuine contemporary disagreement — both positions have credentialed professional advocates. This seeded pair exer",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e47",
@@ -1852,7 +2661,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MEMBER_OF",
       "evidence": "AKC is not a direct member of FCI but holds a 'Letter of Agreement' for mutual pedigree and judge recognition, signed November 5, 2005. This is a formal agreement-level relationship, not full membership. The same agreement structure exists for The Kennel Club (UK) and Canadian Kennel Club.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e48",
@@ -1861,7 +2671,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MEMBER_OF",
       "evidence": "The Kennel Club (UK) holds a Letter of Agreement with FCI effective May 1, 2017. The UK Kennel Club is not a full FCI member; like AKC, it operates independently but with mutual recognition arrangements.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e49",
@@ -1870,7 +2681,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MEMBER_OF",
       "evidence": "The United Kennel Club is explicitly NOT recognized by FCI. Wikipedia and breedarchive.com both confirm: 'In contrast, the FCI does not recognise the UKC and no agreement is in place.' This creates a real regulatory asymmetry for breeds registered with UKC but not AKC.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e50",
@@ -1879,7 +2691,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "REGULATES",
       "evidence": "AKC is the U.S. breed registry authority for German Shepherd Dog. Issues AKC registration and publishes the official breed standard for the breed in the United States. (Entity breed_german_shepherd_dog already declared in akc-german-shepherd-dog.md.)",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e51",
@@ -1888,7 +2701,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "REGULATES",
       "evidence": "The Kennel Club is the UK breed registry authority for German Shepherd Dog, classified in the Pastoral Group (distinct from AKC's Herding Group classification). (Entity breed_german_shepherd_dog already declared.)",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e52",
@@ -1897,7 +2711,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "AUTHORED",
       "evidence": "Page is published on royalkennelclub.com under the Breed Standards section, Pastoral Group.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e53",
@@ -1906,7 +2721,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Page title: 'German Shepherd Dog | Breed Standards | The Kennel Club'. The RKC classifies the breed in the Pastoral Group, distinct from the AKC's Herding Group classification.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e54",
@@ -1915,7 +2731,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "ALIAS_OF",
       "evidence": "The UK Kennel Club registered the breed as 'Alsatian' (originally 'Alsatian Wolf Dog') in the post-WWI era and reverted to 'German Shepherd Dog' in 1977. Reported in coverage of the UK reversion: 'The UK Kennel Club finally allowed the official reversion back to German Shepherd Dog in 1977.' Registered in ontology.yaml#aliases.german_shepherd.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e55",
@@ -1924,7 +2741,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "REGULATES",
       "evidence": "The Royal Kennel Club is the UK breed registry authority that issues and maintains the official UK breed standard for the German Shepherd Dog.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e56",
@@ -1933,7 +2751,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "AUTHORED",
       "evidence": "Document title and publisher field name UKC as the issuer; PDF is hosted at ukcdogs.com under /docs/breeds/.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e57",
@@ -1942,7 +2761,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Title: 'AMERICAN PIT BULL TERRIER Official UKC Breed Standard Revised May 1, 2017'. Canonical breed name appears throughout.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e58",
@@ -1951,7 +2771,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "ABOUT",
       "evidence": "Standard documents the breed UKC has registered since 1898. UKC founder C.Z. Bennett assigned UKC registration number 1 to his APBT 'Bennett's Ring' on February 10, 1898; reported across multiple breed-history sources verifying the UKC registry-origin date.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e59",
@@ -1960,7 +2781,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "ALIAS_OF",
       "evidence": "APBT is the standard abbreviation of the canonical breed name. Registered in ontology.yaml#aliases.pit_bull.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e60",
@@ -1969,7 +2793,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "ALIAS_OF",
       "evidence": "Per ontology.yaml#aliases.pit_bull, the canonical UKC-registered name is 'American Pit Bull Terrier' and 'Pit Bull' is documented as its colloquial alias. The corpus also documents that 'Pit Bull' is frequently conflated in media with the distinct AKC-registered American Staffordshire Terrier — see akc-american-staffordshire-terrier.md for the conflation-test pair.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e61",
@@ -1978,7 +2805,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "REGULATES",
       "evidence": "UKC is the breed registry authority that recognized the American Pit Bull Terrier in 1898 and continues to publish and maintain the official APBT breed standard.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e62",
@@ -1987,7 +2815,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "AUTHORED",
       "evidence": "Article published on nbcnews.com under NBC News health-news section",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e63",
@@ -1996,7 +2825,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "ABOUT",
       "evidence": "Article's primary subject is the FDA's continuing investigation into the diet-DCM link first announced in July 2018",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e64",
@@ -2005,7 +2837,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Subject matter throughout — 'dog heart damage' / DCM is the central topic",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e65",
@@ -2014,7 +2849,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Headline names 'grain-free food' as the implicated diet category",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e66",
@@ -2023,7 +2861,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Article references the BEG (boutique / exotic-ingredient / grain-free) framing used in the veterinary nutrition literature",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e67",
@@ -2032,7 +2873,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Article reports on the FDA's ongoing investigation and the agency's stated position that no recall has been issued",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e68",
@@ -2041,7 +2885,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Article quotes Dr. Lisa Freeman as a veterinary nutritionist whose study tracked DCM cases over time",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e69",
@@ -2050,7 +2897,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "AFFILIATED_WITH",
       "evidence": "Article identifies Lisa Freeman as a professor at the Cummings School of Veterinary Medicine at Tufts University",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e70",
@@ -2059,7 +2909,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "AUTHORED",
       "evidence": "Article published on npr.org under NPR News byline",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e71",
@@ -2068,7 +2919,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "AUTHORED",
       "evidence": "Article reporting credited to NPR's Julie Depenbrock",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e72",
@@ -2077,7 +2929,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "ABOUT",
       "evidence": "Article's primary subject is the 2023 shelter overcrowding situation — intake outpacing adoption",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e73",
@@ -2086,7 +2939,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "ABOUT",
       "evidence": "Article frames the gap as a post-pandemic phenomenon driven by return-to-office, rising costs, and rental restrictions",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e74",
@@ -2095,7 +2949,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Article cites Shelter Animals Count as the data source on national shelter intake (~7,000 shelters tracked; intake up 10% from 2021)",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e75",
@@ -2104,7 +2959,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Article reports from the Humane Rescue Alliance shelter in Washington, D.C.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e76",
@@ -2113,7 +2969,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Article quotes Stephanie Filer, executive director of Shelter Animals Count, on the 'perfect storm' of staffing, funding, and veterinarian shortages",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e77",
@@ -2122,7 +2979,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "AFFILIATED_WITH",
       "evidence": "Article identifies Stephanie Filer as executive director of Shelter Animals Count",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e78",
@@ -2131,7 +2989,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "AFFILIATED_WITH",
       "evidence": "Article credited to NPR reporter Julie Depenbrock",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e79",
@@ -2140,7 +2999,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "LOCATED_AT",
       "evidence": "Article describes reporting from the Humane Rescue Alliance shelter in Washington, D.C.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e80",
@@ -2149,7 +3009,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "AUTHORED",
       "evidence": "Article published on cpr.org under CPR News byline",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e81",
@@ -2158,7 +3019,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "ABOUT",
       "evidence": "Article's primary subject is the November 5, 2024 ballot vote on Question 3A repealing Aurora's pit bull ban",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e82",
@@ -2167,7 +3031,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Article frames the Aurora measure as the repeal of a long-standing breed-specific ban",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e83",
@@ -2176,7 +3043,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "The breed named in the ballot measure and headline; ordinance covered American Pit Bull Terriers",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e84",
@@ -2185,7 +3055,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Aurora's restricted-breed ordinance covered American Staffordshire Terriers alongside APBT",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e85",
@@ -2194,7 +3067,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Aurora's restricted-breed ordinance covered Staffordshire Bull Terriers alongside APBT and AmStaff",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e86",
@@ -2203,7 +3079,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Article recounts the Aurora City Council's 2021 attempt to repeal the ban administratively, which was reversed in court",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e87",
@@ -2212,7 +3091,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "LOCATED_AT",
       "evidence": "The ballot measure was a municipal referendum in Aurora, Colorado",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e88",
@@ -2221,7 +3103,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "LOCATED_AT",
       "evidence": "Aurora City Council is the legislative body of the City of Aurora, Colorado",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e89",
@@ -2230,7 +3115,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "REGULATES",
       "evidence": "The Aurora City Council originally enacted the 2005 BSL ordinance and submitted Question 3A to voters in 2024 after a court ruled the council could not unilaterally repeal it",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e90",
@@ -2239,7 +3127,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "ABOUT",
       "evidence": "Colorado Dog Fanciers Association, Inc. v. City and County of Denver is the Colorado Supreme Court opinion whose date is 1991-11-12; the opinion is the publication that is the event.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e91",
@@ -2248,7 +3139,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "ABOUT",
       "evidence": "Toledo v. Tellings is the Ohio Supreme Court opinion whose date is 2007-08-29.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e92",
@@ -2257,7 +3151,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "ABOUT",
       "evidence": "Danker v. City of Council Bluffs is the 8th Circuit opinion filed 2022-11-08.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e93",
@@ -2266,7 +3163,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "The case concerns Denver's Revised Municipal Code Sec. 8-55 prohibiting pit bulls; the opinion references the breed definition and the city's rationale for targeting pit bulls specifically.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e94",
@@ -2275,7 +3175,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Colorado Dog Fanciers v. Denver is the foundational case in which a court applied rational basis review to a municipal BSL ordinance and upheld it.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e95",
@@ -2284,7 +3187,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "The Colorado Supreme Court applied rational basis review: the ordinance neither proceeded along suspect lines nor infringed a fundamental right, so it was upheld if rationally related to a legitimate government interest.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e96",
@@ -2293,7 +3199,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Toledo v. Tellings challenged Ohio's statutory definition of 'vicious dog' including pit bulls and Toledo's municipal code restrictions on pit bull ownership; the court found the laws unconstitutional as applied.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e97",
@@ -2302,7 +3211,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "The Ohio Supreme Court held that R.C. 955.22 and Toledo Municipal Code 505.14 violated procedural due process by not providing dog owners a meaningful opportunity to be heard on whether their dog was 'vicious'; the court also held the laws failed rational basis review once the trial court found pit bulls were not inherently dangerous.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e98",
@@ -2311,7 +3223,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "The appellate court had held the statutes void for vagueness due to the lack of an exact statutory definition of 'pit bull' and the highly subjective nature of breed identification; the Ohio Supreme Court reversed on this specific ground but upheld the due process holding.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e99",
@@ -2320,7 +3235,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Danker concerns Council Bluffs Municipal Code Sec. 4.20.112 (effective 2005-01-01) which prohibited owning, possessing, or harboring any pit bull within the city.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e100",
@@ -2329,7 +3247,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Dog owners argued the Council Bluffs ordinance violated equal protection; the 8th Circuit applied rational basis review and affirmed summary judgment for the city, finding the ordinance rationally related to the city's interest in public health and safety.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e101",
@@ -2338,7 +3259,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "The court held that dog bites are a public health issue, that the City had a conceivable basis to believe banning pit bulls would promote safety, and that the ordinance did not need to be a perfect fit — rational basis review requires only that the legislature could have had a rational reason for the classification.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e102",
@@ -2347,7 +3271,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "REGULATES",
       "evidence": "The Colorado Supreme Court in Colorado Dog Fanciers v. Denver confirmed Denver's regulatory authority over pit-bull-type dogs via Sec. 8-55.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e103",
@@ -2356,7 +3283,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "LOCATED_AT",
       "evidence": "City and County of Denver is located in Colorado.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e104",
@@ -2365,7 +3295,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "LOCATED_AT",
       "evidence": "The Colorado Supreme Court decision was issued in Denver, CO.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e105",
@@ -2374,7 +3307,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "SUPERSEDES",
       "evidence": "Calgary newsroom and ACLRC reporting confirm 47M2021 replaces the previous Responsible Pet Ownership Bylaw 23M2006 (2006), updating it for the first time in over a decade. The replacement is a continuity update, not a policy reversal: both bylaws instantiate the behaviour-based 'Calgary model.'",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e106",
@@ -2383,7 +3319,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "ABOUT",
       "evidence": "47M2021 takes effect 2022-01-01 per City of Calgary newsroom announcement and the bylaw's own commencement provision.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e107",
@@ -2392,7 +3331,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "47M2021 is the current statutory instantiation of the responsible-pet-ownership framework that municipal-policy literature names the 'Calgary model.' The Montreal 2018 repeal note (vault/municipal_policy/montreal-bsl-2018-repeal.md) cites this same framework as the alternative Montreal would emulate when replacing 16-060.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e108",
@@ -2401,7 +3343,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "47M2021 governs all dogs without breed-specific bans; pit-bull-type dogs are within scope as ordinary regulated dogs subject to the same licensing and behaviour-based vicious-animal provisions as any other breed. Cross-jurisdiction relevance is precisely the absence of breed-specific provisions.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e109",
@@ -2410,7 +3355,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "REGULATES",
       "evidence": "The City of Calgary is the regulatory authority that codifies and enforces the responsible-pet-ownership framework via 47M2021 and its predecessor 23M2006.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e110",
@@ -2419,7 +3367,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "REGULATES",
       "evidence": "47M2021 establishes Calgary's regulatory authority over all dogs in the city, including pit-bull-type dogs, without breed-specific restrictions.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e111",
@@ -2428,7 +3379,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "LOCATED_AT",
       "evidence": "City of Calgary is the municipal government of Calgary, AB.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e112",
@@ -2437,7 +3391,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "LOCATED_AT",
       "evidence": "Bylaw 47M2021 is in force in the City of Calgary.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e113",
@@ -2446,7 +3403,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "SUPERSEDES",
       "evidence": "Ballot Measure 2J (2020) was the voter-approved instrument that formally repealed Denver's Sec. 8-55 pit bull ban; per Denver news reporting, the measure led with over 65% approval on 2020-11-03 and the repeal took effect 2025-01-01.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e114",
@@ -2455,7 +3415,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "ABOUT",
       "evidence": "Denver Revised Municipal Code Sec. 8-55 is the document adopted at the July 31-August 1, 1989 Denver city council session (Bill No. 434, Series of 1989), signed by Mayor Federico Peña on 1989-08-02.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e115",
@@ -2464,7 +3427,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "ABOUT",
       "evidence": "Ballot Measure 2J is the document adopted by Denver voters on 2020-11-03 that repealed Sec. 8-55.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e116",
@@ -2473,7 +3439,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Sec. 8-55 defines 'pit bull' as any dog that is an American Pit Bull Terrier, American Staffordshire Terrier, Staffordshire Bull Terrier, or any dog displaying the majority of physical traits of any of those breeds, or any dog substantially conforming to AKC or UKC standards for those breeds.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e117",
@@ -2482,7 +3451,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Denver's Sec. 8-55 is a canonical and long-running North American instance of breed-specific legislation; it predates most other major municipal BSL in the US.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e118",
@@ -2491,7 +3463,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "REGULATES",
       "evidence": "Denver Revised Municipal Code Sec. 8-55 established the City and County of Denver's regulatory authority over pit-bull-type dogs within its jurisdiction from 1989 until the 2025 repeal.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e119",
@@ -2500,7 +3475,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "LOCATED_AT",
       "evidence": "City and County of Denver is the municipal government of Denver, CO.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e120",
@@ -2509,7 +3487,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "LOCATED_AT",
       "evidence": "The ordinance was adopted at Denver city council.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e121",
@@ -2518,7 +3499,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "LOCATED_AT",
       "evidence": "The ballot measure was voted on in Denver, CO.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e122",
@@ -2527,7 +3511,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "LOCATED_AT",
       "evidence": "The repeal took effect in Denver city limits.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e123",
@@ -2536,7 +3523,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "ABOUT",
       "evidence": "Bylaw 16-060 is the document adopted at the Montreal city council session on 2016-09-27 reported by CBC; the publication is the canonical text whose passage is the event.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e124",
@@ -2545,7 +3535,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "ABOUT",
       "evidence": "Bylaw 16-060 is the originating instrument of the Montreal BSL lifecycle that closes with its 2018 repeal (see vault/municipal_policy/montreal-bsl-2018-repeal.md).",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e125",
@@ -2554,7 +3547,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Bylaw 16-060 defines and restricts ownership of 'pit bull-type dogs' (American pit bull terrier, American Staffordshire terrier, Staffordshire bull terrier, and crossbreeds with several morphological traits of those breeds).",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e126",
@@ -2563,7 +3559,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "The bylaw is the worked example of municipal-level breed-specific legislation in Canadian municipal-policy literature; news coverage names it as such.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e127",
@@ -2572,7 +3571,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "REGULATES",
       "evidence": "Bylaw 16-060 establishes Montreal's regulatory authority over pit-bull-type dogs within the city limits; CBC reports the bylaw applies 'across all 19 Montreal boroughs.'",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e128",
@@ -2581,7 +3583,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "LOCATED_AT",
       "evidence": "City of Montreal is the municipal government of Montreal, QC.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e129",
@@ -2590,7 +3595,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "LOCATED_AT",
       "evidence": "The council vote took place at Montreal city hall (CBC News, 2016-09-27).",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e130",
@@ -2599,7 +3607,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "SUPERSEDES",
       "evidence": "ALDF: 'Montreal Repeals Controversial Pit Bull Ban' — the 2018 replacement bylaw, adopted under Mayor Valérie Plante and Projet Montréal, repealed the breed-targeting provisions of bylaw 16-060 and replaced them with a behaviour-based dangerous-dog framework. Per CBC News follow-up, restrictions now apply equally to all dogs regardless of breed.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e131",
@@ -2608,7 +3619,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "ABOUT",
       "evidence": "The 2018 replacement bylaw is the document adopted at the council session that repealed 16-060's breed-targeting provisions.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e132",
@@ -2617,7 +3631,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "ABOUT",
       "evidence": "Same shared event entity as the 2016 enactment note — the repeal closes the lifecycle that the 2016 bylaw opened, making the chain queryable as a single event with two endpoints.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e133",
@@ -2626,7 +3643,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "ALDF reports the 2018 replacement explicitly removes the pit-bull-specific provisions of 16-060.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e134",
@@ -2635,7 +3655,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "CBC News follow-up coverage: Montreal's new administration suggested it would emulate the 'Calgary model,' which focuses on owner education as the key element to preventing dog attacks and ensuring public safety.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e135",
@@ -2644,7 +3667,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "ALDF article frames the repeal as Montreal exiting breed-specific legislation in favour of a behaviour-based regime.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e136",
@@ -2653,7 +3679,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "REGULATES",
       "evidence": "Even after repeal of breed-specific provisions, the City of Montreal retains regulatory authority over all dogs (including pit-bull-type dogs) under the replacement framework's behaviour-based dangerous-dog provisions, which apply equally regardless of breed.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e137",
@@ -2662,7 +3691,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "LOCATED_AT",
       "evidence": "Repeal vote occurred at Montreal city council.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e138",
@@ -2671,7 +3703,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "SUPERSEDES",
       "evidence": "Bill 132 (Public Safety Related to Dogs Statute Law Amendment Act, 2005) substantively amended the 1990 DOLA to add the pit-bull restriction provisions; amended sections supersede the prior un-amended text. Per the Legislative Assembly of Ontario record, the bill received Royal Assent 2005-03-09 and the pit-bull restrictions came into force 2005-08-29.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e139",
@@ -2680,7 +3715,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "ABOUT",
       "evidence": "Bill 132 is the document whose adoption is the Royal Assent event of 2005-03-09.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e140",
@@ -2689,7 +3727,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "ABOUT",
       "evidence": "DOLA as amended by Bill 132 is the statute whose pit-bull provisions came into force on 2005-08-29.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e141",
@@ -2698,7 +3739,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "DOLA's Bill 132 amendments define 'pit bull' for the purposes of the statute and prohibit owning, breeding, transferring, abandoning, or importing pit bulls in Ontario, subject to the grandfather clause.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e142",
@@ -2707,7 +3751,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "DOLA's pit-bull provisions are the canonical Canadian example of breed-specific legislation at the provincial level; BSL literature consistently names DOLA as the province-level Canadian instance.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e143",
@@ -2716,7 +3763,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Bill 132 is the statute-amendment instrument that introduced the 'pit bull' definition and the prohibition into Ontario law.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e144",
@@ -2725,7 +3775,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "REGULATES",
       "evidence": "DOLA establishes provincial regulatory authority over pit-bull-type dogs across Ontario; the Government of Ontario is the regulator.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e145",
@@ -2734,7 +3787,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "REGULATES",
       "evidence": "Bill 132 is the legislative instrument by which Ontario chose breed-specific legislation as its regulatory posture; the Government of Ontario regulates the BSL framework directly at the provincial level (in contrast to municipal-level BSL such as Montreal 16-060).",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e146",
@@ -2743,7 +3799,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "LOCATED_AT",
       "evidence": "The Government of Ontario is the provincial government of Ontario.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e147",
@@ -2752,7 +3811,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "LOCATED_AT",
       "evidence": "The pit-bull restrictions are in force province-wide in Ontario.",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e148",
@@ -2761,7 +3823,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "ABOUT",
       "evidence": "Publication documents the March 16 2007 announcement and FDA investigation launch — the lifecycle's announcement stage",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e149",
@@ -2770,7 +3833,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "AUTHORED",
       "evidence": "Hosted on fda.gov as FDA's enforcement story archive documenting the 2007 investigation",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e150",
@@ -2779,7 +3845,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "REGULATES",
       "evidence": "FDA exercised jurisdiction under FFDCA over Menu Foods as a pet food manufacturer; FDA issued import alert and recall coordination",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e151",
@@ -2788,7 +3855,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "REGULATES",
       "evidence": "FDA asserted regulatory authority over pet food contaminated with melamine under the Federal Food, Drug, and Cosmetic Act — unsafe adulterant",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e152",
@@ -2797,7 +3865,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Menu Foods is the index firm — the manufacturer whose 'cuts and gravy' products first triggered the recall",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e153",
@@ -2806,7 +3875,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "ChemNutra is identified as the U.S. importer of the Chinese wheat gluten ultimately traced as the primary contamination source",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e154",
@@ -2815,7 +3885,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Wilbur-Ellis is identified as the U.S. importer of rice protein concentrate from a second Chinese supplier that was found to contain melamine analogues",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e155",
@@ -2824,7 +3895,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Hill's Pet Nutrition participated voluntarily in the Menu Foods recall and recalled Prescription Diet m/d Feline dry food on March 30 2007",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e156",
@@ -2833,7 +3905,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Del Monte issued voluntary recalls of Jerky Treats, Gravy Train Beef Sticks, and Pounce products containing wheat gluten from the identified Chinese supplier",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e157",
@@ -2842,7 +3915,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Nestlé Purina recalled ALPO Prime Cuts in Gravy wet dog food and withdrew Mighty Dog pouch products in response to the same contamination event",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e158",
@@ -2851,7 +3925,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Source details melamine as the primary contaminant identified in pet food and wheat gluten imported from China",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e159",
@@ -2860,7 +3935,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Source notes that melamine combined with its analogue cyanuric acid forms crystals in urine and kidney tissue, producing more severe toxicity than melamine alone",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e160",
@@ -2869,7 +3945,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "ABOUT",
       "evidence": "Publication summarizes the two-year FDA CVM study (Oct 2010–Jul 2012) screening over 1,000 pet food samples for foodborne pathogens — the study is the primary data source the factsheet cites",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e161",
@@ -2878,7 +3957,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "AUTHORED",
       "evidence": "Published on FDA.gov animal health literacy section as an FDA-authored public guidance document",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e162",
@@ -2887,7 +3969,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "SUPERSEDES",
       "evidence": "The 2018 factsheet updates the FDA's position on raw pet food risk; the 2004 guidance was the prior authoritative statement but the 2018 factsheet represents the agency's current position and recommendation against raw feeding, incorporating new study data not available in 2004",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e163",
@@ -2896,7 +3981,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Factsheet is explicitly about the dangers of raw pet food diets to pets and owners",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e164",
@@ -2905,7 +3991,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Salmonella is one of the two primary pathogens studied; factsheet reports 15 of 196 raw samples positive",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e165",
@@ -2914,7 +4001,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Listeria monocytogenes is one of the two primary pathogens studied; factsheet reports 32 of 196 raw samples positive and notes L. mono as a first-ever finding in commercial pet food",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e166",
@@ -2923,7 +4011,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "REGULATES",
       "evidence": "FDA asserts regulatory authority over raw pet food under the Federal Food, Drug, and Cosmetic Act; considers raw pet food adulterated when contaminated with Salmonella or Listeria and not subject to subsequent heat treatment",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e167",
@@ -2932,7 +4021,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "REGULATES",
       "evidence": "FDA issued a public health alert against Performance Dog frozen raw pet food after sampletesting confirmed Salmonella and L. mono contamination — exercising regulatory authority over the specific product",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e168",
@@ -2941,7 +4031,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Performance Dog is a product of Bravo Packing Inc.; the 2019 recall of this product is cited in the factsheet as a concrete example of the risk the FDA warns against",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e169",
@@ -2950,7 +4041,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Performance Dog frozen raw pet food is explicitly named as the product associated with the 2019 Bravo Packing recall and the FDA's advisory against raw pet food",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e170",
@@ -2959,7 +4051,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "ABOUT",
       "evidence": "Publication is the canonical FDA safety alert announcing the Jan 31 2019 recall — the lifecycle's announcement stage",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e171",
@@ -2968,7 +4061,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "AUTHORED",
       "evidence": "Hosted on fda.gov as an FDA-published safety alert reproducing the firm's recall notice",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e172",
@@ -2977,7 +4071,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Recall notice issued by Hill's Pet Nutrition; firm named throughout",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e173",
@@ -2986,7 +4081,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Affected canned dog food includes Hill's Science Diet varieties (per FDA listing of recalled SKUs)",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e174",
@@ -2995,7 +4091,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Affected canned dog food includes Hill's Prescription Diet varieties (per FDA listing of recalled SKUs)",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e175",
@@ -3004,7 +4101,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Source describes excessive vitamin D as the basis for the recall",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e176",
@@ -3013,7 +4111,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "REGULATES",
       "evidence": "FDA regulates pet food under FFDCA / FSMA; Hill's products are subject to FDA recall coordination",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e177",
@@ -3022,7 +4123,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "REGULATES",
       "evidence": "FDA regulates pet food under FFDCA / FSMA; Hill's products are subject to FDA recall coordination",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e178",
@@ -3031,7 +4135,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "SUPERSEDES",
       "evidence": "Source explicitly identifies the March 20 2019 expansion as covering additional products affected by the same vitamin premix that was the source of the January 31 2019 recall, expanding the prior recall's product list",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e179",
@@ -3040,7 +4145,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "ABOUT",
       "evidence": "Publication is the FDA-published expansion notice for the same underlying recall event",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e180",
@@ -3049,7 +4155,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "AUTHORED",
       "evidence": "Hosted on fda.gov as an FDA-published safety alert reproducing the firm's expanded recall notice",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e181",
@@ -3058,7 +4165,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Recall expansion issued by Hill's Pet Nutrition; firm named throughout",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e182",
@@ -3067,7 +4175,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Expanded recall lists Hill's Science Diet varieties",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e183",
@@ -3076,7 +4185,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Expanded recall lists Hill's Prescription Diet varieties",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e184",
@@ -3085,7 +4195,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Source attributes the expansion to elevated vitamin D from the same vitamin premix",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e185",
@@ -3094,7 +4205,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "SUPERSEDES",
       "evidence": "Source describes May 20 2019 as an additional expansion of the same recall first expanded on March 20 2019, attributing the same vitamin premix root cause and updating the product/lot list",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e186",
@@ -3103,7 +4215,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "ABOUT",
       "evidence": "Publication is the FDA-published second-expansion notice for the same underlying recall event",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e187",
@@ -3112,7 +4225,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "AUTHORED",
       "evidence": "Hosted on fda.gov as an FDA-published safety alert reproducing the firm's expanded recall notice",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e188",
@@ -3121,7 +4235,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Recall expansion issued by Hill's Pet Nutrition; firm named throughout",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e189",
@@ -3130,7 +4245,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Source identifies elevated vitamin D as the basis for the additional expansion",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e190",
@@ -3139,7 +4255,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "SUPERSEDES",
       "evidence": "FDA Warning Letter is dated 2019-11-20, six months after the May 20 expansion; it is the regulatory-followup stage that documents inspection findings stemming from the same vitamin D contamination event the May expansion belongs to, closing the public-facing recall-lifecycle chain",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e191",
@@ -3148,7 +4265,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "ABOUT",
       "evidence": "Publication is the canonical record of the Nov 20 2019 Warning Letter event",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e192",
@@ -3157,7 +4277,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "AUTHORED",
       "evidence": "Warning Letter issued by FDA's Center for Veterinary Medicine; hosted on fda.gov in the warning-letters directory",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e193",
@@ -3166,7 +4289,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Warning Letter is addressed to Hill's Pet Nutrition Inc., the recipient firm",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e194",
@@ -3175,7 +4299,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Letter cites unsafe vitamin D levels in finished animal food as the underlying violation",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e195",
@@ -3184,7 +4309,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "CITES",
       "evidence": "Letter explicitly references the Jan 2019 recall (and subsequent expansions) as the events that triggered the FDA inspections of the Topeka, KS facility",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e196",
@@ -3193,7 +4319,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "REGULATES",
       "evidence": "Warning Letter cites violations of the Federal Food, Drug, and Cosmetic Act and FSMA preventive-controls regulation, asserting FDA jurisdiction over Hill's animal-food manufacturing",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e197",
@@ -3202,7 +4329,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "AUTHORED",
       "evidence": "Jeff D. Brourman is first and corresponding author of JAVMA 208(11):1855-1858, 1996",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e198",
@@ -3211,7 +4339,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "ABOUT",
       "evidence": "Primary topic: perioperative mortality in surgically managed GDV in 137 dogs",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e199",
@@ -3220,7 +4349,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Study notes that without gastropexy, GDV recurs in up to 80% of affected dogs",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e200",
@@ -3229,7 +4359,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Great Danes represented the largest breed category in the study cohort (noted as a high-risk breed)",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e201",
@@ -3238,7 +4369,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Saint Bernards noted as another overrepresented breed in the GDV case population",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e202",
@@ -3247,7 +4379,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "AUTHORED",
       "evidence": "Source page is published by FDA Center for Veterinary Medicine; byline FDA",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e203",
@@ -3256,7 +4391,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "ABOUT",
       "evidence": "Publication is the canonical record of the July 2018 announcement",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e204",
@@ -3265,7 +4403,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Subject matter throughout",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e205",
@@ -3274,7 +4415,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Identifies grain-free as common feature in 90% of single-diet cases (2018 update)",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e206",
@@ -3283,7 +4427,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "REGULATES",
       "evidence": "FDA regulates pet food generally; the specific statutory citation is not verified in this note's source",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e207",
@@ -3292,7 +4439,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "AUTHORED",
       "evidence": "Published in CDC Emerging Infectious Diseases journal; byline CDC",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e208",
@@ -3301,7 +4449,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "ABOUT",
       "evidence": "Full article addresses B. canis prevalence, transmission, regulations, and public health risk",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e209",
@@ -3310,7 +4459,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Article states that treatment alone after reproductive failure is usually unsuccessful; recommended multimodal approach includes surgical sterilization plus antimicrobial drugs",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e210",
@@ -3319,7 +4469,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Article references USDA guidance and notes the absence of federal mandate for B. canis testing before interstate dog movement",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e211",
@@ -3328,7 +4479,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Testing protocols (RSAT, AGID, culture, PCR) are described as tools for detecting B. canis infection",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e212",
@@ -3337,7 +4489,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "AUTHORED",
       "evidence": "Post is published on the Tufts Petfoodology blog under Dr. Lisa Freeman's byline; she is the author who coined / disseminated the BEG terminology in this November 2018 update",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e213",
@@ -3346,7 +4501,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "AFFILIATED_WITH",
       "evidence": "Petfoodology is the public-facing blog of the Clinical Nutrition Service at the Cummings School of Veterinary Medicine at Tufts University; Freeman is a board-certified veterinary nutritionist on faculty there",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e214",
@@ -3355,7 +4513,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "ABOUT",
       "evidence": "Post introduces and disseminates the BEG (boutique, exotic-ingredient, grain-free) terminology for the suspected diet category",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e215",
@@ -3364,7 +4525,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "DCM is the central condition under discussion in the update",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e216",
@@ -3373,7 +4537,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "The post's central argument is that the apparent diet-DCM signal is 'not just grain-free' — it implicates ingredients used to replace grains",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e217",
@@ -3382,7 +4549,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Post discusses lentils and chickpeas (pulses) as ingredients used to replace grains in grain-free diets and as candidate culprits in the diet-DCM signal",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e218",
@@ -3391,7 +4561,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "BEG diets are the subset of nontraditional diets the post argues are most associated with reported DCM cases",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e219",
@@ -3400,7 +4573,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "CITES",
       "evidence": "Post is explicitly framed as an update on the FDA's diet-DCM investigation, building on the FDA's July 2018 announcement",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e220",
@@ -3409,7 +4585,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "AUTHORED",
       "evidence": "Page is published by FDA / Center for Veterinary Medicine as a CVM Update; byline FDA",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e221",
@@ -3418,7 +4597,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "ABOUT",
       "evidence": "Publication is the canonical record of the June 27, 2019 status report",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e222",
@@ -3427,7 +4609,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Subject matter throughout: 524 cumulative DCM reports through April 30, 2019",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e223",
@@ -3436,7 +4621,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "More than 90 percent of products named in DCM reports were labeled grain-free",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e224",
@@ -3445,7 +4633,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "93 percent of reported products contained peas and/or lentils; smaller proportion contained potatoes",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e225",
@@ -3454,7 +4645,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "CONTRADICTS",
       "evidence": "The Third Status Report reframes the diet-DCM connection from a grain-free-centered association (2018 framing, 90% of single-diet cases were grain-free) to a multifactorial picture in which non-hereditary DCM has been reported in dogs eating both grain-free and grain-containing diets, with pulses (peas/lentils) as the more salient shared ingredient feature; this framing shift is the seeded Cat 3 contradiction pair for the corpus",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e226",
@@ -3463,7 +4657,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "AUTHORED",
       "evidence": "First / corresponding author Lisa M. Freeman, JVIM 36(2):451-463, 2022",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e227",
@@ -3472,7 +4669,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "AUTHORED",
       "evidence": "Co-author John E. Rush listed in JVIM 36(2):451-463, 2022",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e228",
@@ -3481,7 +4681,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "AUTHORED",
       "evidence": "Co-author Darcy Adin listed in JVIM 36(2):451-463, 2022",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e229",
@@ -3490,7 +4693,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "AFFILIATED_WITH",
       "evidence": "Lisa M. Freeman is a board-certified veterinary nutritionist on faculty at Cummings School of Veterinary Medicine at Tufts University; primary affiliation reported on the JVIM article",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e230",
@@ -3499,7 +4705,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "AFFILIATED_WITH",
       "evidence": "John E. Rush is a faculty cardiologist at Cummings School of Veterinary Medicine at Tufts; primary affiliation reported on the JVIM article",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e231",
@@ -3508,7 +4717,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "ABOUT",
       "evidence": "Study population is dogs with diet-associated (non-hereditary) DCM and dogs with subclinical cardiac abnormalities",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e232",
@@ -3517,7 +4729,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "DCM is the central condition under study",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e233",
@@ -3526,7 +4741,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Study compares dogs originally eating nontraditional vs traditional diets",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e234",
@@ -3535,7 +4753,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Nontraditional diets in this study are operationalized as boutique, exotic-ingredient, or grain-free formulations",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e235",
@@ -3544,7 +4765,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "CONTRADICTS",
       "evidence": "Peer-reviewed multifactorial framing of diet-associated DCM that is consistent with the FDA 2019/2022 reframing and stands against the 2018 announcement's grain-free-centered framing; finds that diet change is associated with longer survival, supporting diet as a contributor rather than a definitive sole cause; binds the academic side of the corpus's seeded Cat 3 contradiction pair",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e236",
@@ -3553,7 +4777,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "AUTHORED",
       "evidence": "Page is published by FDA / Center for Veterinary Medicine; byline FDA",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e237",
@@ -3562,7 +4789,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "ABOUT",
       "evidence": "Title and full document are about FDA's work on potential causes of non-hereditary DCM in dogs",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e238",
@@ -3571,7 +4801,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "DCM is the central subject of the Q&A document",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e239",
@@ -3580,7 +4813,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Q&A discusses the historical association between grain-free diets and reported DCM cases",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e240",
@@ -3589,7 +4825,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Q&A discusses ingredient sourcing and formulation, including pulse ingredients (peas, lentils) raised in earlier status reports",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e241",
@@ -3598,7 +4837,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "REGULATES",
       "evidence": "Q&A states FDA 'is a regulatory agency and has regulatory authority over animal food, including pet food', explaining the agency's focus on diet as a potential contributor",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e242",
@@ -3607,7 +4849,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "CONTRADICTS",
       "evidence": "The Q&A explicitly states FDA 'has not taken regulatory action against or declared any specific pet food products unsafe or definitively linked to DCM' and reframes non-hereditary DCM as 'a complex medical condition that may be affected by the interplay of multiple factors such as genetics, underlying medical conditions, and diet' — a multifactorial framing that walks back the 2018 announcement's grain-free-centered framing without retracting any specific 2018 fact",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": [
+        "grain_free"
+      ]
     },
     {
       "id": "e243",
@@ -3616,7 +4861,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "AUTHORED",
       "evidence": "First author Jane E. Sykes, BVSc (Hons) PhD MBA MPH FNAP DACVIM; ACVIM consensus statement published November 2023",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e244",
@@ -3625,7 +4871,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "ABOUT",
       "evidence": "Statement includes explicit recommendations on vaccination: all dogs annually, regardless of breed, age, or lifestyle",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e245",
@@ -3634,7 +4881,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Statement recommends 4-serovar vaccines (Icterohaemorrhagiae, Canicola, Grippotyphosa, Pomona) for North American dogs",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e246",
@@ -3643,7 +4891,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Statement notes that current vaccines are adjuvanted killed whole-cell bacterins but that nonadjuvanted options have been marketed more recently",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e247",
@@ -3652,7 +4901,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "AFFILIATED_WITH",
       "evidence": "Sykes holds ACVIM diplomate status and the consensus statement is published under ACVIM auspices",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e248",
@@ -3661,7 +4911,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "CONTRADICTS",
       "evidence": "The 2023 consensus statement reverses the historical 'vaccinate only high-risk dogs, be cautious in small breeds' position; states that current 4-serovar vaccines have safety profiles similar to DAPP vaccines, adverse reactions are rare (<53 per 10,000 doses), and all dogs in North America should be vaccinated annually regardless of breed or size — a direct contradiction of pre-2020 guidance that recommended limiting vaccination in small breeds due to perceived higher reactio",
       "confidence": 1.0,
-      "bridge": false
+      "bridge": false,
+      "stories": []
     },
     {
       "id": "e249",
@@ -3670,7 +4921,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "ABOUT",
       "evidence": "The review is the AVMA's evidentiary basis for opposing breed-specific legislation: 'breed-specific bans are a simplistic answer to a far more complex social problem.'",
       "confidence": 1.0,
-      "bridge": true
+      "bridge": true,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e250",
@@ -3679,7 +4933,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "CITES",
       "evidence": "The review synthesizes behavior-assessment and bite-incidence research (including SAFER-style aggression-assessment validity work) and concludes the breed-bite connection is weak or absent.",
       "confidence": 1.0,
-      "bridge": true
+      "bridge": true,
+      "stories": []
     },
     {
       "id": "e251",
@@ -3688,7 +4943,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Discusses behavior-assessment instruments used to predict aggression as more informative than breed.",
       "confidence": 1.0,
-      "bridge": true
+      "bridge": true,
+      "stories": []
     },
     {
       "id": "e252",
@@ -3697,7 +4953,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "Notes pit-bull-type dogs are over-reported in bites but that visual breed identification is unreliable, confounding the signal.",
       "confidence": 1.0,
-      "bridge": true
+      "bridge": true,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e253",
@@ -3706,7 +4965,10 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "AmStaff is among the breeds frequently conflated with 'pit bull' under unreliable visual identification.",
       "confidence": 1.0,
-      "bridge": true
+      "bridge": true,
+      "stories": [
+        "breed"
+      ]
     },
     {
       "id": "e254",
@@ -3715,7 +4977,8 @@ const GOOD_DOGS_GRAPH = {
       "type": "MENTIONS",
       "evidence": "The German Shepherd Dog is among the breeds the review reports as over-represented in bite incidents.",
       "confidence": 1.0,
-      "bridge": true
+      "bridge": true,
+      "stories": []
     }
   ],
   "meta": {
@@ -3757,7 +5020,11 @@ const GOOD_DOGS_GRAPH = {
       "nutrition_safety": 33,
       "community_journalism": 7,
       "municipal_policy": 39
-    }
+    },
+    "storyGrainFree": 27,
+    "storyBreed": 52,
+    "storyDominance": 14,
+    "protagonists": 6
   }
 };
 

@@ -15,7 +15,10 @@
   <header id="topbar">
     <div class="brand">
       <span class="mark" aria-hidden="true">&#128062;</span>
-      <span class="title">Good&nbsp;Dogs <span class="amp">&amp;</span> Good&nbsp;Dog&nbsp;People</span>
+      <span class="headline">
+        <span class="title">Good&nbsp;Dogs <span class="amp">&amp;</span> Good&nbsp;Dog&nbsp;People</span>
+        <span class="thesis">Follow the evidence, not the fear &mdash; who&rsquo;s actually looking out for dogs?</span>
+      </span>
       <span class="counts" id="counts"></span>
     </div>
 
@@ -25,16 +28,6 @@
     </nav>
 
     <div class="toggles" id="toggles">
-      <!-- BEFORE / AFTER loop-demo toggle (View B) -->
-      <div class="loop" id="loop-wrap" title="Show the AVMA review that bridges behavioural research and breed-specific legislation">
-        <span class="loop-cap">research&nbsp;&rarr;&nbsp;policy gap</span>
-        <label class="switch">
-          <input type="checkbox" id="t-bridge" />
-          <span class="track"><span class="thumb"></span></span>
-        </label>
-        <span class="loop-state" id="loop-state">open</span>
-      </div>
-
       <select id="t-domain" title="Focus one knowledge domain">
         <option value="all">All six domains</option>
         <option value="veterinary_research">Veterinary research</option>
@@ -45,11 +38,68 @@
         <option value="breed_standards">Breed standards</option>
       </select>
 
-      <label class="chk"><input type="checkbox" id="t-contradict" /> trace the disagreements</label>
+      <label class="chk"><input type="checkbox" id="t-contradict" /> where fear met evidence</label>
     </div>
   </header>
 
+  <!-- ===== The Three Fears — the narrative spine (Tufte small multiples:
+       same visual grammar, three comparable states). Selecting a fear lights
+       its arc and dims the rest to non-data ink. ===== -->
+  <div id="story-spine" role="region" aria-label="The three fears">
+    <div class="spine-rail" role="tablist" aria-label="Choose a story">
+      <span class="spine-eyebrow">The three fears</span>
+      <button class="fear active" data-story="all" role="tab" aria-selected="true">All</button>
+      <button class="fear" data-story="grain_free" role="tab" aria-selected="false">
+        <span class="fear-name">The grain-free panic</span><span class="fear-n" id="n-grain_free"></span></button>
+      <button class="fear" data-story="breed" role="tab" aria-selected="false">
+        <span class="fear-name">The breed panic</span><span class="fear-n" id="n-breed"></span></button>
+      <button class="fear" data-story="dominance" role="tab" aria-selected="false">
+        <span class="fear-name">The dominance myth</span><span class="fear-n" id="n-dominance"></span></button>
+
+      <!-- the AVMA bridge before/after lives INSIDE the breed panic -->
+      <div class="loop" id="loop-wrap" hidden
+           title="The 2014 AVMA review that reconnects behavioural research to breed-specific legislation">
+        <span class="loop-cap">the science reaches the law</span>
+        <label class="switch">
+          <input type="checkbox" id="t-bridge" />
+          <span class="track"><span class="thumb"></span></span>
+        </label>
+        <span class="loop-state" id="loop-state">gap open</span>
+      </div>
+    </div>
+    <p class="spine-caption" id="spine-caption" aria-live="polite"></p>
+  </div>
+
   <main id="stage">
+
+    <!-- ===== the three takeaways — text AS data, no decoration. Dismissible;
+         a viewer reads it once and gets the whole argument. ===== -->
+    <aside id="takeaways" aria-label="What this investigation found">
+      <button id="takeaways-close" title="Dismiss">&times;</button>
+      <h2>What the graph shows</h2>
+      <ol class="findings">
+        <li>
+          <b>It records the disagreement instead of averaging it.</b>
+          Where a fear met evidence, both claims stay in the graph as an explicit
+          <span class="tk-contra">contradicts</span> /
+          <span class="tk-super">supersedes</span> edge &mdash; sourced on both sides.
+        </li>
+        <li>
+          <b>The &ldquo;good dog people&rdquo; are the structure.</b>
+          The evidence-followers aren&rsquo;t an opinion &mdash; they&rsquo;re the
+          load-bearing hubs (highest betweenness). Remove them and the map falls apart.
+        </li>
+        <li>
+          <b>A graph tells you what&rsquo;s missing.</b>
+          It found a real hole &mdash; science and law never connected &mdash; and
+          one sourced document closed it.
+        </li>
+      </ol>
+      <p class="tk-foot">Built from 36 public documents. Nothing here is a new
+        allegation &mdash; every edge is sourced. <button id="takeaways-go" class="linkish">Pick a fear &rarr;</button></p>
+    </aside>
+    <button id="takeaways-reopen" hidden title="Show the takeaways">the takeaways</button>
+
     <section id="view-b" class="view active" aria-label="The knowledge network">
       <div id="cy"></div>
       <!-- a quiet caption that narrates the current state of the loop demo -->
@@ -81,8 +131,12 @@
         <h4>How the lines read</h4>
         <ul class="lines">
           <li><span class="ln solid"></span> connection (width&nbsp;=&nbsp;confidence)</li>
-          <li><span class="ln contra"></span> <b>contradicts</b> — disagreement kept, not averaged</li>
-          <li><span class="ln bridge"></span> the AVMA bridge (toggle above)</li>
+          <li><span class="ln contra"></span> <b>where fear met evidence</b> — the disagreement, kept</li>
+          <li><span class="ln bridge"></span> the science reaches the law (AVMA bridge)</li>
+        </ul>
+        <h4>The good dog people <span class="by-shape">— always labelled</span></h4>
+        <ul class="lines">
+          <li><span class="g g-protagonist"></span> a betweenness hub (an evidence-follower)</li>
         </ul>
         <p class="note">Click any dog, person, study, or line to read its evidence.</p>
       </div>

@@ -96,7 +96,14 @@
     const d = DOMAIN_BY_ID.get(ent.domain);
     let html = `<h3>${esc(ent.label)}</h3>`;
     html += `<p class="sub">${esc(ent.type)}${ent.year ? " · " + ent.year : ""}`
-      + `${ent.bridge ? " · loop-demo bridge" : ""}</p>`;
+      + `${ent.protagonist ? " · good dog person" : ""}`
+      + `${ent.bridge ? " · the bridge" : ""}</p>`;
+    // WHO'S WHO — the protagonist note: why this hub is an evidence-follower.
+    if (ent.protagonist && ent.protagonistNote) {
+      html += `<p><span class="badge hub">good dog person · a betweenness hub</span></p>`
+        + `<div class="fact hub">${esc(ent.protagonistNote)}. The graph didn't `
+        + `<i>decide</i> they matter &mdash; centrality surfaced them: the most paths run through them.</div>`;
+    }
     html += `<div class="kv"><span class="k">knowledge domain</span><span class="v domchip">`
       + `<span class="dot" style="background:${d ? d.color : "#888"}"></span>${esc(domainLabel(ent.domain))}</span></div>`;
     html += `<div class="kv"><span class="k">connections</span><span class="v">${degree.get(ent.id) || 0} edge(s) in the graph</span></div>`;
@@ -117,8 +124,8 @@
       html += `</span></div>`;
     }
     if (ent.bridge) {
-      html += `<p><span class="badge bridge">the AVMA bridge</span></p>`
-        + `<div class="fact">This 2014 AVMA literature review is the link that closes the research&rarr;policy gap: behavioural / bite-risk research on one side, breed-specific legislation on the other. Toggle the switch in the toolbar to watch it connect.</div>`;
+      html += `<p><span class="badge bridge">the science reaches the law</span></p>`
+        + `<div class="fact">This 2014 AVMA literature review is the document the graph's own topology asked for: behavioural / bite-risk research on one side, breed-specific legislation on the other, and <i>no path</i> between them. Adding it closed the gap. Pick <b>the breed panic</b> and flip the switch to watch it connect.</div>`;
     }
     panelBody.innerHTML = html;
     panel.classList.remove("hidden");
@@ -127,17 +134,20 @@
   function showEdge(e) {
     const from = entById.get(e.from), to = entById.get(e.to);
     const isContra = e.type === "CONTRADICTS";
+    const isSuper = e.type === "SUPERSEDES";
     let html = `<h3>${esc(e.type)}</h3>`;
     html += `<p class="sub">${esc(from ? from.label : e.from)} &rarr; ${esc(to ? to.label : e.to)}</p>`;
     if (isContra)
-      html += `<p><span class="badge contra">a recorded disagreement</span></p>`;
+      html += `<p><span class="badge contra">where fear met evidence</span></p>`;
+    if (isSuper)
+      html += `<p><span class="badge super">the correction, dated</span></p>`;
     if (e.bridge)
-      html += `<p><span class="badge bridge">loop-demo bridge edge</span></p>`;
+      html += `<p><span class="badge bridge">the science reaches the law</span></p>`;
     html += `<div class="kv"><span class="k">evidence</span></div>`;
     html += `<div class="fact${isContra ? " contra" : ""}">${esc(e.evidence) || "<i>no evidence note recorded</i>"}</div>`;
     html += confBar(e.confidence);
     if (isContra)
-      html += `<p class="note">This edge is kept as a disagreement on purpose — the graph records that the good dog people disagree, instead of averaging them into a false consensus.</p>`;
+      html += `<p class="note">This is a disagreement, kept on purpose. The graph records that fear and evidence collided here &mdash; sourced on both sides &mdash; instead of averaging them into a false consensus.</p>`;
     panelBody.innerHTML = html;
     panel.classList.remove("hidden");
   }
@@ -178,6 +188,8 @@
   /* ================= VIEW B — the knowledge network ================= */
   let cy = null;
   const story = document.getElementById("story");
+  // which of the three fears is in focus ("all" = the whole map).
+  let currentStory = "all";
 
   function buildCy() {
     const nodes = ENT.map((ent) => ({
@@ -185,6 +197,10 @@
         id: ent.id, label: shortLabel(ent.label, 28), full: ent.label,
         etype: ent.type, domain: ent.domain, domColor: domainColor(ent.domain),
         degree: degree.get(ent.id) || 1, bridge: ent.bridge, ent,
+        // NARRATIVE: protagonists carry an always-on label; story membership
+        // drives the small-multiples dimming.
+        protagonist: !!ent.protagonist,
+        plabel: ent.protagonist ? shortLabel(ent.label, 30) : shortLabel(ent.label, 28),
       },
     }));
     const edges = EDGES.map((e) => ({
@@ -227,6 +243,19 @@
         // the AVMA bridge node, when shown, pulses teal
         { selector: "node[?bridge]", style: {
             "border-color": BRIDGE, "border-width": 4, "shape": "round-rectangle" } },
+        // PROTAGONISTS — the "good dog people". Subtle ink halo + a label that is
+        // always on (so the evidence-followers stay legible at a glance), and a
+        // touch larger so the hubs read as hubs. No chartjunk: the halo is one
+        // soft outline, the label sits on the same paper chip as every other.
+        { selector: "node[?protagonist]", style: {
+            "label": "data(plabel)",
+            "font-size": 10, "font-weight": 600,
+            "color": INK,
+            "text-background-opacity": 0.92,
+            "text-background-padding": 2,
+            "z-index": 70,
+            "underlay-color": HL, "underlay-opacity": 0.16,
+            "underlay-padding": 7, "underlay-shape": "ellipse" } },
         {
           selector: "edge",
           style: {
@@ -253,6 +282,11 @@
         // domain focus / loop fading
         { selector: ".faded", style: { "opacity": 0.06, "text-opacity": 0 } },
         { selector: "node.faded", style: { "opacity": 0.07, "text-opacity": 0 } },
+        // STORY small-multiples: when one fear is selected, everything outside
+        // that arc recedes to near-zero ink (Tufte: dim the non-data); the arc's
+        // own nodes/edges stay full, and the climax edge already self-asserts.
+        { selector: ".story-dim", style: { "opacity": 0.05, "text-opacity": 0 } },
+        { selector: "node.story-dim", style: { "opacity": 0.06, "text-opacity": 0, "underlay-opacity": 0 } },
         // hidden = the "before" state for bridge elements
         { selector: ".gone", style: { "display": "none" } },
         // cross-view + selection highlight
@@ -319,7 +353,7 @@
   function applyBridge() {
     if (!cy) return;
     const after = bridgeChk.checked;
-    loopState.textContent = after ? "closed" : "open";
+    loopState.textContent = after ? "gap closed" : "gap open";
     document.getElementById("loop-wrap").classList.toggle("on", after);
     cy.batch(() => {
       cy.elements("[?bridge]").forEach((el) => {
@@ -327,16 +361,19 @@
         el.toggleClass("bridge-hot", after);
       });
     });
-    // narrate it
-    if (after) {
-      story.className = "bridged";
-      story.innerHTML = "The 2014 AVMA review connects: <b>behavioural research</b> "
-        + "&rarr; the AVMA literature review &rarr; <b>breed-specific legislation</b>. "
-        + "The research&rarr;policy gap is closed.";
-    } else {
-      story.className = "";
-      story.innerHTML = "Behavioural research and breed policy sit in separate clusters. "
-        + "What document bridges them? <span style='color:var(--bridge)'>Flip the switch.</span>";
+    // narrate it — only meaningful while the breed panic is the active arc.
+    if (currentStory === "breed") {
+      if (after) {
+        story.className = "bridged";
+        story.innerHTML = "<b>The science reaches the law.</b> SAFER behavioural "
+          + "research &rarr; the 2014 AVMA review &rarr; breed-specific legislation. "
+          + "The gap the graph found is closed.";
+      } else {
+        story.className = "";
+        story.innerHTML = "The behavioural research and the breed law sit in separate "
+          + "worlds &mdash; a shortest-path query returns <i>no&nbsp;path</i>. What document "
+          + "bridges them? <span style='color:var(--bridge)'>Flip the switch.</span>";
+      }
     }
   }
   bridgeChk.addEventListener("change", applyBridge);
@@ -373,6 +410,117 @@
     if (contraChk.checked) domainSel.value = "all";
     applyFilters();
   });
+
+  /* ---- THE THREE FEARS — the narrative spine (small multiples) ----
+   *
+   * Each fear is the SAME visual grammar (the network), in a comparable state:
+   * its arc lit, the rest dimmed to non-data ink. The captions narrate the same
+   * shape three times — fear -> evidence -> correction — so the eye can compare
+   * across them. "All" restores the whole map. Selecting "breed" also reveals the
+   * AVMA before/after bridge toggle (the climax of that arc).               */
+
+  const STORY_META = {
+    all: {
+      label: "All",
+      caption: "Three fears about dogs &mdash; a scary diet, a &lsquo;dangerous&rsquo; breed, "
+        + "a dominance you must assert. Each one was pulled back to the evidence by a few "
+        + "<b>good dog people</b> (always-labelled here). Pick a fear to follow one arc.",
+    },
+    grain_free: {
+      label: "The grain-free panic",
+      caption: "<b>Fear:</b> boutique grain-free &lsquo;BEG&rsquo; diets, and a 2018 alarm "
+        + "linking them to heart disease (DCM). <b>Evidence:</b> Lisa Freeman and the FDA "
+        + "investigate; the 2022 study complicates the simple story. The red line is the "
+        + "climax &mdash; <b>where fear met evidence</b>, the 2018 alarm against the 2022 reassessment.",
+    },
+    breed: {
+      label: "The breed panic",
+      caption: "<b>Fear:</b> pit bulls cast as inherently dangerous; breed bans enacted. "
+        + "<b>Evidence:</b> the AVMA&rsquo;s 2014 review finds breed doesn&rsquo;t predict bites, "
+        + "and the Calgary model works better &mdash; so courts and voters repeal. "
+        + "Flip the switch to watch <b>the science reach the law</b>.",
+    },
+    dominance: {
+      label: "The dominance myth",
+      caption: "<b>Fear:</b> &lsquo;be the alpha&rsquo; training, rooted in 1947 captive-wolf work "
+        + "(Schenkel). <b>Evidence:</b> L. David Mech recants his own myth; the AVSAB&rsquo;s 2008 "
+        + "statement supersedes it; modern welfare research follows. The arc is one long "
+        + "<b>supersedes</b> chain &mdash; the consensus shift, dated and sourced.",
+    },
+  };
+
+  const fearBtns = Array.from(document.querySelectorAll(".fear"));
+  const spineCaption = document.getElementById("spine-caption");
+  const loopWrap = document.getElementById("loop-wrap");
+
+  function applyStory(key) {
+    currentStory = key;
+    // segmented-control selection state
+    fearBtns.forEach((b) => {
+      const on = b.dataset.story === key;
+      b.classList.toggle("active", on);
+      b.setAttribute("aria-selected", on ? "true" : "false");
+    });
+    document.getElementById("story-spine").dataset.story = key;
+
+    // the AVMA before/after bridge lives INSIDE the breed panic only
+    const breed = key === "breed";
+    loopWrap.hidden = !breed;
+    if (!breed) {                 // leaving breed: reset the bridge to "gap open"
+      if (bridgeChk.checked) { bridgeChk.checked = false; applyBridge(); }
+    }
+
+    // dim everything outside the chosen arc (small-multiples non-data-ink)
+    if (cy) {
+      cy.batch(() => {
+        cy.elements().removeClass("story-dim");
+        if (key !== "all") {
+          const inStory = (el) => {
+            const src = el.isEdge() ? el.data("edge") : el.data("ent");
+            const arr = (src && src.stories) || [];
+            return arr.indexOf(key) !== -1;
+          };
+          cy.elements().forEach((el) => {
+            if (!inStory(el)) el.addClass("story-dim");
+          });
+          // re-fit to the lit arc so it fills the frame (data density up)
+          const lit = cy.elements().not(".story-dim").not(".gone");
+          if (lit.nonempty()) cy.animate({ fit: { eles: lit, padding: 70 }, duration: 360 });
+        } else {
+          cy.animate({ fit: { eles: cy.elements().not(".gone"), padding: 55 }, duration: 360 });
+        }
+      });
+    }
+
+    // narrate the arc
+    spineCaption.innerHTML = STORY_META[key].caption;
+
+    // the bottom caption: only the breed arc uses the bridge-state narration;
+    // for the others, echo a one-line take so the canvas isn't mute.
+    if (breed) {
+      applyBridge();
+    } else if (key === "all") {
+      story.className = "empty"; story.innerHTML = "";
+    } else if (key === "grain_free") {
+      story.className = ""; story.innerHTML = "Follow the red line: the 2018 alarm and the "
+        + "2022 reassessment, kept side by side instead of blended away.";
+    } else if (key === "dominance") {
+      story.className = ""; story.innerHTML = "Follow the chain back: positive reinforcement "
+        + "supersedes the &lsquo;alpha&rsquo; myth Mech himself helped retire.";
+    }
+  }
+
+  fearBtns.forEach((b) => b.addEventListener("click", () => {
+    // a fear focus and the domain/contra filters are mutually exclusive views
+    if (b.dataset.story !== "all") {
+      domainSel.value = "all"; contraChk.checked = false; applyFilters();
+    }
+    applyStory(b.dataset.story);
+  }));
+
+  // selecting a domain or the contradiction trace exits any story focus
+  domainSel.addEventListener("change", () => { if (currentStory !== "all") applyStory("all"); });
+  contraChk.addEventListener("change", () => { if (contraChk.checked && currentStory !== "all") applyStory("all"); });
 
   /* ================= VIEW A — the timeline (real calendar axis) ================= */
   // Only entities with a real year plot. SUPERSEDES + CONTRADICTS chains between
@@ -417,11 +565,12 @@
 
     const spineY = margin.top + innerH * 0.62;
 
-    // headings
+    // headings — the timeline's one-line framing.
     svg.append("text").attr("class", "tl-band-label").attr("x", margin.left).attr("y", 26)
-      .text("How the consensus changed");
+      .text("The corrections, dated");
     svg.append("text").attr("class", "tl-band-sub").attr("x", margin.left).attr("y", 42)
-      .text("each dot is a dated study, recall, bylaw, or event · arcs above = supersession (solid) and disagreement (dashed red)");
+      .text("each dot is a dated study, recall, bylaw, or event on a real 1947→2024 calendar · "
+        + "arcs above: the correction supersedes (solid) or fear met evidence (dashed red)");
 
     // decade grid
     const gridG = svg.append("g");
@@ -532,8 +681,8 @@
     tabB.setAttribute("aria-selected", isB); tabA.setAttribute("aria-selected", !isB);
     viewB.classList.toggle("active", isB); viewA.classList.toggle("active", !isB);
     panel.classList.add("hidden");
-    // the bridge + domain + contradict controls are View-B-only
-    document.getElementById("loop-wrap").style.visibility = isB ? "visible" : "hidden";
+    // the domain + contradict controls are View-B-only; the story spine + its
+    // breed-only bridge toggle apply to both views' narrative (kept visible).
     domainSel.style.visibility = isB ? "visible" : "hidden";
     contraChk.parentElement.style.visibility = isB ? "visible" : "hidden";
     if (isB && cy) { cy.resize(); cy.fit(undefined, 55); }
@@ -543,11 +692,36 @@
   tabB.onclick = () => setView("b");
   tabA.onclick = () => setView("a");
 
+  /* ---- takeaways panel: dismissible, re-openable ---- */
+  const takeaways = document.getElementById("takeaways");
+  const takeawaysReopen = document.getElementById("takeaways-reopen");
+  function dismissTakeaways() { takeaways.classList.add("gone"); takeawaysReopen.hidden = false; }
+  document.getElementById("takeaways-close").onclick = dismissTakeaways;
+  document.getElementById("takeaways-go").onclick = () => {
+    dismissTakeaways();
+    // nudge the viewer into the spine: open the grain-free arc first.
+    const b = document.querySelector('.fear[data-story="grain_free"]');
+    if (b) b.click();
+  };
+  takeawaysReopen.onclick = () => { takeaways.classList.remove("gone"); takeawaysReopen.hidden = true; };
+
   /* ================= boot ================= */
   buildCy();
   window.cy = cy;
-  applyBridge();   // sets initial "before" state + story caption
+
+  // seed the three-fears counters (text-as-data: each fear shows its node count)
+  const M = (G.meta || {});
+  const setN = (id, n) => { const el = document.getElementById(id); if (el && n != null) el.textContent = n; };
+  setN("n-grain_free", M.storyGrainFree);
+  setN("n-breed", M.storyBreed);
+  setN("n-dominance", M.storyDominance);
+
   applyFilters();
+  // hide the AVMA bridge by default (the "gap open" before-state); the breed
+  // arc reveals + narrates it. applyBridge() also seeds .gone on the bridge edges.
+  bridgeChk.checked = false;
+  applyBridge();
+  applyStory("all");   // sets the spine caption + initial (no-story) state
   window.addEventListener("resize", () => {
     if (viewB.classList.contains("active") && cy) cy.resize();
     if (viewA.classList.contains("active")) buildTimeline();
@@ -559,6 +733,7 @@
     const contradicts = EDGES.filter((e) => e.type === "CONTRADICTS");
     const bridgeEdges = EDGES.filter((e) => e.bridge);
     const dashedRendered = cy ? cy.edges("[?contra]").length : 0;
+    const inStory = (k) => ENT.filter((e) => (e.stories || []).indexOf(k) !== -1).length;
     return {
       nodes: ENT.length,
       edges: EDGES.length,
@@ -571,6 +746,16 @@
       cyEdges: cy ? cy.edges().length : 0,
       dashedContradictsRendered: dashedRendered,
       legendDomains: document.querySelectorAll("#domain-ramp li").length,
+      // NARRATIVE: story-tag node counts + the protagonist count + that the
+      // selector and always-on protagonist labels actually rendered.
+      storyGrainFree: inStory("grain_free"),
+      storyBreed: inStory("breed"),
+      storyDominance: inStory("dominance"),
+      protagonists: ENT.filter((e) => e.protagonist).length,
+      protagonistsRendered: cy ? cy.nodes("[?protagonist]").length : 0,
+      fearButtons: document.querySelectorAll(".fear").length,
+      takeawaysFindings: document.querySelectorAll("#takeaways .findings li").length,
+      currentStory: currentStory,
       jsErrors: jsErrors.slice(),
     };
   };

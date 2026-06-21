@@ -1,157 +1,173 @@
-<!-- DRAFT — for the maintainer's edit. This is public-facing copy in the project's
-voice; the numbers and the loop are real and reproducible (see "Reproduce" below),
-but the wording is raw material, not finished copy. -->
+<!-- DRAFT — for the maintainer's edit. Public-facing copy in the project's voice.
+The investigation, the named hubs, the numbers, and the loop are all real and
+reproducible (see "Reproduce"); the wording is raw material, not finished copy. -->
 
-# Good Dogs & Good Dog People — a worked knowledge-graph investigation
+# Good Dogs & Good Dog People
 
-A wholesome, zero-PII demonstration of what `investigation-graph` does: take a
-folder of public documents, turn it into a typed, evidence-bearing knowledge
-graph, and then use the **shape** of that graph to tell you where to look next.
-The subject is dogs — veterinary science, behavior research, pet-food safety,
-breed standards, municipal policy, and the local journalism that covers all four —
-because the most compelling way to show a tool is on something everyone can follow
-and no one gets hurt by.
+### An investigation: *follow the evidence, not the fear — who's actually looking out for dogs?*
 
-This case study is a **public-records methodology demonstration**, not a new
-claim about anyone. Every fact traces to a public source in the corpus.
+Over and over, the same thing happens to dogs. A fear takes hold — a scary diet, a
+"dangerous" breed, a dominance you're supposed to assert — and it drives marketing,
+or panic, or law. And then a handful of people quietly follow the **evidence** and
+pull the world back toward what's true. This is an investigation into those people
+and those dogs, built from 36 public documents, using a knowledge graph to find the
+story a folder of PDFs would hide.
 
-## The corpus
+**It's also a demonstration.** Everything below is a public record, summarized and
+connected; nothing here is a new accusation. The point is to show what
+`investigation-graph` does on a subject where the stakes are real but no one gets
+hurt: turn documents into a typed, evidence-bearing map, and read the *shape* of
+that map for the story.
 
-`corpus/` holds **36 public notes across 6 domains** — veterinary research (8),
-behavioral research (6), nutrition & safety (6), municipal policy (6), community
-journalism (5), and breed standards (5). Each note is a fair-use summary of a
-real, attributable public source (FDA recalls, AKC/UKC breed standards, municipal
-bylaws, peer-reviewed studies, AVSAB position statements, local news), with a
-hand-curated frontmatter block of typed entities and relationships.
+## Bottom line — three takeaways
 
-## Two graphs, on purpose
+1. **The graph records disagreement instead of averaging it away.** Where fear met
+   evidence — grain-free diets, breed bans, "alpha" dominance — both claims sit in
+   the graph as an explicit `CONTRADICTS` or `SUPERSEDES` edge, sourced on both
+   sides. You can *see* the correction happen.
+2. **The "good dog people" are not an opinion — they're the structure.** The
+   people and institutions who followed the evidence are literally the graph's
+   load-bearing hubs (highest betweenness): the FDA, the AVMA, Lisa Freeman,
+   the AVSAB, L. David Mech, the Calgary model. Remove them and the map falls apart.
+3. **A graph tells you what's *missing*.** It found a real hole — the behavioral
+   science and the breed-ban law never connected — and one sourced document closed
+   it. That's the difference between a search box and an investigation.
 
-We build the corpus two ways, and the difference is itself a lesson.
+## The cast (and how the graph names them)
 
-**1. The extraction graph — what the tool finds in raw prose.** We strip the
-frontmatter and run our pipeline end-to-end (chunk → embed → three-phase
-extraction → grounding → graph) over the *prose only*. The result is honest and
-messy: **~760 entities / ~210 edges**, but **549 connected components and 516
-single-mention orphans**. A local LLM reading prose produces redundant,
-un-canonicalized entities — `"pit bull"`, `"pit bull-type dogs"`, `"300 pit
-bulls"`, and `"pit bull characteristics"` all land as *separate* nodes. The typed
-relationships we want are all there (7 `CONTRADICTS`, 11 `SUPERSEDES`, 38
-`ALIAS_OF`), but the graph is fragmented. **This is the realistic baseline** — and
-the grounding gate that quarantines ~20% of edges is doing its job.
+The graph wasn't told who matters; betweenness centrality surfaced them — the nodes
+the most paths run through:
 
-**2. The gold graph — the corpus's curated design.** The corpus also ships
-hand-authored annotations (the frontmatter entity/edge blocks) whose IDs
-interconnect across notes by construction. Built from those, the same 36 notes
-become **175 entities / 234 edges in just 16 components, with 7 orphans** and a
-62-node connected core. This is the clean graph the corpus was *designed* to
-materialize, and it's the one we visualize and investigate below.
+**Good dog people — the evidence-followers:**
+- **Dr. Lisa Freeman** (Tufts) — coined "BEG" and chased the grain-free/DCM signal
+  honestly, all the way to the 2022 study that complicated her own earlier alarm.
+- **L. David Mech** — the wolf biologist whose 1999 work *retired the "alpha wolf"*
+  idea he'd helped popularize decades earlier. A good dog person corrects himself.
+- **The AVSAB** and the **AVMA** — the veterinary bodies that put the dominance myth
+  and breed-specific legislation, respectively, on the wrong side of the evidence.
+- **The FDA** (the single biggest hub, degree 18) — the recall watchdog threaded
+  through melamine (2007), Hill's vitamin-D (2019), and the salmonella recalls.
+- **The Calgary model** — the responsible-ownership framework that became the
+  evidence-based answer to breed bans.
 
-The gap between the two graphs is the real-world story: **extraction quality is
-the hard part of graph-RAG**, and a curated ontology + annotations is what turns a
-fragmented scrape into a navigable map. (See `GAPS-MEASURED.md` for the full
-topology of both.)
+**Good dogs — the maligned, vindicated:** the **American Pit Bull Terrier** /
+**American Staffordshire Terrier** (banned on fear, exonerated on data) and the
+**German Shepherd Dog** (a high-betweenness bridge across research, standards, and
+policy).
 
-## What the graph already knows — five investigative moves
+## The three fears, and who corrected them
 
-The corpus was designed to exercise the questions a knowledge graph answers better
-than a folder of PDFs:
+### 1. The grain-free panic
+**Fear:** boutique "BEG" (boutique, exotic-ingredient, grain-free) diets marketed
+as healthier; a 2018 alarm linking them to dilated cardiomyopathy (DCM).
+**Evidence:** Freeman and the FDA investigate; the 2022 *JVIM* prospective study
+complicates the simple grain-free→DCM story.
+**In the graph:** a `CONTRADICTS` edge between the 2018 alarm and the 2022
+reassessment — the disagreement preserved, not blended into a mush.
 
-- **Contradiction (the graph records disagreement instead of averaging it).** The
-  grain-free / DCM debate is in the graph as a `CONTRADICTS` edge: the 2018
-  "diet-associated DCM" alarm vs. the 2022 Freeman *JVIM* prospective reassessment.
-  So is the training-science shift: the 1970s dominance/"alpha" model vs. the 2008
-  AVSAB position statement and later aversive-training welfare research.
-- **Temporal supersession.** `SUPERSEDES` chains carry the dominance-theory →
-  positive-reinforcement consensus shift and the staged pet-food recall timelines.
-- **Alias resolution.** `ALIAS_OF` links the German Shepherd Dog / Alsatian / GSD
-  surface forms — and the corpus deliberately keeps the American Pit Bull Terrier
-  and the American Staffordshire Terrier *distinct* (a trap for systems that
-  collapse them).
-- **Multi-hop.** A researcher → their institution → a study → the policy that
-  leaned on it: paths flat search can't make.
-- **Cross-domain bridges.** The breeds and concepts that hold the six domains
-  together — German Shepherd Dog, DCM, breed-specific legislation — surface as
-  high-betweenness nodes: the connective tissue that a topic-by-topic read misses.
+### 2. The breed panic
+**Fear:** pit bulls cast as inherently dangerous; breed bans enacted (Denver 1989,
+Ontario 2005, Montreal 2016).
+**Evidence:** the AVMA's 2014 review finds breed doesn't predict bites and that
+visual breed ID is unreliable; the Calgary model shows responsible-ownership rules
+work better; courts and voters move (Colorado Dog Fanciers, Montreal 2018, Denver
+2020, Aurora 2024).
+**In the graph:** a fear→evidence→repeal arc you can trace — and the climax of this
+case study (below).
 
-## The payoff — the co-evolutionary loop
+### 3. The dominance myth
+**Fear:** "be the alpha," dominance-based training rooted in 1947 captive-wolf
+observation.
+**Evidence:** Mech's own recantation; the 2008 AVSAB position statement; modern
+welfare research on aversive methods.
+**In the graph:** a `SUPERSEDES` chain from dominance theory to positive
+reinforcement — the consensus shift, dated and sourced.
 
-A knowledge graph's best trick isn't answering a question you already have; it's
-**exposing the holes in its own structure as leads.** Here is that loop, run end
-to end on the gold graph.
+*(Running underneath all three: the FDA recall trail — melamine → Hill's vitamin D
+→ salmonella — the watchdog catching what marketing missed.)*
 
-**1. Build and run topology.** `run_analysis.py` reports communities, bridges, and
-structural gaps.
+## The climax — the graph finds a hole, and we close it
 
-**2. The tool names a gap.** Two clusters that obviously *should* connect, don't:
-the **behavioral-research** cluster (the SAFER aggression-assessment work, the
-dominance-theory literature, Bollen & Horowitz 2012) and the **municipal-policy**
-cluster (the breed-specific-legislation concept and the Denver / Calgary / Montreal
-/ Ontario bylaws). Both turn on the same breeds — yet a shortest-path query between
-them returns **NO PATH** (verified across every behavioral×policy pair). The
-science and the law sit in separate components.
+This is the part a search box can't do.
 
-**3. Do targeted public-records OSINT to fill it.** What public document bridges
-the behavior science and the breed bans? The **AVMA's 2014 literature review,
-*The Role of Breed in Dog Bite Risk and Prevention*** — it weighs the bite-and-
-behavior research *and* states the veterinary case against breed-specific
-legislation ("breed-specific bans are a simplistic answer to a far more complex
-social problem"; visual breed identification is unreliable; ownership factors
-matter more than breed). Sourced to avma.org. We add it as one note in
-`enrichment/`, annotated to cite the SAFER-validity study and to be *about* breed-
-specific legislation.
+**The tool named a gap.** Topology showed two clusters that obviously *should*
+connect but didn't: the **behavioral-research** cluster (the SAFER aggression-
+assessment work, the dominance literature) and the **breed-law** cluster (breed-
+specific legislation and the Denver/Calgary/Montreal/Ontario bylaws). Both turn on
+the same breeds — yet a shortest-path query between them returned **NO PATH**. The
+science and the law sat in separate worlds.
 
-**4. Re-ingest and watch the bridge close.** With the one note added, the path
-appears:
+**We did the good-dog OSINT.** What public document bridges them? The **AVMA's 2014
+review, *The Role of Breed in Dog Bite Risk and Prevention*** — it weighs the
+behavior-and-bite research *and* states the case against breed bans. Public, sourced
+(avma.org). We added it as one note.
 
-> **SAFER (behavioral research) → AVMA 2014 review → Breed-specific legislation**
+**The bridge closed:**
 
-`concept_safer_assessment ↔ concept_bsl` goes from **NO PATH → length 2**, the
-behavioral and policy clusters merge, and the largest connected component grows
-from **62 to 83** nodes. One sourced document, and a question that flat search
-would never have surfaced now has a navigable, evidence-bearing answer.
+> **SAFER behavioral research → AVMA 2014 review → Breed-specific legislation**
 
-**5. Be honest about what's still open.** Not every gap is worth closing, and some
-remain by design — the dominance-theory cluster still doesn't reach every bylaw,
-the breed-group taxonomic spine is thin (`GROUPED_UNDER` is sparse), and the
-extraction graph's orphan tail is real. Honest gaps stay gaps; the tool just makes
-them visible.
+`concept_safer_assessment ↔ concept_bsl` went from **NO PATH → length 2**, the two
+clusters merged, and the connected core grew from **62 to 83** nodes. One sourced
+document turned "the science says one thing, the law does another" from an
+unprovable hunch into a navigable, evidence-bearing path. *That* is the
+investigation the cute title promised: a good dog person (the AVMA, doing the
+review) reconnecting the evidence to the policy that ignored it.
+
+## A note on honesty — two graphs
+
+We build the corpus two ways, and the gap between them is itself a lesson.
+
+- The **gold graph** (the corpus's hand-curated annotations) is the clean map this
+  story is told on: **175 entities / 234 edges, 16 components**.
+- The **extraction graph** (our pipeline reading the raw prose with a local LLM) is
+  the honest, messy reality: the relationships are all there, but ~760 entities
+  fragment into **549 components / 516 single-mention orphans** because the model
+  over-extracts and doesn't canonicalize ("pit bull," "pit bull-type dogs," "300
+  pit bulls" become three nodes). **Extraction quality is the hard part of graph-
+  RAG**, and that's why a curated ontology earns its keep. (Full topology of both:
+  `GAPS-MEASURED.md`.)
+
+## What's still open (honest gaps remain gaps)
+
+Not every thread closes. The dominance cluster still doesn't reach every bylaw; the
+breed-group taxonomy is thin; the recall trail could connect to more of the
+nutrition science. The tool's job isn't to pretend otherwise — it's to make the
+holes visible so you know where to look next.
 
 ## The visualization
 
-`viz/` renders the gold graph in two linked, fully-offline views: a **knowledge
-network** (communities colored by domain, cross-domain bridges and the
-`CONTRADICTS` edges called out, a before/after toggle for the AVMA bridge) and a
-**timeline** (the supersession and recall chains on a real calendar axis). Click
-any node or edge for its provenance — which note, which evidence, what confidence.
+`viz/` renders this on the gold graph, fully offline, in two linked views: a
+**knowledge network** (the cast as hubs, the three fears as `CONTRADICTS`/
+`SUPERSEDES` edges, a before/after switch for the AVMA bridge) and a **timeline**
+(the corrections on a real 1947→2024 calendar axis). Click any node or edge for its
+provenance — which document, which evidence, what confidence.
 
 ## Reproduce
 
 ```bash
-# 1. Extraction graph (the honest, messy baseline) — strips frontmatter, runs the
-#    full pipeline. Needs Ollama (local or a remote endpoint via EXTRACT_ENDPOINT).
-INGEST_DIR=examples/good-dogs/corpus \
-GRAPH_DIR=examples/good-dogs/data/graph.lbug \
-CHUNK_DB=examples/good-dogs/data/chunks.duckdb \
-ONTOLOGY_PATH=examples/good-dogs/ONTOLOGY.md \
-PYTHONPATH=. python scripts/ingest_folder.py
-
-# 2. Gold graph (the clean, curated graph) — before the enrichment:
+# The clean gold graph the story is told on — BEFORE the bridge:
 GRAPH_DIR=examples/good-dogs/data-gold/graph.lbug \
 ONTOLOGY_PATH=examples/good-dogs/ONTOLOGY-gold.md \
 PYTHONPATH=. python scripts/build_graph_from_corpus_gold.py examples/good-dogs/corpus
-#    ...then run_analysis.py and note: behavioral <-> policy = NO PATH.
+#   run_analysis.py  →  behavioral <-> policy = NO PATH (the gap).
 
-# 3. Close the loop — add the enrichment note and rebuild:
+# Close the loop — add the one sourced document and rebuild:
 GRAPH_DIR=examples/good-dogs/data-gold/graph.lbug \
 ONTOLOGY_PATH=examples/good-dogs/ONTOLOGY-gold.md \
 PYTHONPATH=. python scripts/build_graph_from_corpus_gold.py \
   examples/good-dogs/corpus examples/good-dogs/enrichment
-#    ...run_analysis.py again: SAFER -> AVMA review -> BSL, the bridge is closed.
+#   run_analysis.py  →  SAFER -> AVMA review -> BSL. The bridge is closed.
+
+# The honest, messy extraction graph (our pipeline on raw prose) — needs Ollama:
+INGEST_DIR=examples/good-dogs/corpus GRAPH_DIR=examples/good-dogs/data/graph.lbug \
+CHUNK_DB=examples/good-dogs/data/chunks.duckdb ONTOLOGY_PATH=examples/good-dogs/ONTOLOGY.md \
+PYTHONPATH=. python scripts/ingest_folder.py
 ```
 
 ## Sources
 
-The corpus notes each cite their public source. The enrichment note cites the AVMA
-2014 review (`avma.org/.../dog_bite_risk_and_prevention_bgnd.pdf`) and the AVMA's
-public BSL-position page. Nothing here is a new allegation; everything is a public
-record, summarized and connected.
+Every corpus note cites its public source (FDA recalls, AKC/UKC/FCI breed
+standards, municipal bylaws and court decisions, peer-reviewed studies, AVSAB/AVMA
+statements, local journalism). The enrichment note cites the AVMA 2014 review and
+the AVMA's public BSL-position page. Nothing here is a new allegation; everything is
+a public record, summarized and connected.
