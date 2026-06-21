@@ -40,3 +40,6 @@ osint-toolkit/
 
 # Minimization denylist lists private PII tokens — never commit it (gate fail-closes if absent).
 scripts/minimization_denylist.txt
+
+# good-dogs build artifacts
+examples/good-dogs/ingest-run.log

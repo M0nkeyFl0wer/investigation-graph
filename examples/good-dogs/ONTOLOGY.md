@@ -64,7 +64,7 @@ The system tracks quality metadata on entities and edges:
 | AFFILIATED_WITH | person → organization | Current affiliation (no time bounds) | Conflicts of interest; institutional clusters |
 | MEMBER_OF | person → organization | Membership in a group/body (distinct from employment) | Committee/panel networks |
 | GROUPED_UNDER | breed → breed | A breed belongs to a broader breed group (SKOS broader) | The taxonomic spine; gives the otherwise-flat breed set an is-a backbone |
-| ALIAS_OF | breed/person/organization → same type | Two surface forms naming the SAME canonical entity (same type only) | Entity resolution; the GSD/Alsatian and APBT-conflation tests |
+| ALIAS_OF | breed/person/organization/document → breed/person/organization/document | Two surface forms naming the SAME canonical entity. Intended *same-type* (a breed aliases a breed, not a person); grade-locality can't bind "same type as source", so the entity resolver enforces that — the domain/range here just lists the types aliases legitimately apply to | Entity resolution; the GSD/Alsatian and APBT-conflation tests |
 | SUPERSEDES | document → document | A newer finding/policy/recommendation replaces an older one | Temporal consensus shifts (dominance theory → positive reinforcement) |
 | CONTRADICTS | document → document | Two documents make incompatible claims about the same subject | Inconsistencies; the grain-free/DCM 2018↔2022 debate |
 | CITES | document → document | Explicit reference from one document to another | Evidence lineage; which studies a policy leans on |

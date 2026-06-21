@@ -1,0 +1,684 @@
+{"id": "719e987e435f20b5", "label": "1947", "type": "event", "description": "", "confidence": 0.7}
+{"id": "a99475aee299a28c", "label": "Rudolf Schenkel", "type": "person", "description": "", "confidence": 0.7}
+{"id": "677acd98906c4426", "label": "Basel Zoo", "type": "organization", "description": "", "confidence": 0.7}
+{"id": "841501a1d76eee97", "label": "decades", "type": "event", "description": "", "confidence": 0.7}
+{"id": "57ca87d08f66e30a", "label": "the Basel Zoo", "type": "location", "description": "", "confidence": 0.7}
+{"id": "4e29eb0c0f4dd3ce", "label": "the 1930s", "type": "event", "description": "", "confidence": 0.7}
+{"id": "0947b5f99574dd8d", "label": "1940s", "type": "event", "description": "", "confidence": 0.7}
+{"id": "f153aa88b86748f2", "label": "wolf", "type": "person", "description": "", "confidence": 0.7}
+{"id": "06ca87f7d81e202e", "label": "1999", "type": "event", "description": "", "confidence": 0.7}
+{"id": "525b32d26c705b78", "label": "2008", "type": "event", "description": "", "confidence": 0.7}
+{"id": "e52023f6f7a86c2c", "label": "https://davemech.org/wolf-news-and-information/schenkels-classic-wolf-behavior-study-available-in-english/\n- Internet", "type": "person", "description": "", "confidence": 0.7}
+{"id": "a5e0207973e92b06", "label": "PDF", "type": "document", "description": "Format in which the study is available", "confidence": 0.6}
+{"id": "5a38131d6678cf45", "label": "WebFetch", "type": "product", "description": "Tool used for fetching data", "confidence": 0.6}
+{"id": "3d9a35208e48d75c", "label": "Classic Wolf Behavior Study Available", "type": "document", "description": "Title of the davemech.org announcement page", "confidence": 0.6}
+{"id": "bdbedb37c91b3e41", "label": "https://davemech.org/wolf-news-and-information/schenkels-classic-wolf-behavior-study-available-in-english/", "type": "document", "description": "Canonical URL for the announcement page", "confidence": 0.6}
+{"id": "d0d186bce8a8655a", "label": "Internet", "type": "location", "description": "Location where the study and announcements are available", "confidence": 0.6}
+{"id": "e34ea3abadb59abb", "label": "wolves", "type": "breed", "description": "The subject of Rudolf Schenkel's study", "confidence": 0.6}
+{"id": "70e963952c8e36e7", "label": "*Behaviour*", "type": "document", "description": "The original 1947 publication of Rudolf Schenkel's study", "confidence": 0.6}
+{"id": "898792511f5dbf6f", "label": "Schenkel's Classic Wolf Behavior Study Available", "type": "document", "description": "A note available at https://davemech.org/wolf-news-and-information/schenkels-classic-wolf-behavior-study-available-in-english/", "confidence": 0.6}
+{"id": "d503b13fa57af2b0", "label": "Internet Archive full-text mirror", "type": "document", "description": "An English translation of the original paper, derivative work hosted on archive.org", "confidence": 0.6}
+{"id": "e53df88c6f5edcc6", "label": "Schenkel, R.", "type": "person", "description": "The author of the classic wolf behavior study", "confidence": 0.6}
+{"id": "bdfc28d6ee55092a", "label": "Expression Studies on Wolves", "type": "document", "description": "Original primary publication by Schenkel in 1947", "confidence": 0.6}
+{"id": "bb6fe2f35af0edaa", "label": "1970", "type": "event", "description": "", "confidence": 0.7}
+{"id": "3eda7b65bbb067da", "label": "Canadian Journal of Zoology", "type": "organization", "description": "", "confidence": 0.7}
+{"id": "7787dd40124407a6", "label": "pp", "type": "location", "description": "", "confidence": 0.7}
+{"id": "59a20f4eeacff1f3", "label": "Canadian Journal of Zoology* 77(8", "type": "organization", "description": "", "confidence": 0.7}
+{"id": "f605a6a2e5aa9c90", "label": "the pivot year", "type": "event", "description": "", "confidence": 0.7}
+{"id": "f9d7a1c4b8622889", "label": "Mech \u2192 USGS NPWRC", "type": "organization", "description": "", "confidence": 0.7}
+{"id": "f471d9fffc0da05e", "label": "L. D. 1999", "type": "person", "description": "", "confidence": 0.7}
+{"id": "1689cb1104fde6f2", "label": "1196-1203", "type": "event", "description": "", "confidence": 0.7}
+{"id": "2d103b1821fb93aa", "label": "Ellesmere Island, Northwest Territories, Canada", "type": "location", "description": "Location where Mech observed wild wolf packs", "confidence": 0.6}
+{"id": "d697ae77f5a40782", "label": "USGS NPWRC", "type": "organization", "description": "United States Geological Survey Northern Prairie Wildlife Research Center", "confidence": 0.6}
+{"id": "8917ee007d320c5c", "label": "Digital Commons", "type": "location", "description": "Repository where the paper is available", "confidence": 0.6}
+{"id": "3082f21fa45f0584", "label": "Canadian Journal of Zoology*", "type": "document", "description": "The specific issue and pages of Mech's publication", "confidence": 0.6}
+{"id": "bcee7edb25e350c5", "label": "year 1999", "type": "concept", "description": "Year in which Mech published his correction", "confidence": 0.6}
+{"id": "b0fe6cc60057bc05", "label": "L. D.", "type": "person", "description": "Author initials, likely referring to L. David Mech", "confidence": 0.6}
+{"id": "beb609b2fbbe67f3", "label": "Schenkel 1947", "type": "document", "description": "A study that established a view of wolf pack dynamics", "confidence": 0.6}
+{"id": "299c3ea685137dfb", "label": "Mech's evidence base", "type": "concept", "description": "The basis for Mech's research, including literature review and field observations", "confidence": 0.6}
+{"id": "bb491a130fd7e21a", "label": "pub_mech_1999_alpha_status", "type": "document", "description": "Canadian Journal of Zoology* 77(8): 1196-1203, DOI `10.1139/z99-099`, year 1999", "confidence": 0.6}
+{"id": "82db1f3269a1eca2", "label": "pub_schenkel_1947_wolf_expression", "type": "document", "description": "Schenkel's work on wolf behavior in captivity published in 1947", "confidence": 0.6}
+{"id": "77124d9d7d7d5c1d", "label": "concept_dominance_theory", "type": "concept", "description": "The theory of dominance among animals", "confidence": 0.6}
+{"id": "bb7396a323c75d7e", "label": "Northwest Territories, Canada", "type": "location", "description": "A region within Canada", "confidence": 0.6}
+{"id": "ed1d1db11121de02", "label": "Mech, L. D.", "type": "person", "description": "Author of the study on wolf packs", "confidence": 0.6}
+{"id": "9174afb6f86527a9", "label": "Alpha status, dominance, and division of labor in wolf packs", "type": "document", "description": "Title of the study by Mech, L. D.", "confidence": 0.6}
+{"id": "949571fd71decca0", "label": "post-1999", "type": "event", "description": "", "confidence": 0.7}
+{"id": "e921802029ba0880", "label": "https://caninewelfare.centers.purdue.edu/resource/dominance-position-statement/", "type": "person", "description": "", "confidence": 0.7}
+{"id": "62dde63232cfe92d", "label": "the Use of Dominance Theory", "type": "document", "description": "A position statement against dominance theory in animal behavior", "confidence": 0.6}
+{"id": "ed8b11b80b2ed0ba", "label": "American Veterinary Society of Animal Behavior", "type": "organization", "description": "Professional organization for veterinarians and behaviorists", "confidence": 0.6}
+{"id": "ec59c84c0dad7791", "label": "Mech", "type": "person", "description": "Researcher known for work on wolf behavior", "confidence": 0.6}
+{"id": "efb26042a0790995", "label": "AVSAB", "type": "document", "description": "A broader resource library by AVSAB reflecting reward-based/positive-reinforcement training.", "confidence": 0.6}
+{"id": "48d729fc90e8d3f2", "label": "Mech 1999", "type": "document", "description": "", "confidence": 0.6}
+{"id": "c1a4d32c80bd8455", "label": "concept_positive_reinforcement_training", "type": "concept", "description": "", "confidence": 0.6}
+{"id": "33933dbe487df6cc", "label": "https://archive.org/details/dominance-position-statement", "type": "document", "description": "Internet Archive mirror URL for verifying the content of the AVSAB dominance position statement", "confidence": 0.6}
+{"id": "cc6d6e4f16b7c4e8", "label": "https://avsab.org/resources/position-statements/", "type": "document", "description": "URL to AVSAB's position statements index page on their website", "confidence": 0.6}
+{"id": "3137e24d98168a92", "label": "AVSAB Position Statement", "type": "document", "description": "A position statement published by the American Veterinary Society of Animal Behavior", "confidence": 0.6}
+{"id": "bce01fe76a0a12fe", "label": "https://avsab.org/wp-content/uploads/2018/03/Dominance_Position_Statement_download-10-3-14.pdf", "type": "location", "description": "Canonical URL for the AVSAB Position Statement document", "confidence": 0.6}
+{"id": "5f395b3170eda3a7", "label": "2012", "type": "event", "description": "", "confidence": 0.7}
+{"id": "d2a8dcdd37299607", "label": "Vieira de Castro", "type": "person", "description": "", "confidence": 0.7}
+{"id": "82b0d96f58e91e54", "label": "Bollen & Horowitz", "type": "organization", "description": "", "confidence": 0.7}
+{"id": "6228e3b99537ca7f", "label": "n=67", "type": "person", "description": "", "confidence": 0.7}
+{"id": "eed01f4c950ef36f", "label": "2015", "type": "event", "description": "", "confidence": 0.7}
+{"id": "71ed8822f162edd3", "label": "2014", "type": "event", "description": "", "confidence": 0.7}
+{"id": "84587b65bb760956", "label": "the Assessment Prediction Problem", "type": "concept", "description": "", "confidence": 0.6}
+{"id": "4448c879f4f6ec95", "label": "C-BARQ", "type": "product", "description": "", "confidence": 0.6}
+{"id": "7067a14d3f2c0654", "label": "Applied Animal Behaviour Science", "type": "document", "description": "", "confidence": 0.6}
+{"id": "18c3522ef4ef9669", "label": "67", "type": "concept", "description": "number of dogs in the study", "confidence": 0.6}
+{"id": "edc07bc74cafc327", "label": "mAAP", "type": "product", "description": "modified Assessment of Friendliness to Animals and People", "confidence": 0.6}
+{"id": "b38b6733c1e67b47", "label": "SAFER", "type": "breed", "description": "Shelter Dog Behavior Assessments", "confidence": 0.6}
+{"id": "a2fa61f1e1b6cf64", "label": "pub_bollen_horowitz_2012_safer_validity", "type": "document", "description": "Document authored by Kelly Bollen and Jason Horowitz questioning the validity of SAFER", "confidence": 0.6}
+{"id": "6972739fc9ec42f8", "label": "concept_behavior_assessment_limitations", "type": "concept", "description": "Concept that addresses limitations in behavior assessment tools like SAFER", "confidence": 0.6}
+{"id": "eadfec0b423c354c", "label": "Elsevier", "type": "organization", "description": "Publisher of the Bollen & Horowitz study", "confidence": 0.6}
+{"id": "dd5ee0a9eb786248", "label": "Serpell et al.", "type": "document", "description": "", "confidence": 0.6}
+{"id": "6897a92a181700d5", "label": "ASPCA Position Statement on Shelter Dog Behavior Assessments", "type": "document", "description": "", "confidence": 0.6}
+{"id": "92d6b140e5d0a244", "label": "C-BARQ (Serpell et al.)", "type": "product", "description": "", "confidence": 0.6}
+{"id": "5ec1250521796726", "label": "J Vet Behav 9(6)", "type": "document", "description": "", "confidence": 0.6}
+{"id": "03b3c1827c09853e", "label": "2020-12-16", "type": "event", "description": "Date reference: 2020-12-16", "confidence": 0.9}
+{"id": "4e88e285af076470", "label": "al", "type": "person", "description": "", "confidence": 0.7}
+{"id": "f54cec70a17d6481", "label": "2020", "type": "event", "description": "", "confidence": 0.7}
+{"id": "3c8dac1d2f962e10", "label": "December 2020", "type": "event", "description": "", "confidence": 0.7}
+{"id": "67558340684e8b10", "label": "CC-BY 4.0", "type": "organization", "description": "", "confidence": 0.7}
+{"id": "326452bf477583d0", "label": "2021", "type": "event", "description": "", "confidence": 0.7}
+{"id": "e04203d7c1dff4c9", "label": "schools (Group Reward", "type": "organization", "description": "", "confidence": 0.7}
+{"id": "bde6a8d028b8bbf5", "label": "2008/2021", "type": "event", "description": "", "confidence": 0.7}
+{"id": "0808c0e37f3a8122", "label": "2017", "type": "event", "description": "", "confidence": 0.7}
+{"id": "f834f691ae4d45e5", "label": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7743949/\n- PubMed", "type": "organization", "description": "", "confidence": 0.7}
+{"id": "c1178f6e086aba73", "label": "PLOS ONE", "type": "document", "description": "The journal where the study was published", "confidence": 0.6}
+{"id": "b6bc9d8df7998481", "label": "92 companion dogs", "type": "breed", "description": "The subjects of the study", "confidence": 0.6}
+{"id": "d7b703b7b0067e03", "label": "reward-based schools", "type": "organization", "description": "Training schools that use reward-based methods", "confidence": 0.6}
+{"id": "ec07162b7d4ba7cd", "label": "Nce (2021)", "type": "document", "description": "", "confidence": 0.6}
+{"id": "3748698db8c53db1", "label": "Group Reward", "type": "concept", "description": "Reward-based training method for dogs", "confidence": 0.6}
+{"id": "c5a429a9dcb5b102", "label": "Group Mixed", "type": "concept", "description": "Training method that includes low proportions of aversive methods and high proportions of reward-based methods", "confidence": 0.6}
+{"id": "d583771d350953f3", "label": "PLOS ONE 15(12): e0225023", "type": "document", "description": "Study published in PLOS ONE on December 16, 2020", "confidence": 0.6}
+{"id": "062fca22fac8c57e", "label": "captive-wolf dominance framework", "type": "concept", "description": "A theoretical framework based on wolf behavior that underpins aversive training methods.", "confidence": 0.6}
+{"id": "5107ad1fa6291fbc", "label": "Vieira de Castro 2020", "type": "document", "description": "Empirical study published in 2020 by Vieira de Castro et al., measuring welfare harms from aversive training methodology in companion dogs.", "confidence": 0.6}
+{"id": "5b6b437b18411b72", "label": "dominance_to_positive_reinforcement", "type": "concept", "description": "Temporal concept representing a shift from dominance-based to positive reinforcement-based dog training approaches.", "confidence": 0.6}
+{"id": "9d1e7eeffa924e6d", "label": "2017 Ziv literature review", "type": "document", "description": "A literature review published in 2017 that discusses the efficacy of dominance-based versus other training methods.", "confidence": 0.6}
+{"id": "42a4f0aa6e382238", "label": "AVSAB humane-training position statement", "type": "document", "description": "Position statement by AVSAB advocating for humane and positive reinforcement training methodologies.", "confidence": 0.6}
+{"id": "07e76e7c10e504c5", "label": "AVSAB 2008", "type": "organization", "description": "American Veterinary Society of Animal Behavior position statement from 2008", "confidence": 0.6}
+{"id": "d5aac04fcb21eec1", "label": "Vieira de Castro AC, Fuchs D, Morello GM, Pastur S, de Sousa L, Olsson IAS. 2020.", "type": "document", "description": "Does training method matter? Evidence for the negative impact of aversive-based methods on companion dog welfare.", "confidence": 0.6}
+{"id": "2b6a242ce94d60e4", "label": "2020-07-27", "type": "event", "description": "Date reference: 2020-07-27", "confidence": 0.9}
+{"id": "1dba73f5ae189b2b", "label": "23:795-805", "type": "event", "description": "", "confidence": 0.7}
+{"id": "7bdddb468755d24c", "label": "the Canine Social and Learned Behavior", "type": "organization", "description": "", "confidence": 0.7}
+{"id": "39cd362faaafe817", "label": "CI 2.93\u201317.23", "type": "event", "description": "", "confidence": 0.7}
+{"id": "99a145b4fd8cc5f8", "label": "Cat 2c", "type": "location", "description": "", "confidence": 0.7}
+{"id": "3128c0a23994835a", "label": "n=4,137", "type": "organization", "description": "", "confidence": 0.7}
+{"id": "f383d40d78076909", "label": "https://link.springer.com/article/10.1007/s10071-020-01385-0\n- PMC", "type": "person", "description": "", "confidence": 0.7}
+{"id": "0d397bc97d2faef9", "label": "12", "type": "event", "description": "", "confidence": 0.7}
+{"id": "ee1f01121a190fa8", "label": "Snyder-Mackler N. 2020", "type": "person", "description": "", "confidence": 0.7}
+{"id": "bfcc95cf39258899", "label": "PMC", "type": "document", "description": "", "confidence": 0.6}
+{"id": "f34df396fc6fd1df", "label": "Dognition citizen science project", "type": "product", "description": "", "confidence": 0.6}
+{"id": "13f3b67829fcf445", "label": "4,137 dogs across 66 breeds", "type": "concept", "description": "", "confidence": 0.6}
+{"id": "360f304944dbccd5", "label": "quadratic cognitive trajectory", "type": "concept", "description": "", "confidence": 0.6}
+{"id": "0e91e696ed022e46", "label": "Dognition dataset", "type": "document", "description": "Dataset used for performing standardized cognitive tasks with dogs at home.", "confidence": 0.6}
+{"id": "a397e7ce5718ce3f", "label": "executive function", "type": "concept", "description": "A type of task measured in the Dognition study.", "confidence": 0.6}
+{"id": "24ba02847d88f6b5", "label": "memory", "type": "concept", "description": "A type of task measured in the Dognition study.", "confidence": 0.6}
+{"id": "b83c818c9573ed6f", "label": "reasoning", "type": "concept", "description": "A type of task measured in the Dognition study.", "confidence": 0.6}
+{"id": "0853faecffcf26bb", "label": "decision-making", "type": "concept", "description": "A type of task measured in the Dognition study.", "confidence": 0.6}
+{"id": "0efb3e40537038e9", "label": "self-control", "type": "concept", "description": "A type of task measured in the Dognition study.", "confidence": 0.6}
+{"id": "15d54d11aa5719e6", "label": "social cognition", "type": "concept", "description": "A type of task measured in the Dognition study.", "confidence": 0.6}
+{"id": "05993384c4673a2f", "label": "cognitive aging trajectories", "type": "concept", "description": "The key analytical question of the study regarding whether cognitive aging differs by expected breed lifespan.", "confidence": 0.6}
+{"id": "1a38656f61cefbfb", "label": "truncation hypothesis", "type": "concept", "description": "Hypothesis stating that all breeds have similar cognitive trajectories; larger dogs decline earlier because they die sooner (limited decline).", "confidence": 0.6}
+{"id": "54a3e30faa20bae3", "label": "compression hypothesis", "type": "concept", "description": "Hypothesis stating that cognitive aging scales with lifespan; larger dogs show compressed but faster cognitive trajectories.", "confidence": 0.6}
+{"id": "ebf0eda3c4f77233", "label": "quadratic trajectory of cognitive development and aging", "type": "concept", "description": "The result found in the study indicating a similar trajectory for all breeds regardless of size or expected lifespan.", "confidence": 0.6}
+{"id": "a1a8b699006b0f03", "label": "Hare B", "type": "person", "description": "Co-author of the study on canine cognitive aging", "confidence": 0.6}
+{"id": "b5d065d25033b713", "label": "Animal Cognition", "type": "document", "description": "Journal where the canine cognitive aging study was published", "confidence": 0.6}
+{"id": "b2688ddd844b0c20", "label": "66 breeds", "type": "breed", "description": "A group of dog breeds included in the study on canine cognitive aging", "confidence": 0.6}
+{"id": "6a071b85cadd038f", "label": "citizen science methodology", "type": "concept", "description": "The method used by the authors to gather data for their study", "confidence": 0.6}
+{"id": "02658d73b21626bb", "label": "canine cognitive aging research", "type": "concept", "description": "The field of research focused on understanding how canine cognition changes over time", "confidence": 0.6}
+{"id": "0cc435be1fe2a9ec", "label": "pub_watowich_2020_cognition_lifespan", "type": "document", "description": "A study published in Scientific Reports, volume 12, that investigates cognitive aging trajectories in dog breeds.", "confidence": 0.6}
+{"id": "1ce64f2edf4369bb", "label": "concept_breed_lifespan_cognitive_tradeoff", "type": "concept", "description": "The idea that faster life histories compress cognitive aging trajectories in dog breeds.", "confidence": 0.6}
+{"id": "2e3ec591edc55dea", "label": "University of Arizona EvoAmy lab", "type": "organization", "description": "A research laboratory at the University of Arizona focusing on evolutionary biology and animal behavior.", "confidence": 0.6}
+{"id": "b329832dc58e6e4a", "label": "watowich 2020", "type": "document", "description": "Study published in July 2020 by Watowich et al.", "confidence": 0.6}
+{"id": "c5a5d797a7319383", "label": "dog aging project (dap)", "type": "organization", "description": "NIH-funded initiative studying canine aging", "confidence": 0.6}
+{"id": "ba2398820a923913", "label": "scientific reports", "type": "document", "description": "Scientific journal published by Nature Publishing Group", "confidence": 0.6}
+{"id": "244fbf96c9483ca5", "label": "canine social and learned behavior (cslb)", "type": "concept", "description": "Survey assessing cognitive function in dogs", "confidence": 0.6}
+{"id": "b9c4fd9b073a10c9", "label": "ccdr (canine cognitive dysfunction rating scale)", "type": "concept", "description": "Scale used to assess canine cognitive dysfunction", "confidence": 0.6}
+{"id": "706b575049280793", "label": "DAP", "type": "document", "description": "Document discussing modifiable factors associated with CCD risk", "confidence": 0.6}
+{"id": "da6c5170fe43209d", "label": "CSLB survey", "type": "document", "description": "", "confidence": 0.6}
+{"id": "d7ef94ded2d4d534", "label": "CCD", "type": "concept", "description": "Canine Cognitive Dysfunction", "confidence": 0.6}
+{"id": "a9dfbedc338cb236", "label": "Physical activity interventions", "type": "product", "description": "Intervention to delay cognitive decline in dogs", "confidence": 0.6}
+{"id": "76f81a2321f38567", "label": "Dognition", "type": "document", "description": "Cross-sectional study involving 66 breeds", "confidence": 0.6}
+{"id": "58b43f1f5425f681", "label": "Dognition protocol", "type": "concept", "description": "", "confidence": 0.6}
+{"id": "54c856ebf05067f8", "label": "Watowich finding", "type": "concept", "description": "", "confidence": 0.6}
+{"id": "d2890bb3eff7d745", "label": "June 10, 1936", "type": "event", "description": "Date reference: June 10, 1936", "confidence": 0.9}
+{"id": "dec0dfbe728637d6", "label": "1936", "type": "event", "description": "", "confidence": 0.7}
+{"id": "cc2f2889dd7f393c", "label": "1972", "type": "event", "description": "", "confidence": 0.7}
+{"id": "3bda7f2cd8988335", "label": "1974", "type": "event", "description": "", "confidence": 0.7}
+{"id": "8d5a81430cb16549", "label": "Cat 4", "type": "location", "description": "", "confidence": 0.7}
+{"id": "87bbb17a72ba7476", "label": "the American Staffordshire Terrier", "type": "breed", "description": "", "confidence": 0.6}
+{"id": "43d2ea3ead1bb882", "label": "Official Standard of the American Staffordshire Terrier", "type": "document", "description": "", "confidence": 0.6}
+{"id": "b80ebcce04cdabe0", "label": "UKC APBT", "type": "breed", "description": "A registered breed by United Kennel Club, not an alias of American Staffordshire Terrier", "confidence": 0.6}
+{"id": "5e063c377daa664b", "label": "APBT", "type": "breed", "description": "", "confidence": 0.6}
+{"id": "216f7b77d585e756", "label": "GSD/Alsatian", "type": "breed", "description": "A breed group, not an alias of American Staffordshire Terrier", "confidence": 0.6}
+{"id": "d6aa32d47e52a5e3", "label": "AKC American Staffordshire Terrier standard PDF", "type": "document", "description": "Official AKC document detailing the breed standard for the American Staffordshire Terrier", "confidence": 0.6}
+{"id": "75423680e0e9939f", "label": "AKC's published breed-history coverage on akc.org", "type": "document", "description": "The AKC's web-published history of the American Staffordshire Terrier", "confidence": 0.6}
+{"id": "f4cb00652f7cf3a6", "label": "February 11, 1978", "type": "event", "description": "Date reference: February 11, 1978", "confidence": 0.9}
+{"id": "5477594d7aeafc51", "label": "July 11, 1994", "type": "event", "description": "Date reference: July 11, 1994", "confidence": 0.9}
+{"id": "049f2b14965a3840", "label": "AKC canonical", "type": "organization", "description": "", "confidence": 0.7}
+{"id": "2cc4a07ffec751f2", "label": "German Shepherd Dog", "type": "breed", "description": "The recognized breed name for this dog type, according to the AKC.", "confidence": 0.6}
+{"id": "6121b14e181efd80", "label": "Alsatian", "type": "breed", "description": "Historical name for the German Shepherd Dog in the UK", "confidence": 0.6}
+{"id": "a29b900f340d2878", "label": "GSD", "type": "breed", "description": "Colloquial abbreviation for German Shepherd Dog", "confidence": 0.6}
+{"id": "d8d2eed979d89aba", "label": "manShepherdDog.pdf", "type": "document", "description": "", "confidence": 0.6}
+{"id": "9901a2134687ffe7", "label": "November 5, 2005", "type": "event", "description": "Date reference: November 5, 2005", "confidence": 0.9}
+{"id": "864f9a041cbf767b", "label": "May 1, 2017", "type": "event", "description": "Date reference: May 1, 2017", "confidence": 0.9}
+{"id": "d1e4cf8200274a52", "label": "1911", "type": "event", "description": "", "confidence": 0.7}
+{"id": "10c6840d5a0a75e8", "label": "FCI:**", "type": "organization", "description": "", "confidence": 0.7}
+{"id": "a8aa5f281255084c", "label": "1884", "type": "event", "description": "", "confidence": 0.7}
+{"id": "62075a7734b3963d", "label": "1983", "type": "event", "description": "", "confidence": 0.7}
+{"id": "ef8393984f5a2bcc", "label": "1873", "type": "event", "description": "", "confidence": 0.7}
+{"id": "51e601d65bf76f65", "label": "Cat 3", "type": "organization", "description": "", "confidence": 0.7}
+{"id": "3a0a5b947b00ccd0", "label": "the 1970s", "type": "event", "description": "", "confidence": 0.7}
+{"id": "416fd245ea34c586", "label": "13 years", "type": "event", "description": "", "confidence": 0.7}
+{"id": "eb77c0a33b6e33a6", "label": "Orthopedic Foundation for Animals", "type": "organization", "description": "", "confidence": 0.7}
+{"id": "8d7cc3e8d587a46b", "label": "2025", "type": "event", "description": "", "confidence": 0.7}
+{"id": "95e22fc7229c5258", "label": "https://akc.org/expert-advice/dog-breeds/history-akc-breed-groups\n- Open Registry Offers Rx For Dog Ailments (Divine Farm / GDC", "type": "organization", "description": "", "confidence": 0.7}
+{"id": "cb77b519332403c9", "label": "1995", "type": "event", "description": "", "confidence": 0.7}
+{"id": "99442e5f25aee523", "label": "http://devinefarm.net/rp/rporeg.htm\n- Breed", "type": "person", "description": "", "confidence": 0.7}
+{"id": "0b198347174b651a", "label": "F\u00e9d\u00e9ration Cynologique Internationale", "type": "organization", "description": "The largest international federation of national kennel clubs.", "confidence": 0.6}
+{"id": "3af2e070a4bf3b03", "label": "American Kennel Club (AKC)", "type": "organization", "description": "A major registry system in the global purebred dog world.", "confidence": 0.6}
+{"id": "0603c4df1705740b", "label": "The Kennel Club (UK)", "type": "organization", "description": "A major registry system in the UK, rebranded as the Royal Kennel Club in some contexts.", "confidence": 0.6}
+{"id": "d686166b01821650", "label": "Sporting", "type": "concept", "description": "AKC breed group", "confidence": 0.6}
+{"id": "bd29b88b9d725e53", "label": "CHIC program", "type": "document", "description": "Canine Health Information Center program", "confidence": 0.6}
+{"id": "69bbe66239f532e7", "label": "BVA/KC health schemes", "type": "concept", "description": "Health screening programs for dogs administered by the British Veterinary Association and The Kennel Club", "confidence": 0.6}
+{"id": "4d03545302e2dd0f", "label": "Assured Breeders scheme", "type": "concept", "description": "A breeding program of The Kennel Club that mandates specific tests for certain breeds", "confidence": 0.6}
+{"id": "2c17b282feb785b9", "label": "Pastoral Group", "type": "breed", "description": "One of the seven breed groups in the classification system used by The Kennel Club for German Shepherd Dogs", "confidence": 0.6}
+{"id": "c25a2af8d9ab2b00", "label": "Herding Group", "type": "breed", "description": "The AKC's equivalent group to Pastoral, but differs from KC's classification for some breeds such as the German Shepherd Dog", "confidence": 0.6}
+{"id": "2b78ba4a1e6706e4", "label": "closed stud book", "type": "concept", "description": "A registry system that does not accept dogs from outside the breed to maintain genetic integrity.", "confidence": 0.6}
+{"id": "09d115b379a64736", "label": "open registry", "type": "concept", "description": "A registry system that accepts dogs from outside the breed to prevent inbreeding depression.", "confidence": 0.6}
+{"id": "07b1415099db3857", "label": "FCI-member clubs", "type": "organization", "description": "Clubs affiliated with the F\u00e9d\u00e9ration Cynologique Internationale", "confidence": 0.6}
+{"id": "ac8b0d05583f5a81", "label": "Swedish open registry", "type": "concept", "description": "", "confidence": 0.6}
+{"id": "8d6498ce45eaa903", "label": "2016-08-01", "type": "event", "description": "Date reference: 2016-08-01", "confidence": 0.9}
+{"id": "8ad550b451a6c02a", "label": "August 2016", "type": "event", "description": "", "confidence": 0.7}
+{"id": "7c6f8781a2325c5e", "label": "Following World War I", "type": "event", "description": "", "confidence": 0.7}
+{"id": "c613e2be0348bab6", "label": "1977", "type": "event", "description": "", "confidence": 0.7}
+{"id": "dcc047b1eb55efcf", "label": "the United Kingdom's national breed registry", "type": "organization", "description": "The official definition of RKC", "confidence": 0.6}
+{"id": "c8901654a9e55b5d", "label": "UK Kennel Club", "type": "organization", "description": "The national kennel club of the United Kingdom.", "confidence": 0.6}
+{"id": "3d45e7ecd1ddbdc7", "label": "WebSearch", "type": "product", "description": "A tool or service used to search for information online.", "confidence": 0.6}
+{"id": "78454f380c9098ba", "label": "February 10, 1898", "type": "event", "description": "Date reference: February 10, 1898", "confidence": 0.9}
+{"id": "23e5905468c32aa2", "label": "1898", "type": "event", "description": "", "confidence": 0.7}
+{"id": "e741b5c5c49e9e08", "label": "https://en.wikipedia.org/wiki/American_Pit_Bull_Terrier\n- Corpus", "type": "person", "description": "", "confidence": 0.7}
+{"id": "555f9b6bc1af3603", "label": "Bennett's Ring", "type": "breed", "description": "", "confidence": 0.6}
+{"id": "e5ace668c81314ff", "label": "AMERICAN PIT BULL TERRIER Official UKC Breed Standard Revised May 1, 2017", "type": "document", "description": "The official breed standard for the American Pit Bull Terrier by the United Kennel Club revised on May 1, 2017", "confidence": 0.6}
+{"id": "b22700c63a9803db", "label": "UKC's own public statements", "type": "document", "description": "Public documents or communications by UKC regarding the history and standards of the American Pit Bull Terrier", "confidence": 0.6}
+{"id": "32efb97420469601", "label": "1898 / Bennett's Ring registration-origin facts", "type": "concept", "description": "Historical information about the origins of ring registrations for the breed, attributed to C. Z. Bennett in 1898", "confidence": 0.6}
+{"id": "931af5546f4fe940", "label": "https://www.ukcdogs.com/docs/breeds/american-pit-bull-terrier.pdf", "type": "document", "description": "Official UKC Breed Standard Revised May 1, 2017", "confidence": 0.6}
+{"id": "d083d54c510e3a29", "label": "ontology.yaml#aliases.pit_bull", "type": "document", "description": "", "confidence": 0.6}
+{"id": "7a892ffafcfc0aee", "label": "https://www.ukcdogs.com/american-pit-bull-terrier", "type": "document", "description": "Breed Standards : American Pit Bull Terrier | United Kennel Club (UKC) \u2014 registry landing page", "confidence": 0.6}
+{"id": "070e78eef3542069", "label": "https://en.wikipedia.org/wiki/American_Pit_Bull_Terrier", "type": "document", "description": "American Pit Bull Terrier \u2014 Wikipedia", "confidence": 0.6}
+{"id": "3f6f2de9b3d8724a", "label": "July 2018", "type": "event", "description": "", "confidence": 0.7}
+{"id": "33f2b41908268107", "label": "just under five years", "type": "event", "description": "", "confidence": 0.7}
+{"id": "5b64327beda4e4a4", "label": "org_us_fda", "type": "location", "description": "", "confidence": 0.7}
+{"id": "2409e37c9b092c1f", "label": "https://www.nbcnews.com/health/health-news/fda-continues-investigation-dog-heart-damage-linked-diet-n1255196\n- Paired", "type": "person", "description": "", "confidence": 0.7}
+{"id": "81cfcd1434665221", "label": "June 2019", "type": "event", "description": "", "confidence": 0.7}
+{"id": "91682a0d62c0acfb", "label": "U.S. Food and Drug Administration", "type": "organization", "description": "The entity also known as FDA, the U.S. Food and Drug Administration's regulatory body.", "confidence": 0.6}
+{"id": "dc171ecd1eeba5fe", "label": "Cummings School of Veterinary Medicine at Tufts University", "type": "organization", "description": "", "confidence": 0.6}
+{"id": "03bfd1454187dda8", "label": "non-hereditary canine dilated cardiomyopathy (DCM)", "type": "concept", "description": "", "confidence": 0.6}
+{"id": "51d1abd458b29f08", "label": "2018-07-fda-dcm-investigation.md", "type": "document", "description": "", "confidence": 0.6}
+{"id": "5118e8013eec25de", "label": "pulses", "type": "concept", "description": "Legume seeds such as peas and lentils, high in ingredient lists of certain grain-free diets", "confidence": 0.6}
+{"id": "7441bd0c13b586e0", "label": "https://www.nbcnews.com/health/health-news/fda-continues-investigation-dog-heart-damage-linked-diet-n1255196", "type": "document", "description": "NBC News article about FDA's investigation on DCM linked to diet", "confidence": 0.6}
+{"id": "4eae80105e37987b", "label": "event_fda_dcm_investigation_open_2018_07", "type": "event", "description": "FDA opening an investigation into DCM in dogs related to certain diets", "confidence": 0.6}
+{"id": "754c62b07cf06498", "label": "n_free_dcm_continuing_2020", "type": "event", "description": "An event related to the continuing investigation of dilated cardiomyopathy linked to grain-free diets in dogs.", "confidence": 0.6}
+{"id": "2d92356b490870a3", "label": "October 31, 2024", "type": "event", "description": "Date reference: October 31, 2024", "confidence": 0.9}
+{"id": "a3363dee9fa3875e", "label": "September 3, 2023", "type": "event", "description": "Date reference: September 3, 2023", "confidence": 0.9}
+{"id": "37ab42fb307fca6b", "label": "September", "type": "event", "description": "", "confidence": 0.7}
+{"id": "b038e2f754442fa3", "label": "November 2023", "type": "event", "description": "", "confidence": 0.7}
+{"id": "8c0288236660b8d6", "label": "1000016385", "type": "event", "description": "", "confidence": 0.7}
+{"id": "eba6347fc1360a14", "label": "Victor Super Premium Dog Food", "type": "location", "description": "", "confidence": 0.7}
+{"id": "d399f1e694fdcdfa", "label": "1000016891", "type": "event", "description": "", "confidence": 0.7}
+{"id": "2614491334c92d26", "label": "one year of age", "type": "event", "description": "", "confidence": 0.7}
+{"id": "ca361d01df1fd7e1", "label": "January 14, 2023 to August 19, 2023", "type": "event", "description": "", "confidence": 0.7}
+{"id": "14a32cc3182d2b72", "label": "months", "type": "event", "description": "", "confidence": 0.7}
+{"id": "8982267b69bf0c8d", "label": "Mid America Pet Food's", "type": "organization", "description": "", "confidence": 0.7}
+{"id": "04ecd6dbb51227ca", "label": "Salmonella Kiambu", "type": "concept", "description": "A strain of Salmonella bacteria", "confidence": 0.6}
+{"id": "aef7d7c66877d324", "label": "Mid America Pet Food of Mount Pleasant, Texas", "type": "organization", "description": "Manufacturer of the recalled dog food", "confidence": 0.6}
+{"id": "9e46949d63225d34", "label": "Victor Super Premium Dog Food, Select Beef Meal & Brown Rice Formula", "type": "product", "description": "A specific variety of dog food by Victor brand", "confidence": 0.6}
+{"id": "8506a247d60ad38c", "label": "South Carolina State Department of Agriculture", "type": "organization", "description": "State agency responsible for agriculture and food safety in South Carolina", "confidence": 0.6}
+{"id": "33267027d37eb26c", "label": "Member's Mark varieties", "type": "product", "description": "", "confidence": 0.6}
+{"id": "427e605fcbfad684", "label": "Beef & Brown Rice Recipe", "type": "product", "description": "", "confidence": 0.6}
+{"id": "1b11833527a65694", "label": "Hi-Pro Plus dry dog food", "type": "product", "description": "", "confidence": 0.6}
+{"id": "393f7d6a0701f109", "label": "South Carolina Department of Health and Environmental Control", "type": "organization", "description": "", "confidence": 0.6}
+{"id": "ebf30923a0acb6b2", "label": "FDA consumer guidance", "type": "document", "description": "Guidance document from the FDA on product disposal and risk communication", "confidence": 0.6}
+{"id": "4d928133e937dc21", "label": "the FDA/CDC joint investigation page", "type": "document", "description": "Authoritative primary source for the outbreak investigation", "confidence": 0.6}
+{"id": "5509ee9faac40a77", "label": "CDC's outbreak summary", "type": "document", "description": "Public-communication layer for the outbreak", "confidence": 0.6}
+{"id": "70c21cae1a95f52d", "label": "Wayne Feeds", "type": "product", "description": "A product line from Mid America Pet Food", "confidence": 0.6}
+{"id": "a94595d9ec43adbd", "label": "Salmonella", "type": "concept", "description": "Bacterial genus causing foodborne illness", "confidence": 0.6}
+{"id": "2639cf9898237932", "label": "2024-01-10", "type": "event", "description": "Date reference: 2024-01-10", "confidence": 0.9}
+{"id": "97ac287d86a5be9e", "label": "2023 / 2024", "type": "event", "description": "", "confidence": 0.7}
+{"id": "f91de6be8c8a8024", "label": "NPR Morning Edition", "type": "document", "description": "NPR news segment", "confidence": 0.6}
+{"id": "f66a053b778521b9", "label": "Pet restrictions at rental properties", "type": "concept", "description": "Restrictions on pet housing in rental properties", "confidence": 0.6}
+{"id": "ae059033d5b6bdd9", "label": "Shortages of shelter staffing, funding, and veterinarians", "type": "concept", "description": "Lack of resources in animal shelters", "confidence": 0.6}
+{"id": "e80a6b929b120525", "label": "Humane Rescue Alliance", "type": "organization", "description": "Local animal rescue organization in Washington, D.C.", "confidence": 0.6}
+{"id": "0c211c1ccf134ae7", "label": "Washington, D.C.", "type": "location", "description": "Location where events or organizations are situated.", "confidence": 0.6}
+{"id": "04d2829c1d26ab42", "label": "20-year-old", "type": "event", "description": "", "confidence": 0.7}
+{"id": "3dfd1f3c9ae33ee4", "label": "2005", "type": "event", "description": "", "confidence": 0.7}
+{"id": "5869f046060eb1f9", "label": "Aurora resident", "type": "person", "description": "", "confidence": 0.6}
+{"id": "32f5d98d1181c472", "label": "pit bull", "type": "concept", "description": "Colloquial term used alongside the canonical 'American Pit Bull Terrier'", "confidence": 0.6}
+{"id": "a93494b532f30d8c", "label": "Adams/Arapahoe county election offices", "type": "organization", "description": "Official source of certified election results.", "confidence": 0.6}
+{"id": "7a1d276ae6232b9d", "label": "pub_cpr_aurora_pit_bull_repeal_2024", "type": "document", "description": "", "confidence": 0.6}
+{"id": "328eb4da06b8b46a", "label": "event_aurora_question_3a_2024_11_05", "type": "event", "description": "", "confidence": 0.6}
+{"id": "454832eabf88ceab", "label": "the Sentinel Colorado", "type": "document", "description": "A news article covering the event related to Question 3A in Aurora, Colorado.", "confidence": 0.6}
+{"id": "d29c9218da3ddf1a", "label": "two-decade-old", "type": "event", "description": "", "confidence": 0.7}
+{"id": "6adb981937928c86", "label": "early December 2024", "type": "event", "description": "", "confidence": 0.7}
+{"id": "2add63779766858d", "label": "five-year", "type": "event", "description": "", "confidence": 0.7}
+{"id": "a2268256abc32248", "label": "10-year-old", "type": "event", "description": "", "confidence": 0.7}
+{"id": "b6f0a7af3795ec30", "label": "March 2024, 18th", "type": "event", "description": "", "confidence": 0.7}
+{"id": "070f38b964f3e186", "label": "Aurora, Colorado", "type": "location", "description": "City in Colorado where ballot question was voted on", "confidence": 0.6}
+{"id": "85f86786e96a2d86", "label": "Ballot Question 3A", "type": "document", "description": "Specific ballot measure to repeal breed-specific dog ban", "confidence": 0.6}
+{"id": "29a43e5594e0f4d8", "label": "American Pit Bull Terriers", "type": "breed", "description": "Recognized dog breed subject to ballot question", "confidence": 0.6}
+{"id": "d924c1ea8f10fc0c", "label": "Legal Path", "type": "document", "description": "Summary or overview of the legal process leading up to the ballot question", "confidence": 0.6}
+{"id": "a0173f384a6470fb", "label": "Legal Path to the Ballot", "type": "concept", "description": "", "confidence": 0.6}
+{"id": "70d605151aa85824", "label": "March 2024", "type": "event", "description": "The month when Judge Volz agreed with Matthew Snider's argument", "confidence": 0.6}
+{"id": "6b0a373993fabd40", "label": "Dumb Friends League", "type": "organization", "description": "Animal shelter organization in Colorado", "confidence": 0.6}
+{"id": "e2a4a885a61e61ce", "label": "2005 ban", "type": "document", "description": "A dated occurrence of a ban on Pit Bulls in Aurora, Colorado", "confidence": 0.6}
+{"id": "30dec009c691c95c", "label": "2014 referendum", "type": "event", "description": "A public vote to change the 2005 ban on Pit Bulls in Aurora, Colorado", "confidence": 0.6}
+{"id": "a792e4e1b1079116", "label": "2021 council repeal", "type": "document", "description": "The council decision to repeal the ban on Pit Bulls in Aurora, Colorado", "confidence": 0.6}
+{"id": "637efd9912538c88", "label": "2024 court void", "type": "event", "description": "A judicial ruling that declares the 2005 ban on Pit Bulls invalid", "confidence": 0.6}
+{"id": "8d1dfc4cd76481da", "label": "2024 ballot", "type": "document", "description": "A city ballot to revisit the regulation of specific dog breeds", "confidence": 0.6}
+{"id": "7a44fbc56db7eb04", "label": "June 28, 1990", "type": "event", "description": "Date reference: June 28, 1990", "confidence": 0.9}
+{"id": "6dabe4c9b90f26a4", "label": "Colo. 1991", "type": "event", "description": "", "confidence": 0.7}
+{"id": "8e28a706dfad6577", "label": "2007", "type": "event", "description": "", "confidence": 0.7}
+{"id": "1dc42cfbd4beec9e", "label": "1152", "type": "event", "description": "", "confidence": 0.7}
+{"id": "a4ae7254ffa3bf29", "label": "Ohio Revised Code 955.22", "type": "organization", "description": "", "confidence": 0.7}
+{"id": "b71beb987b09d725", "label": "Danker v. City of Council Bluffs", "type": "organization", "description": "", "confidence": 0.7}
+{"id": "25421f89f05448a8", "label": "2022", "type": "event", "description": "", "confidence": 0.7}
+{"id": "004230425072ddee", "label": "583", "type": "organization", "description": "", "confidence": 0.7}
+{"id": "e82a01175f28fcd4", "label": "The 8th Circuit", "type": "organization", "description": "", "confidence": 0.7}
+{"id": "a2366462871bcca9", "label": "2003\u20132004", "type": "event", "description": "", "confidence": 0.7}
+{"id": "6abddbb3d3108acc", "label": "14-75", "type": "event", "description": "", "confidence": 0.7}
+{"id": "c6cd508cd070c48a", "label": "1279, 2004", "type": "event", "description": "", "confidence": 0.7}
+{"id": "53beec4f5d407b16", "label": "Danker v. Council Bluffs", "type": "organization", "description": "", "confidence": 0.7}
+{"id": "c00bc0b318360215", "label": "Aurora v. ACF", "type": "person", "description": "", "confidence": 0.7}
+{"id": "48eaed90724eac06", "label": "https://casetext.com/case/danker-v-the-city-of-council-bluffs-iowa\n- DogsBite.org PDF", "type": "person", "description": "", "confidence": 0.7}
+{"id": "f338df92be24a8fb", "label": "Breed-specific legislation", "type": "concept", "description": "Legislation targeting specific dog breeds", "confidence": 0.6}
+{"id": "417d81711a2e38f0", "label": "procedural due process", "type": "concept", "description": "A legal concept concerning the steps taken by a government before it deprives a person of life, liberty or property", "confidence": 0.6}
+{"id": "dd2a834cef4a8e4f", "label": "substantive due process", "type": "concept", "description": "A constitutional doctrine that limits the power of the state and federal governments to intrude on certain fundamental rights and personal freedoms of individuals", "confidence": 0.6}
+{"id": "242c78aab26062b2", "label": "equal protection", "type": "concept", "description": "A principle in U.S. law which requires that states treat all people equally under the law", "confidence": 0.6}
+{"id": "02d5a1ee9cb351e8", "label": "void-for-vagueness doctrine", "type": "concept", "description": "A legal doctrine stating that a statute is unconstitutionally vague if it does not clearly define what conduct is prohibited or penalized", "confidence": 0.6}
+{"id": "827a3a91ca98e882", "label": "rational basis review", "type": "concept", "description": "A form of judicial review under U.S. constitutional law", "confidence": 0.6}
+{"id": "48df09928f0213ad", "label": "Denver Revised Municipal Code Sec. 8-55", "type": "document", "description": "", "confidence": 0.6}
+{"id": "fec88a8064b91c9e", "label": "rational basis", "type": "concept", "description": "The legal standard used for evaluating laws or ordinances, particularly when they do not involve suspect classifications or fundamental rights.", "confidence": 0.6}
+{"id": "f8951c397d995d5e", "label": "preponderance of the evidence", "type": "concept", "description": "Legal standard requiring that one side's evidence is more convincing than the other's, but not beyond a reasonable doubt.", "confidence": 0.6}
+{"id": "e14b08968c67df01", "label": "Toledo v. Tellings", "type": "document", "description": "Case ruling on the constitutionality of Toledo's and Ohio's laws regarding pit bull ownership.", "confidence": 0.6}
+{"id": "4a1d712fcd555a2b", "label": "Paul Tellings", "type": "person", "description": "Owner of three dogs identified as pit bulls in a case against Toledo's and Ohio's laws.", "confidence": 0.6}
+{"id": "c8c8d48750b5228d", "label": "Toledo Municipal Code 505.14(a)", "type": "document", "description": "Provision within the municipal code limiting ownership to one pit bull per household.", "confidence": 0.6}
+{"id": "9fa89584a1e094ff", "label": "Toledo Municipal Code", "type": "concept", "description": "The city's code regulating various aspects of municipal life, including dog ownership.", "confidence": 0.6}
+{"id": "41fa39bdef8c68d6", "label": "Ohio Revised Code", "type": "concept", "description": "Statewide laws governing various subjects, including animal control.", "confidence": 0.6}
+{"id": "ecd52362daaab7c2", "label": "substantive due process / rational basis", "type": "concept", "description": "", "confidence": 0.6}
+{"id": "1b4b02a99634704f", "label": "vagueness", "type": "concept", "description": "", "confidence": 0.6}
+{"id": "d0205307f33b51a9", "label": "City of Council Bluffs", "type": "organization", "description": "The city government in question", "confidence": 0.6}
+{"id": "5743f1c5f0a2bc12", "label": "8th Cir.", "type": "organization", "description": "United States Court of Appeals for the Eighth Circuit", "confidence": 0.6}
+{"id": "92c7edaea6abf7e2", "label": "42 U.S.C. \u00a7 1983", "type": "concept", "description": "A section of United States Code", "confidence": 0.6}
+{"id": "befe211eabd1f3af", "label": "Municipal Code \u00a7 4.20.112", "type": "document", "description": "The specific ordinance in question", "confidence": 0.6}
+{"id": "cfb9c17ba1c5baf8", "label": "Aurora City Code \u00a7 14-75", "type": "concept", "description": "Regulation by the city of Aurora regarding possession of pit bulls and other restricted breeds", "confidence": 0.6}
+{"id": "69e0ec7b9c8257b8", "label": "Aurora", "type": "location", "description": "City in Colorado", "confidence": 0.6}
+{"id": "31824c007e532f5b", "label": "HB 1279", "type": "document", "description": "State bill related to preemption law", "confidence": 0.6}
+{"id": "06ec83e138efa055", "label": "Colorado Dog Fanciers v. Denver", "type": "document", "description": "", "confidence": 0.6}
+{"id": "83d13493d98845e5", "label": "Denver BSL (enactment)", "type": "document", "description": "", "confidence": 0.6}
+{"id": "2a4563d9d5f5b640", "label": "Calgary model (no BSL)", "type": "concept", "description": "A behavior-based alternative policy to avoid BSL litigation", "confidence": 0.6}
+{"id": "8b8393ebd1fe2d07", "label": "Ontario DOLA", "type": "document", "description": "Provincial-level dog ownership law that survived a Supreme Court of Canada challenge", "confidence": 0.6}
+{"id": "9e99b1d0d6fe7cf8", "label": "Toledo v. Tellings, 114 Ohio St.3d 278, 871 N.E.2d 1152 (Ohio 2007)", "type": "document", "description": "Legal case", "confidence": 0.6}
+{"id": "5c72879ac0a11d08", "label": "Danker v. City of Council Bluffs, 57 F.4th 583 (8th Cir. 2023)", "type": "document", "description": "Legal case", "confidence": 0.6}
+{"id": "55a2745716f0f05f", "label": "Aurora v. American Canine Foundation (Florence Vianzon)", "type": "document", "description": "Legal case", "confidence": 0.6}
+{"id": "21e0bf4cfccce542", "label": "2022-01-01", "type": "event", "description": "Date reference: 2022-01-01", "confidence": 0.9}
+{"id": "ec96df0c252be01e", "label": "2005-08-29", "type": "event", "description": "Date reference: 2005-08-29", "confidence": 0.9}
+{"id": "da71947211599206", "label": "2021-08-09", "type": "event", "description": "Date reference: 2021-08-09", "confidence": 0.9}
+{"id": "1752330360f2e928", "label": "the City of Calgary's", "type": "location", "description": "", "confidence": 0.7}
+{"id": "0522c1a44ad5bced", "label": "Cat 6", "type": "organization", "description": "", "confidence": 0.7}
+{"id": "e908b0c10f5f7b5a", "label": "Bylaw 47M2021", "type": "document", "description": "The City of Calgary's Responsible Pet Ownership Bylaw", "confidence": 0.6}
+{"id": "2e8d746b30e279d0", "label": "the City of Calgary's Responsible Pet Ownership Bylaw", "type": "document", "description": "Also known as Bylaw 47M2021", "confidence": 0.6}
+{"id": "6236acdc7837f507", "label": "23M2006", "type": "document", "description": "The previous Responsible Pet Ownership Bylaw in Calgary that was replaced by Bylaw 47M2021", "confidence": 0.6}
+{"id": "f1052a06b25b4fd5", "label": "Calgary model", "type": "concept", "description": "A behavior-based regulatory framework for pet ownership without breed-specific bans, as instantiated by the City of Calgary's Responsible Pet Ownership Bylaws", "confidence": 0.6}
+{"id": "fbb3464cabf0f1d9", "label": "Plante administration", "type": "organization", "description": "The municipal government in Montreal that cited the Calgary model as an alternative to BSL", "confidence": 0.6}
+{"id": "ae79679f424e028a", "label": "BSL", "type": "concept", "description": "Breed-specific legislation, which is not adopted by Calgary but rather contrasted against their approach", "confidence": 0.6}
+{"id": "d7839911d0ebcea2", "label": "Alberta Civil Liberties Research Centre (ACLRC)", "type": "organization", "description": "An organization that provides summaries and news about pet ownership laws", "confidence": 0.6}
+{"id": "49c0e8b5b385f7fb", "label": "six dogs and six cats", "type": "concept", "description": "Pet ownership limits in Calgary", "confidence": 0.6}
+{"id": "c345ff67449b3cb3", "label": "predecessor bylaw 23M2006", "type": "document", "description": "", "confidence": 0.6}
+{"id": "68a5579b9372de9b", "label": "org_city_of_calgary", "type": "organization", "description": "", "confidence": 0.6}
+{"id": "de546bbd0dd246cd", "label": "concept_pit_bull", "type": "concept", "description": "", "confidence": 0.6}
+{"id": "3cf9a7d243fdbfc0", "label": "pub_calgary_rpob_47m2021", "type": "document", "description": "", "confidence": 0.6}
+{"id": "127c67c93604430d", "label": "montreal-bsl-2016-enactment.md", "type": "document", "description": "", "confidence": 0.6}
+{"id": "f6b3814322d8d516", "label": "montreal-bsl-2018-repeal.md", "type": "document", "description": "", "confidence": 0.6}
+{"id": "feb83022958e7cfe", "label": "Calgary's Responsible Pet Ownership Bylaw | Key Changes Explained", "type": "document", "description": "Blog post by ACLRC about key changes in Calgary's Responsible Pet Ownership Bylaw", "confidence": 0.6}
+{"id": "bae6770d1387ad2b", "label": "August 1, 1989", "type": "event", "description": "Date reference: August 1, 1989", "confidence": 0.9}
+{"id": "ef1d015f58fbc608", "label": "January 1, 2025", "type": "event", "description": "Date reference: January 1, 2025", "confidence": 0.9}
+{"id": "f0d06e188fb74d9f", "label": "November 12, 1991", "type": "event", "description": "Date reference: November 12, 1991", "confidence": 0.9}
+{"id": "bc21a485309f0074", "label": "2009-09-24", "type": "event", "description": "Date reference: 2009-09-24", "confidence": 0.9}
+{"id": "a231a2a7785adf6d", "label": "2020-02-25", "type": "event", "description": "Date reference: 2020-02-25", "confidence": 0.9}
+{"id": "aa9fefd93ac78307", "label": "2020-11-06", "type": "event", "description": "Date reference: 2020-11-06", "confidence": 0.9}
+{"id": "f41cad0ea4cc8780", "label": "1989", "type": "event", "description": "", "confidence": 0.7}
+{"id": "1732a8886b77cb28", "label": "the City and County of", "type": "location", "description": "", "confidence": 0.7}
+{"id": "ae9860633e48c44b", "label": "annual", "type": "event", "description": "", "confidence": 0.7}
+{"id": "f801487c07c10fc7", "label": "2003", "type": "event", "description": "", "confidence": 0.7}
+{"id": "d4c7c6f6c3894c69", "label": "October 1986", "type": "event", "description": "", "confidence": 0.7}
+{"id": "9599731c689dd445", "label": "three-year-old", "type": "event", "description": "", "confidence": 0.7}
+{"id": "b7f0565c5de5a5c3", "label": "seven-year-old", "type": "event", "description": "", "confidence": 0.7}
+{"id": "a494946653586043", "label": "Dade County's", "type": "location", "description": "", "confidence": 0.7}
+{"id": "88281d0cc3b43e3c", "label": "fall 1989", "type": "event", "description": "", "confidence": 0.7}
+{"id": "93258e652bcc6d46", "label": "2004", "type": "event", "description": "", "confidence": 0.7}
+{"id": "65df7ef4760db82d", "label": "1279", "type": "event", "description": "", "confidence": 0.7}
+{"id": "3e647984c42f65c6", "label": "three years", "type": "event", "description": "", "confidence": 0.7}
+{"id": "2466612705177463", "label": "35-year", "type": "event", "description": "", "confidence": 0.7}
+{"id": "210f1cc178258178", "label": "The 2020 Ballot Measure 2J", "type": "organization", "description": "", "confidence": 0.7}
+{"id": "f93343d15bcaba20", "label": "https://www.animallaw.info/local/louscodenver8_55.htm\n-", "type": "person", "description": "", "confidence": 0.7}
+{"id": "6689a23bd021bc65", "label": "two decades", "type": "event", "description": "", "confidence": 0.7}
+{"id": "df93ecf09de16847", "label": "https://www.westword.com/news/for-two-decades-pit-bulls-have-been-public-enemy-1-in-denver-but-maybe-its-time-for-a-recount-5105359\n- DogsBite.org", "type": "person", "description": "", "confidence": 0.7}
+{"id": "20b3c89f4e367abc", "label": "more than 30 years", "type": "event", "description": "", "confidence": 0.7}
+{"id": "06002d7afa6c4ca9", "label": "Bill No. 434, Series of 1989", "type": "document", "description": "The bill that enacted the 'Pit bulls prohibited' ordinance in Denver", "confidence": 0.6}
+{"id": "5b6eb8c2f448509e", "label": "Federico Pe\u00f1a", "type": "person", "description": "Mayor of Denver in 1989", "confidence": 0.6}
+{"id": "b4ee286e81c372dd", "label": "the Animal Legal & Historical Center's archived ordinance text, Sec. 8-55", "type": "document", "description": "An archive of the 'Pit bulls prohibited' ordinance", "confidence": 0.6}
+{"id": "a1d8a390c678de16", "label": "Ballot Measure 2J", "type": "concept", "description": "A voter-approved ballot measure that repealed Denver's pit bull ban", "confidence": 0.6}
+{"id": "5af6143437314016", "label": "the Animal Legal & Historical Center's archived ordinance text", "type": "document", "description": "Document containing the ordinance text", "confidence": 0.6}
+{"id": "e3f5045a91610fe1", "label": "Sec. 8-55", "type": "concept", "description": "Section of the ordinance regulating pit bull ownership", "confidence": 0.6}
+{"id": "f0df5ed44aa35148", "label": "$100,000 liability insurance", "type": "product", "description": "Insurance requirement for grandfathered pit bull dogs", "confidence": 0.6}
+{"id": "e73e14fc6b938355", "label": "eight-foot-high fenced enclosure", "type": "concept", "description": "Required confinement setup for grandfathered pit bull dogs", "confidence": 0.6}
+{"id": "ca9290fc1e814946", "label": "Staffordshire Bull Terrier", "type": "breed", "description": "One of the breeds specified in the ordinance", "confidence": 0.6}
+{"id": "981a44be2514178d", "label": "$100,000", "type": "concept", "description": "Liability insurance amount for pit bull owners", "confidence": 0.6}
+{"id": "68775b1115803911", "label": "muzzle", "type": "product", "description": "Required equipment to be worn by the dog at all times when outdoors", "confidence": 0.6}
+{"id": "7e4fef3e347bc221", "label": "tattooed with a registration number", "type": "event", "description": "Registration process involving tattooing", "confidence": 0.6}
+{"id": "87c3a43e22b589d9", "label": "300 pit bulls", "type": "concept", "description": "Number of registered grandfathered pit bulls in Denver", "confidence": 0.6}
+{"id": "15d0b879c4042fa4", "label": "October 1986 fatal mauling", "type": "event", "description": "Incident that triggered the ordinance", "confidence": 0.6}
+{"id": "46408c32d9c3c35d", "label": "Miami, Florida", "type": "location", "description": "Location of a prior pit bull attack", "confidence": 0.6}
+{"id": "00624273dfe945db", "label": "Rothenberg", "type": "person", "description": "District Judge who ruled on the constitutionality of the pit bull ban ordinance", "confidence": 0.6}
+{"id": "04bcf6a07400e903", "label": "pit bull characteristics", "type": "concept", "description": "Characteristics of pit bulls including strength, tenacity, and lack of warning signals before attacking", "confidence": 0.6}
+{"id": "812aee2e2101bfaa", "label": "House Bill 1279", "type": "document", "description": "A state bill prohibiting municipalities from enacting BSL", "confidence": 0.6}
+{"id": "c34e6e73f882e785", "label": "Colorado Legislature", "type": "organization", "description": "The legislative body of the State of Colorado", "confidence": 0.6}
+{"id": "bd5221a5c60340a1", "label": "Denver voters", "type": "person", "description": "Voters in the city of Denver who approved Ballot Measure 2J.", "confidence": 0.6}
+{"id": "229c56ed23ea1a62", "label": "Repeal of Sec. 8-55", "type": "event", "description": "The event marking the repeal of Sec. 8-55 taking effect on January 1, 2025.", "confidence": 0.6}
+{"id": "048e5db242182809", "label": "breed-restricted license", "type": "concept", "description": "", "confidence": 0.6}
+{"id": "56acb9c9c6d87da0", "label": "Animal Legal & Historical Center", "type": "organization", "description": "Provides information on animal laws and policies, including the Denver Pit Bull Prohibition Ordinance.", "confidence": 0.6}
+{"id": "12c821ffb8b755d5", "label": "Denver Westword", "type": "organization", "description": "A news source that published an article about pit bulls in Denver.", "confidence": 0.6}
+{"id": "9e3a140569514d26", "label": "Colorado Dog Fanciers v. Denver (1991 Colorado Supreme Court)", "type": "event", "description": "A court case involving a legal challenge to the Denver BSL.", "confidence": 0.6}
+{"id": "66f564d2a0213545", "label": "DogsBite.org", "type": "organization", "description": "", "confidence": 0.6}
+{"id": "cb1f0271b76cd27e", "label": "pit bull ban", "type": "concept", "description": "", "confidence": 0.6}
+{"id": "71fabef37151a19d", "label": "Denver BSL", "type": "document", "description": "Municipal policy banning pit bulls in Denver", "confidence": 0.6}
+{"id": "364fe0eeca7bbb00", "label": "Denver overturns pit bull ban after more than 30 years", "type": "document", "description": "Article about the repeal of the Denver Pit Bull Ban", "confidence": 0.6}
+{"id": "25ffb587ccaa05c2", "label": "2016-09-27", "type": "event", "description": "Date reference: 2016-09-27", "confidence": 0.9}
+{"id": "98a1cddd6b9a225c", "label": "2016-10-03", "type": "event", "description": "Date reference: 2016-10-03", "confidence": 0.9}
+{"id": "53db2b1ff31ab253", "label": "the second half", "type": "event", "description": "", "confidence": 0.7}
+{"id": "5f393c45aaf6b6cf", "label": "the day", "type": "event", "description": "", "confidence": 0.7}
+{"id": "d3a3cd5909a0991c", "label": "late 2017", "type": "event", "description": "", "confidence": 0.7}
+{"id": "3b043b3169593903", "label": "By-Law 16-060", "type": "document", "description": "", "confidence": 0.6}
+{"id": "d3efd85d649a4304", "label": "pit bull-type dogs", "type": "concept", "description": "", "confidence": 0.6}
+{"id": "6c78411e85a19cf4", "label": "By-Law", "type": "document", "description": "The bylaw targeting specific breeds which was repealed and replaced", "confidence": 0.6}
+{"id": "022f5b3af4cc8429", "label": "vault/municipal_policy/calgary-rpob-47m2021.md", "type": "document", "description": "Document describing Calgary's behavior-based alternative model to BSL", "confidence": 0.6}
+{"id": "2baef7c6a0d230a3", "label": "Ontario-dola-statute.md", "type": "document", "description": "Province-wide pit-bull restrictions in Ontario, Canada", "confidence": 0.6}
+{"id": "b19bff18c8f381b8", "label": "vault/veterinary_research/2018-07-fda-dcm-investigation.md", "type": "document", "description": "", "confidence": 0.6}
+{"id": "1d91d5462289b54f", "label": "primary-source PDF of bylaw 16-060", "type": "document", "description": "", "confidence": 0.6}
+{"id": "210f1fc3b5aacc43", "label": "Montreal passes controversial pit bull ban", "type": "document", "description": "", "confidence": 0.6}
+{"id": "604708fc17aac9d4", "label": "bylaw 16-060", "type": "concept", "description": "", "confidence": 0.6}
+{"id": "00b7efc8a3528ad7", "label": "Animal Control By-Law", "type": "organization", "description": "", "confidence": 0.7}
+{"id": "dc1b509f1295dd53", "label": "Animal Control By-Law 16-060", "type": "document", "description": "By-law regulating dangerous dogs in Montreal", "confidence": 0.6}
+{"id": "1163f21a1bf215b3", "label": "CBC News", "type": "document", "description": "News article about changes to animal control laws in Montreal", "confidence": 0.6}
+{"id": "cd7eed86cc9d1891", "label": "calgary-rpob-47m2021.md", "type": "document", "description": "", "confidence": 0.6}
+{"id": "982a1daaa516ee09", "label": "montreal.ca/en/topics/obligations-and-responsibilities-pet-owners", "type": "location", "description": "", "confidence": 0.6}
+{"id": "1011fd2309eba381", "label": "pub_montreal_2016_bsl_bylaw", "type": "concept", "description": "", "confidence": 0.6}
+{"id": "635acf1f1b554193", "label": "event_montreal_bsl_lifecycle", "type": "document", "description": "", "confidence": 0.6}
+{"id": "99abbda471132072", "label": "vault/municipal_policy/ontario-dola-statute.md", "type": "document", "description": "A document detailing the provincial-level policy contrast regarding Pit Bull regulation in Ontario.", "confidence": 0.6}
+{"id": "304c1ae2ab9b4605", "label": "sources/municipal_policy.yaml#muni_montreal_repeal_2018_aldf", "type": "document", "description": "Source manifest recording the date of the 2018 bylaw repeal in Montreal.", "confidence": 0.6}
+{"id": "dc8589e9f49dacdc", "label": "Montreal ditches breed ban in favour of dangerous-dog restrictions", "type": "document", "description": "", "confidence": 0.6}
+{"id": "e7fa2a68f4b2ff44", "label": "2005-03-09", "type": "event", "description": "Date reference: 2005-03-09", "confidence": 0.9}
+{"id": "5b69d9760df2f4ff", "label": "1990", "type": "event", "description": "", "confidence": 0.7}
+{"id": "051bd49cc15bf303", "label": "c. D.16", "type": "person", "description": "", "confidence": 0.7}
+{"id": "eb0ca9627ffe712d", "label": "the end of the", "type": "event", "description": "", "confidence": 0.7}
+{"id": "c72885412b6b0e3e", "label": "90-day", "type": "event", "description": "", "confidence": 0.7}
+{"id": "e5a3eb0282bec3b1", "label": "2006", "type": "event", "description": "", "confidence": 0.7}
+{"id": "b8749263ec896c87", "label": "the Legislative Assembly of Ontario's", "type": "organization", "description": "", "confidence": 0.7}
+{"id": "419129f4ea6f00c1", "label": "Ministry of the", "type": "organization", "description": "", "confidence": 0.7}
+{"id": "756050aa36ab05fd", "label": "Dog Owners' Liability Act, R.S.O. 1990, c. D.16", "type": "document", "description": "", "confidence": 0.6}
+{"id": "c5379a40e5355d9d", "label": "Bill 132", "type": "document", "description": "", "confidence": 0.6}
+{"id": "f2c24d928e13cb15", "label": "Ontario Regulation 157/05", "type": "document", "description": "", "confidence": 0.6}
+{"id": "9a37669a2341894a", "label": "Toronto Municipal Code Chapter 349", "type": "document", "description": "", "confidence": 0.6}
+{"id": "6fed55c260613147", "label": "Toronto Chapter 349", "type": "document", "description": "Operationalizes DOLA within Toronto", "confidence": 0.6}
+{"id": "8baf0c920822ae4f", "label": "animal-services enforcement", "type": "organization", "description": "Enforces animal services in Toronto", "confidence": 0.6}
+{"id": "03a0559df69e8878", "label": "e-Laws | Ontario.ca", "type": "location", "description": "Portal for accessing Ontario laws and statutes", "confidence": 0.6}
+{"id": "187f23b712854feb", "label": "Ministry of the Attorney General DOLA summary", "type": "document", "description": "Summary document by the Ministry of the Attorney General about DOLA", "confidence": 0.6}
+{"id": "f3c02e2d838e73aa", "label": "Public Safety Related to Dogs Statute Law Amendment Act, 2005", "type": "document", "description": "", "confidence": 0.6}
+{"id": "a46cd3f640b47e2a", "label": "Statute Law Amendment Act, 2005", "type": "document", "description": "A statute passed in Ontario related to dogs", "confidence": 0.6}
+{"id": "61b4efa9f0841038", "label": "March 16, 2007", "type": "event", "description": "Date reference: March 16, 2007", "confidence": 0.9}
+{"id": "4815633bd08e99f6", "label": "December 3, 2006", "type": "event", "description": "Date reference: December 3, 2006", "confidence": 0.9}
+{"id": "cca549e45d97d334", "label": "April 3, 2007", "type": "event", "description": "Date reference: April 3, 2007", "confidence": 0.9}
+{"id": "a6065c2310eb0950", "label": "Melamine Pet Food Recall \u2014 Initial Announcement and Investigation", "type": "organization", "description": "", "confidence": 0.7}
+{"id": "a6b977cbd2351de7", "label": "15, 2007", "type": "event", "description": "", "confidence": 0.7}
+{"id": "f004f1a2629036f9", "label": "30, 2007", "type": "event", "description": "", "confidence": 0.7}
+{"id": "0f2720a9b2ed359d", "label": "21, 2007", "type": "event", "description": "", "confidence": 0.7}
+{"id": "ead30a3217d5441a", "label": "lifecycle_id", "type": "person", "description": "", "confidence": 0.7}
+{"id": "dffd818abd07edea", "label": "melamine", "type": "concept", "description": "", "confidence": 0.6}
+{"id": "8a78babbde0c3fab", "label": "Melamine analog", "type": "concept", "description": "", "confidence": 0.6}
+{"id": "74af29661d52e62f", "label": "cat deaths", "type": "concept", "description": "Approximately 1950 reported cat deaths.", "confidence": 0.6}
+{"id": "b26aa2167cb7c08b", "label": "dog deaths", "type": "concept", "description": "Approximately 2200 reported dog deaths.", "confidence": 0.6}
+{"id": "77c2bb196759540e", "label": "cyanuric acid", "type": "product", "description": "Melamine analogue found in contaminated pet food", "confidence": 0.6}
+{"id": "bb487d85be239ef6", "label": "ChemNutra LLC", "type": "organization", "description": "Importer of wheat gluten from China", "confidence": 0.6}
+{"id": "350536d5af98d9ad", "label": "Xuzhou Anying Biologic Technology Development Company", "type": "organization", "description": "Chinese supplier that provided adulterated wheat gluten to ChemNutra LLC", "confidence": 0.6}
+{"id": "5756d2ebc3a32194", "label": "Wilbur-Ellis Company", "type": "organization", "description": "Importer of rice protein concentrate from a Chinese supplier", "confidence": 0.6}
+{"id": "91f7a8c7f1f49760", "label": "Costco's Kirkland Signature brand", "type": "product", "description": "", "confidence": 0.6}
+{"id": "93b9f90ab8af1c36", "label": "First shipment of melamine-contaminated wheat gluten arrives in U.S.", "type": "event", "description": "", "confidence": 0.6}
+{"id": "b9c53adcf043d43f", "label": "Rice Protein (Wilbur-Ellis source)", "type": "product", "description": "", "confidence": 0.6}
+{"id": "d38fbe4df1aa8bc6", "label": "Hill's", "type": "organization", "description": "Pet food manufacturer issuing recalls", "confidence": 0.6}
+{"id": "0875000d221ae9a5", "label": "Import Alert #99-29", "type": "document", "description": "FDA Import Alert detaining vegetable protein products from China", "confidence": 0.6}
+{"id": "99573c3882ba8d6f", "label": "AVMA comprehensive recall list", "type": "document", "description": "", "confidence": 0.6}
+{"id": "6eb275998e7d069e", "label": "FDA Enforcement Story Archive page", "type": "organization", "description": "", "confidence": 0.6}
+{"id": "65accfa0849d64ee", "label": "Wikipedia timeline of the 2007 pet food recalls", "type": "document", "description": "", "confidence": 0.6}
+{"id": "d7ebd91068f2ee98", "label": "Feb 22 2018", "type": "event", "description": "Date reference: Feb 22 2018", "confidence": 0.9}
+{"id": "0d2bc169f08a56a5", "label": "22 2018", "type": "event", "description": "", "confidence": 0.7}
+{"id": "79610e923b7150b6", "label": "February 22, 2018**", "type": "event", "description": "", "confidence": 0.7}
+{"id": "86005e2947404193", "label": "two-year", "type": "event", "description": "", "confidence": 0.7}
+{"id": "9d386c9fbb91b497", "label": "October 2010", "type": "event", "description": "", "confidence": 0.7}
+{"id": "ac408ec9246fff9e", "label": "2019", "type": "event", "description": "", "confidence": 0.7}
+{"id": "83ec2d9cb12390c2", "label": "L. monocytogenes+", "type": "person", "description": "", "confidence": 0.7}
+{"id": "09dcb4d017a8e31c", "label": "pub_fda_raw_pet_food_factsheet_2018", "type": "person", "description": "", "confidence": 0.7}
+{"id": "560bc8d87fd0f9fa", "label": "072219", "type": "event", "description": "", "confidence": 0.7}
+{"id": "b2e672acf98df1a7", "label": "Nemser et al.", "type": "organization", "description": "", "confidence": 0.7}
+{"id": "de0c82c93c53395b", "label": "2013", "type": "event", "description": "", "confidence": 0.7}
+{"id": "00e9adfaf5396ad0", "label": "FDA Raw Pet Food Diets Can Be Dangerous to You and Your Pet", "type": "document", "description": "", "confidence": 0.6}
+{"id": "613da845d0df2bf3", "label": "Get the Facts! Raw Pet Food Diets can be Dangerous to You and Your Pet", "type": "document", "description": "", "confidence": 0.6}
+{"id": "f7bd2807acaccbc2", "label": "two-year FDA Center for Veterinary Medicine (CVM) study", "type": "document", "description": "", "confidence": 0.6}
+{"id": "9219f06ad6ee1483", "label": "October 2010 and July 2012", "type": "event", "description": "", "confidence": 0.6}
+{"id": "4d000f01491a48d1", "label": "event_fda_raw_food_study_2010_2012", "type": "event", "description": "FDA CVM two-year study on raw pet food conducted from Oct 2010 to Jul 2012", "confidence": 0.6}
+{"id": "30ffec264c0fb171", "label": "Listeria", "type": "concept", "description": "A type of bacteria that can cause illness.", "confidence": 0.6}
+{"id": "990b0019e9202a02", "label": "FDA Raw Pet Food Diets Can Be Dangerous", "type": "document", "description": "A document articulating the FDA's position on raw pet food risks.", "confidence": 0.6}
+{"id": "8647d00cc5a0df31", "label": "Raw pet food", "type": "concept", "description": "", "confidence": 0.6}
+{"id": "2befbccc07992eb5", "label": "FDA Guidance for Industry", "type": "document", "description": "", "confidence": 0.6}
+{"id": "69b7d7dcdb0c1593", "label": "Performance Dog frozen raw pet food", "type": "product", "description": "A specific product line of frozen raw pet food.", "confidence": 0.6}
+{"id": "0993c0eae1f21bd5", "label": "Bravo Packing Inc.", "type": "organization", "description": "Manufacturer of Performance Dog frozen raw pet food.", "confidence": 0.6}
+{"id": "4307dafa0610f7fd", "label": "Carneys Point, New Jersey", "type": "location", "description": "Location where Bravo Packing Inc. is based.", "confidence": 0.6}
+{"id": "60828424baf49b9c", "label": "Performance Dog raw pet food, lot code 072219", "type": "product", "description": "Specific batch of Performance Dog raw pet food sampled by FDA.", "confidence": 0.6}
+{"id": "9d381f1ef7e5c6a3", "label": "Bravo Packing beef raw pet food", "type": "product", "description": "Beef-based product manufactured by Bravo Packing Inc.", "confidence": 0.6}
+{"id": "6db33dfb8372816d", "label": "FDA factsheet", "type": "document", "description": "A document published by the FDA providing information about risks associated with raw pet food diets.", "confidence": 0.6}
+{"id": "e9f553457a61f618", "label": "FDA Compliance Policy Guide Sec. 690.800", "type": "document", "description": "A regulatory document by the FDA providing guidance on compliance policies related to raw meat products for companion and captive noncompanion carnivores and omnivores.", "confidence": 0.6}
+{"id": "f853ba2f52ce17bf", "label": "FDA Guidance for Industry #122", "type": "document", "description": "", "confidence": 0.6}
+{"id": "2510c71ffd89b8dc", "label": "Manufacture and Labeling of Raw Meat Foods for Companion and Captive Noncompanion Carnivores and Omnivores", "type": "concept", "description": "", "confidence": 0.6}
+{"id": "b6e6bc079f967eb7", "label": "Salmonella in Food for Animals", "type": "concept", "description": "", "confidence": 0.6}
+{"id": "ccf89d5cc730b71e", "label": "Nemser et al. (2014)", "type": "document", "description": "", "confidence": 0.6}
+{"id": "ba1f1b15d06b1103", "label": "FDA public health alert \u2014 Performance Dog raw pet food", "type": "event", "description": "", "confidence": 0.6}
+{"id": "1f7b3b90c9573f46", "label": "Jan 31 2019", "type": "event", "description": "Date reference: Jan 31 2019", "confidence": 0.9}
+{"id": "0d61990b725033c8", "label": "2019-03-15", "type": "event", "description": "Date reference: 2019-03-15", "confidence": 0.9}
+{"id": "1bc68c72c8bd8593", "label": "Pet Nutrition Voluntarily Recalls Select Canned Dog Food for Excessive Vitamin D", "type": "organization", "description": "", "confidence": 0.7}
+{"id": "0408167127704c1c", "label": "Hill's Pet Nutrition Voluntarily Recalls Select Canned Dog Food for Excessive Vitamin D (Jan 31 2019)", "type": "document", "description": "Recall announcement by Hill's Pet Nutrition", "confidence": 0.6}
+{"id": "b18ac167f71523e4", "label": "Hill's Science Diet", "type": "product", "description": "Brand name for specific dog food products recalled by Hill's Pet Nutrition", "confidence": 0.6}
+{"id": "36a17b855961d800", "label": "FDA notice", "type": "document", "description": "Notice issued by the FDA regarding the recall of dog food products.", "confidence": 0.6}
+{"id": "f2d71f8d77855079", "label": "n D toxicity", "type": "concept", "description": "A condition in dogs resulting from excessive vitamin D intake", "confidence": 0.6}
+{"id": "89cdd3eae42e4f2d", "label": "Hill's Pet Nutrition", "type": "organization", "description": "Manufacturer of dog food products", "confidence": 0.6}
+{"id": "012f11dcca5b2e9c", "label": "AVMA JAVMA News coverage", "type": "document", "description": "", "confidence": 0.6}
+{"id": "7a82b67ab85f0b18", "label": "dvm360 coverage", "type": "document", "description": "", "confidence": 0.6}
+{"id": "5f2b4db6da5afa8c", "label": "dvm360", "type": "organization", "description": "Veterinary news and information source", "confidence": 0.6}
+{"id": "6fae403463c3332d", "label": "Mar 20 2019", "type": "event", "description": "Date reference: Mar 20 2019", "confidence": 0.9}
+{"id": "3462ae358a04804c", "label": "20 2019", "type": "event", "description": "", "confidence": 0.7}
+{"id": "7ac225b0c2969aba", "label": "January 31", "type": "event", "description": "", "confidence": 0.7}
+{"id": "192656a0ca5a75ee", "label": "the January 31, 2019", "type": "event", "description": "", "confidence": 0.7}
+{"id": "3e85804b5d8ffd61", "label": "https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts/hills-pet-nutrition-expands-voluntary-recall-select-canned-dog-food-elevated-vitamin-d\n- AVMA", "type": "person", "description": "", "confidence": 0.7}
+{"id": "579489120b1bb862", "label": "vitamin premix", "type": "concept", "description": "The contaminated vitamin premix that led to multiple recalls", "confidence": 0.6}
+{"id": "3e0f472325ec8a78", "label": "Hill's U.S. supplier", "type": "organization", "description": "Supplier of the contaminated vitamin premix to Hill's Pet Nutrition", "confidence": 0.6}
+{"id": "3d9f0113df3efe78", "label": "U.S. Food and Drug Administration (FDA)", "type": "organization", "description": "Regulatory body involved in overseeing the recall process", "confidence": 0.6}
+{"id": "82ad84173ca007ca", "label": "pub_hills_vitd_announcement_2019_01", "type": "document", "description": "January 31, 2019 announcement about vitamin D toxicity in Hill's products.", "confidence": 0.6}
+{"id": "4373f410fa12a480", "label": "pub_hills_vitd_expansion_2019_03", "type": "document", "description": "March 20, 2019 expansion of the January recall notice to include more products due to vitamin D toxicity.", "confidence": 0.6}
+{"id": "4924692c5114ddfb", "label": "Hill's Pet Nutrition Expands Voluntary Recall of Select Canned Dog Food for Elevated Vitamin D", "type": "document", "description": "", "confidence": 0.6}
+{"id": "dc23615e789f3b2e", "label": "FDA safety alert, Mar 20 2019", "type": "document", "description": "", "confidence": 0.6}
+{"id": "b348bc01811e155f", "label": "Dog Food Advisor recall expansion summary", "type": "document", "description": "Summary and analysis of Hill\u2019s dog food recall on Dog Food Advisor website", "confidence": 0.6}
+{"id": "92a95d6165a65ae7", "label": "May 20", "type": "event", "description": "", "confidence": 0.7}
+{"id": "b8bc2e03849ad4af", "label": "iHeartDogs", "type": "organization", "description": "Website providing information on dog care and news", "confidence": 0.6}
+{"id": "6810cb3c33d81c27", "label": "Defense Commissary Agency", "type": "organization", "description": "Agency responsible for commissaries that serve military members, retirees, and their families", "confidence": 0.6}
+{"id": "bba09a8f2979e9a3", "label": "through 27, 2019", "type": "event", "description": "Date reference: through 27, 2019", "confidence": 0.9}
+{"id": "f698b6381db1b207", "label": "BEFORE 10 2020", "type": "event", "description": "Date reference: BEFORE 10 2020", "confidence": 0.9}
+{"id": "aa88781d1518673d", "label": "576564", "type": "event", "description": "", "confidence": 0.7}
+{"id": "fd8d8634babce9a9", "label": "February 1", "type": "event", "description": "", "confidence": 0.7}
+{"id": "2c23a3849418d533", "label": "March 25 through 27, 2019", "type": "event", "description": "", "confidence": 0.7}
+{"id": "4245d7411fde616c", "label": "10 2020", "type": "event", "description": "", "confidence": 0.7}
+{"id": "d0728c06d8adbacd", "label": "10 2020, T1911125 3912", "type": "event", "description": "", "confidence": 0.7}
+{"id": "c5f8582a9cb54107", "label": "the Mid-America Pet Food / Victor", "type": "organization", "description": "", "confidence": 0.7}
+{"id": "7dac23997259a6af", "label": "FDA Warning Letter", "type": "document", "description": "A warning letter issued by the FDA to Hill's Pet Nutrition Inc.", "confidence": 0.6}
+{"id": "bf92b46bb36ce626", "label": "Hill's Pet Nutrition Inc.", "type": "organization", "description": "Pet food manufacturer", "confidence": 0.6}
+{"id": "cf09dcbdc27aad29", "label": "320 NE Crane St., Topeka, Kansas", "type": "location", "description": "Facility location of Hill's Pet Nutrition Inc.", "confidence": 0.6}
+{"id": "5abb6b0a8926b406", "label": "Reportable Food Registry filing", "type": "document", "description": "A report to the FDA about a potentially dangerous food product", "confidence": 0.6}
+{"id": "4ef188eaa7f1d951", "label": "2019 vitamin D contamination recalls", "type": "event", "description": "Recalls of products contaminated with toxic levels of vitamin D in 2019", "confidence": 0.6}
+{"id": "168e57c984e7edbf", "label": "unsafe levels of vitamin D", "type": "concept", "description": "Unacceptable concentration of Vitamin D in animal foods", "confidence": 0.6}
+{"id": "4630d84da96faad5", "label": "T1911124 3912", "type": "product", "description": "Lot code of a food product with unsafe levels of vitamin D", "confidence": 0.6}
+{"id": "fc7ba99ef6b3517b", "label": "AAFCO's 2017 Official Publication", "type": "document", "description": "", "confidence": 0.6}
+{"id": "201f6766e598abdb", "label": "MARCS-CMS", "type": "location", "description": "", "confidence": 0.6}
+{"id": "57b2021d47abdbd7", "label": "sources/nutrition_safety.yaml", "type": "document", "description": "", "confidence": 0.6}
+{"id": "f7d6461e1d63e65c", "label": "event_hills_vitd_recall_2019", "type": "event", "description": "Recall event related to vitamin D levels in pet food", "confidence": 0.6}
+{"id": "2d6aba74a226b871", "label": "pub_hills_warning_letter_2019_11", "type": "document", "description": "FDA Warning Letter to Hill regarding pet food safety issues", "confidence": 0.6}
+{"id": "3dda63a54511facf", "label": "MARCS-CMS 576564", "type": "document", "description": "FDA Case Number for the warning letter", "confidence": 0.6}
+{"id": "be35b50ba6fe7ec3", "label": "FDA Warning Letter \u2014 Hill's Pet Nutrition Inc., MARCS-CMS 576564, Nov 20 2019", "type": "document", "description": "Warning letter from FDA to Hill's Pet Nutrition Inc. regarding violations of the FD&C Act and FSMA regulations", "confidence": 0.6}
+{"id": "eaf03a5017a1e66a", "label": "FDA Warning Letter \u2014 Hill's Pet Nutrition Inc., MARCS-CMS 576564, Nov 20 2019 (canonical URL of record)", "type": "document", "description": "Official FDA document detailing the warning letter issued to Hill's Pet Nutrition Inc.", "confidence": 0.6}
+{"id": "3e03380caaa31bf4", "label": "Mirrored PDF of the Warning Letter", "type": "document", "description": "Mirror copy of the original FDA warning letter published on petful.com", "confidence": 0.6}
+{"id": "8bb588db7d071819", "label": "AVMA JAVMA News", "type": "document", "description": "News article from AVMA covering updates on the FDA warning letter issued to Hill's Pet Nutrition Inc.", "confidence": 0.6}
+{"id": "800913f65037e40b", "label": "Topeka, Kansas", "type": "location", "description": "A city in Kansas", "confidence": 0.6}
+{"id": "b83f813710d05fce", "label": "Brourman et al.", "type": "person", "description": "", "confidence": 0.7}
+{"id": "58262dede0f45b53", "label": "JAVMA 1996", "type": "event", "description": "", "confidence": 0.7}
+{"id": "2704512300204a51", "label": "between 1988 and 1993", "type": "event", "description": "", "confidence": 0.7}
+{"id": "d718dcf0ec7d8362", "label": "the later 2003", "type": "event", "description": "", "confidence": 0.7}
+{"id": "28f14b88ff02ee78", "label": "188 days", "type": "event", "description": "", "confidence": 0.7}
+{"id": "edd5c37118bb5264", "label": "208(11):1855\u20131858, 1996", "type": "event", "description": "", "confidence": 0.7}
+{"id": "394f6394bf05d7f8", "label": "JAVMA", "type": "organization", "description": "Journal of the American Veterinary Medical Association", "confidence": 0.6}
+{"id": "f4eda1406e396530", "label": "Saint Bernards", "type": "breed", "description": "Breed mentioned but not central to the analysis", "confidence": 0.6}
+{"id": "16fa2fa69d085cf5", "label": "DCM", "type": "concept", "description": "Dilated cardiomyopathy, a condition mentioned in context", "confidence": 0.6}
+{"id": "d94c6890745a8604", "label": "J Am Vet Med Assoc", "type": "document", "description": "Full title of JAVMA journal", "confidence": 0.6}
+{"id": "e7ae8301ec615905", "label": "208(11):1855\u20131858", "type": "document", "description": "Publication reference for the study in JAVMA", "confidence": 0.6}
+{"id": "1c38d306097d90a2", "label": "Schertel ER, Allen DA", "type": "person", "description": "Authors of a study on DCM in Saint Bernards", "confidence": 0.6}
+{"id": "117211dea20f2ca4", "label": "GDV", "type": "concept", "description": "Gastric Dilatation-Volvulus", "confidence": 0.6}
+{"id": "5277d84399633d58", "label": "Ellison cost-effectiveness analysis", "type": "document", "description": "Study analyzing the cost-effectiveness of GDV management", "confidence": 0.6}
+{"id": "a88ae0cce440e99b", "label": "prophylactic gastropexy outcomes study", "type": "document", "description": "Study focusing on prophylactic gastropexy for GDV prevention", "confidence": 0.6}
+{"id": "dbfaf843ff70c7eb", "label": "breed_great_dane", "type": "breed", "description": "A breed that is predisposed to GDV", "confidence": 0.6}
+{"id": "bd27092ad1167faf", "label": "breed_st_bernard", "type": "breed", "description": "A breed that is predisposed to GDV", "confidence": 0.6}
+{"id": "13a444a5e007351b", "label": "November 30, 2018", "type": "event", "description": "Date reference: November 30, 2018", "confidence": 0.9}
+{"id": "c02e911d6363f83e", "label": "January 1, 2014", "type": "event", "description": "Date reference: January 1, 2014", "confidence": 0.9}
+{"id": "5375ec0fd7307a3f", "label": "between January 1, 2014", "type": "event", "description": "", "confidence": 0.7}
+{"id": "53ea793141bfe23f", "label": "https://www.fda.gov/animal-veterinary/outbreaks-and-advisories/fda-investigation-potential-link-between-certain-diets-and-canine-dilated-cardiomyopathy\n- FDA", "type": "person", "description": "", "confidence": 0.7}
+{"id": "039e9734db370ec3", "label": "Canine Dilated Cardiomyopathy", "type": "concept", "description": "A heart condition affecting dogs", "confidence": 0.6}
+{"id": "348d971685010ecd", "label": "300 reports of DCM", "type": "concept", "description": "Number of reported cases of dilated cardiomyopathy in dogs and cats between January 1, 2014 and November 30, 2018", "confidence": 0.6}
+{"id": "7a4013c05510f322", "label": "June 2019 status update", "type": "document", "description": "", "confidence": 0.6}
+{"id": "6b45d168fb516a25", "label": "524 reports", "type": "concept", "description": "", "confidence": 0.6}
+{"id": "575cb112caa5c74c", "label": "Questions & Answers documentation", "type": "document", "description": "", "confidence": 0.6}
+{"id": "d2ed0bf168dc1ae3", "label": "Questions & Answers", "type": "document", "description": "Documentation provided by the FDA with updates on DCM cases related to dog food.", "confidence": 0.6}
+{"id": "8664a7bf6609fe63", "label": "subsequent FDA statements", "type": "document", "description": "statements made by the FDA after the initial investigation", "confidence": 0.6}
+{"id": "01ecdd4920c06135", "label": "veterinary literature", "type": "document", "description": "papers and articles published in veterinary science journals", "confidence": 0.6}
+{"id": "233a35d8648eada2", "label": "Questions & Answers: FDA's Work on Potential Causes of Non-Hereditary DCM in Dogs (count updated 2022-11-01)", "type": "document", "description": "https://www.fda.gov/animal-veterinary/animal-health-literacy/questions-answers-fdas-work", "confidence": 0.6}
+{"id": "38b78af6c8e55d2a", "label": "FDA Investigation into Potential Link between Certain Diets and Canine Dilated Cardiomyopathy", "type": "document", "description": "main investigation page (canonical URL of record): https://www.fda.gov/animal-veterinary/outbreaks-and-advisories/fda-investigation-potential-link-between-certain-diets-and-canine-dilated-cardiomyopathy", "confidence": 0.6}
+{"id": "be9cce13e1adb7ac", "label": "FDA Provides Third Status Report (June 2019)", "type": "document", "description": "https://www.fda.gov/animal-veterinary/cvm-updates/fda-provides-third-status-report-investigation-potential-connection-between-certain-diets-and-cases", "confidence": 0.6}
+{"id": "8e8470fe5edc1c70", "label": "Questions & Answers: FDA's Work on Potential Causes of Non-Hereditary DCM in Dogs", "type": "document", "description": "A document by the FDA that discusses their work on potential causes of non-hereditary dilated cardiomyopathy (DCM) in dogs.", "confidence": 0.6}
+{"id": "fb0d13487d5b57fe", "label": "up to 9 days", "type": "event", "description": "", "confidence": 0.7}
+{"id": "39562ee950fc9bca", "label": "Brucellosis in Dogs and Public Health Risk", "type": "document", "description": "An analysis published in Emerging Infectious Diseases evaluating Brucella canis in dogs in the United States", "confidence": 0.6}
+{"id": "d709ae4b246e87ed", "label": "Emerging Infectious Diseases", "type": "organization", "description": "The journal where the analysis was published", "confidence": 0.6}
+{"id": "318bb7627b6c14df", "label": "Brucella canis", "type": "concept", "description": "A pathogen affecting dogs", "confidence": 0.6}
+{"id": "36c96f84bf0fdcda", "label": "Dogs", "type": "breed", "description": "The animal discussed in the article", "confidence": 0.6}
+{"id": "91750f20b353663e", "label": "United States", "type": "location", "description": "The country where regulations and data are evaluated", "confidence": 0.6}
+{"id": "1d719ae5916e7598", "label": "Dogs and Public Health Risk", "type": "document", "description": "Article addressing the public health risks associated with dogs", "confidence": 0.6}
+{"id": "07a7b1f7c0fdf6af", "label": "kennel outbreaks", "type": "event", "description": "Outbreaks of Brucella canis in kennels", "confidence": 0.6}
+{"id": "6a8975d9bd8db07c", "label": "reproductive failure", "type": "concept", "description": "Signs indicating issues with reproduction due to infection", "confidence": 0.6}
+{"id": "ef67a5e2989317f4", "label": "bacteria", "type": "concept", "description": "Microorganisms causing infection in dogs", "confidence": 0.6}
+{"id": "e3f0caa419af19aa", "label": "bacteremia", "type": "concept", "description": "Bacterial presence in the blood", "confidence": 0.6}
+{"id": "159ff14df478d3a0", "label": "veterinarians", "type": "person", "description": "Veterinary professionals at risk for zoonotic transmission", "confidence": 0.6}
+{"id": "491fb64fd59335c9", "label": "breeders", "type": "person", "description": "Individuals breeding dogs at risk of brucellosis", "confidence": 0.6}
+{"id": "e8c61bf76e924039", "label": "kennel workers", "type": "person", "description": "People working in kennels with potential exposure to Brucella canis", "confidence": 0.6}
+{"id": "88c724a342d88f1d", "label": "USDA APHIS guidance", "type": "document", "description": "Official guidance from USDA Animal and Plant Health Inspection Service", "confidence": 0.6}
+{"id": "c6ee0cd122bb5a5a", "label": "Cosford 2018", "type": "document", "description": "A veterinary source discussing treatment options for Brucella canis", "confidence": 0.6}
+{"id": "bfb98bfef59cb04c", "label": "CDC Emerging Infectious Diseases article", "type": "document", "description": "Article published in Emerging Infectious Diseases journal by CDC", "confidence": 0.6}
+{"id": "d0839e8ecdb00652", "label": "USDA APHIS brucellosis guidance for dog breeders", "type": "document", "description": "APHIS publication on brucellosis guidelines", "confidence": 0.6}
+{"id": "6969c1aa4ecaf7a7", "label": "Brucella canis: An update on research and clinical management", "type": "document", "description": "Can Vet J article by Cosford KL", "confidence": 0.6}
+{"id": "a6d1264c79bd56ca", "label": "Cosford KL", "type": "person", "description": "Author of the Can Vet J article on Brucella canis", "confidence": 0.6}
+{"id": "3994022c366ea6b9", "label": "June 4, 2018", "type": "event", "description": "Date reference: June 4, 2018", "confidence": 0.9}
+{"id": "e839ff9132d430cd", "label": "bison", "type": "person", "description": "", "confidence": 0.7}
+{"id": "65bbeeb404114434", "label": "its first week", "type": "event", "description": "", "confidence": 0.7}
+{"id": "bd23d0e37c9f06c6", "label": "-authored_by-> person_lisa_freeman", "type": "person", "description": "", "confidence": 0.7}
+{"id": "7f1486c51d3e40f8", "label": "https://sites.tufts.edu/petfoodology/2018/06/04/a-broken-heart-risk-of-heart-disease-in-boutique-or-grain-free-diets-and-exotic-ingredients/", "type": "person", "description": "", "confidence": 0.7}
+{"id": "9f4d24e888ed28e2", "label": "# It's Not Just Grain-Free: An Update on Diet-Associated Dilated Cardiomyopathy", "type": "document", "description": "", "confidence": 0.6}
+{"id": "f2047053435951c2", "label": "November 29, 2018 post on the Tufts Cummings School of Veterinary Medicine's Petfoodology blog", "type": "document", "description": "", "confidence": 0.6}
+{"id": "088bba8f9ad9e96e", "label": "BEG (boutique, exotic-ingredient, or grain-free)", "type": "concept", "description": "", "confidence": 0.6}
+{"id": "5634c04c952d8b61", "label": "2022 JVIM prospective study", "type": "document", "description": "", "confidence": 0.6}
+{"id": "c9e9e16c20411701", "label": "Cat 3 contradiction pair", "type": "concept", "description": "", "confidence": 0.6}
+{"id": "b9eecab5cbe83d98", "label": "BEG", "type": "concept", "description": "Implicated category in diet-DCM signal including boutique companies, exotic ingredients, and grain-free food", "confidence": 0.6}
+{"id": "4b3e48564fd5f6d6", "label": "boutique companies", "type": "organization", "description": "Pet food manufacturers that are not large or well-known brands", "confidence": 0.6}
+{"id": "c3b1e4b9594916d8", "label": "exotic ingredients", "type": "concept", "description": "Ingredients uncommon in traditional pet foods, such as kangaroo, alligator, bison, lentils, chickpeas", "confidence": 0.6}
+{"id": "94cbfca6e44d03ec", "label": "kangaroo", "type": "product", "description": "A type of exotic ingredient mentioned in the text", "confidence": 0.6}
+{"id": "0c8176ac2183c1a9", "label": "alligator", "type": "product", "description": "A type of exotic ingredient mentioned in the text", "confidence": 0.6}
+{"id": "42bdbca5857bcb64", "label": "lentils", "type": "product", "description": "A type of exotic ingredient mentioned in the text", "confidence": 0.6}
+{"id": "fb43454d6f93fe62", "label": "chickpeas", "type": "product", "description": "A type of exotic ingredient mentioned in the text", "confidence": 0.6}
+{"id": "b71be551777c98ac", "label": "peas", "type": "product", "description": "An ingredient used to replace grains in grain-free diets", "confidence": 0.6}
+{"id": "747824b5ca63ef2a", "label": "BEG diets", "type": "concept", "description": "Diets that are boutique, exotic or grain-free", "confidence": 0.6}
+{"id": "363e5dc20dfcb2d2", "label": "FDA's July 2018 announcement", "type": "event", "description": "The FDA's announcement regarding diet-associated heart disease in pets", "confidence": 0.6}
+{"id": "78efa4a394c860fe", "label": "https://sites.tufts.edu/petfoodology/2018/11/29/dcm-update/", "type": "document", "description": "canonical URL of record", "confidence": 0.6}
+{"id": "844a85a38c6134e7", "label": "Tufts vetnutrition mirror of the same post", "type": "document", "description": "", "confidence": 0.6}
+{"id": "90433900d84c8e86", "label": "https://vetnutrition.tufts.edu/2018/11/dcm-update/", "type": "document", "description": "", "confidence": 0.6}
+{"id": "2a7137bd95b68dbe", "label": "Earlier Petfoodology post that primed the BEG framing", "type": "document", "description": "", "confidence": 0.6}
+{"id": "6ce36007854de02b", "label": "the U.S. Food and Drug Administration's Center for Veterinary Medicine (CVM)", "type": "organization", "description": "The organization issuing the report", "confidence": 0.6}
+{"id": "93abfe7e3f816180", "label": "Third Status Report on Investigation into Potential Connection Between Certain Diets and Cases of Canine Heart Disease", "type": "document", "description": "Title of the FDA Third Status Report", "confidence": 0.6}
+{"id": "1bc4d0b4176b4002", "label": "Third Status Report", "type": "document", "description": "The FDA's report on DCM cases associated with certain diets.", "confidence": 0.6}
+{"id": "8557e4b3294be62a", "label": "CVM", "type": "organization", "description": "Center for Veterinary Medicine (part of FDA)", "confidence": 0.6}
+{"id": "e23d9fac40d199d1", "label": "grain-free", "type": "concept", "description": "", "confidence": 0.6}
+{"id": "a13e1f33e2706d7f", "label": "peas and/or lentils", "type": "concept", "description": "", "confidence": 0.6}
+{"id": "c9eca80e2b962880", "label": "https://www.fda.gov/animal-veterinary/outbreaks-and-advisories/fda-investigation-potential-link-between-certain-diets-and-canine-dilated-cardiomyopathy", "type": "document", "description": "", "confidence": 0.6}
+{"id": "a0d34a0a39a17796", "label": "Dilated Cardiomyopathy", "type": "concept", "description": "A heart condition that is the subject of investigation by the FDA", "confidence": 0.6}
+{"id": "5ee4c38f08ea0188", "label": "611 days", "type": "event", "description": "", "confidence": 0.7}
+{"id": "367042cdbf663bf4", "label": "2\u2013940 days", "type": "event", "description": "", "confidence": 0.7}
+{"id": "c9433a1634903884", "label": "161 days", "type": "event", "description": "", "confidence": 0.7}
+{"id": "5e8fb01687d81a34", "label": "12\u2013669 days", "type": "event", "description": "", "confidence": 0.7}
+{"id": "b6e132c1b77e5464", "label": "2019/2022", "type": "event", "description": "", "confidence": 0.7}
+{"id": "113995cad23fa74a", "label": "pre-2022", "type": "event", "description": "", "confidence": 0.7}
+{"id": "4d4524137a5a874d", "label": "35297103", "type": "event", "description": "", "confidence": 0.7}
+{"id": "0af8de6b97b38160", "label": "Freeman et al.", "type": "document", "description": "A study on dilated cardiomyopathy in dogs published by Lisa M. Freeman and colleagues", "confidence": 0.6}
+{"id": "586e73258d116c93", "label": "Survival", "type": "concept", "description": "Measure of time until an event (death or other clinical outcome) in medical studies", "confidence": 0.6}
+{"id": "52d252a878d7d175", "label": "PMC8965249", "type": "document", "description": "Publicly accessible document ID for Freeman's 2022 JVIM publication on DCM and diet", "confidence": 0.6}
+{"id": "f2f1a675953b6abd", "label": "dcm_grain_free_2018", "type": "document", "description": "Contradictory document mentioned in the text", "confidence": 0.6}
+{"id": "e3eaa649e53cbe70", "label": "JVIM/PMC", "type": "document", "description": "Publication venue for the Freeman et al. study", "confidence": 0.6}
+{"id": "83be4f0f0fef6714", "label": "Freeman 2022", "type": "document", "description": "A journal article published by Freeman in 2022", "confidence": 0.6}
+{"id": "18ec5cecbf042a76", "label": "FDA reporting", "type": "concept", "description": "Statistics and reports issued by the FDA prior to 2022 regarding ingredient prevalence and DCM association", "confidence": 0.6}
+{"id": "19782a06798e022b", "label": "2018 announcement", "type": "document", "description": "An official statement from FDA in 2018 about diet-DCM relationship centered on grain-free diets", "confidence": 0.6}
+{"id": "4956d3d412ddf449", "label": "FDA Q&A", "type": "document", "description": "A question and answer document released by the FDA framing DCM as a complex medical condition influenced by multiple factors", "confidence": 0.6}
+{"id": "797257eee9e76b2b", "label": "PMC deposit", "type": "document", "description": "The freely re-readable version of the article deposited in PMC", "confidence": 0.6}
+{"id": "4f03902123222146", "label": "JVIM", "type": "document", "description": "Journal of Veterinary Internal Medicine, where a relevant document was published", "confidence": 0.6}
+{"id": "0f545bebab96da27", "label": "Tufts Cummings", "type": "document", "description": "Document associated with Tufts Cummings School of Veterinary Medicine", "confidence": 0.6}
+{"id": "44b8163425a4359b", "label": "Freeman LM", "type": "person", "description": "Lisa M. Freeman, author of the study", "confidence": 0.6}
+{"id": "1e93affacd407eaa", "label": "Rush JE", "type": "person", "description": "Joint author with Lisa M. Freeman and Adin D.", "confidence": 0.6}
+{"id": "3b7f60b17ea92716", "label": "Journal of Veterinary Internal Medicine", "type": "document", "description": "Publication where the study on dilated cardiomyopathy was published", "confidence": 0.6}
+{"id": "13a42dd8ae23c81b", "label": "This FDA Center for Veterinary Medicine Q&A", "type": "organization", "description": "", "confidence": 0.7}
+{"id": "dab7382ae8e67ddb", "label": "diet-DCM", "type": "organization", "description": "", "confidence": 0.7}
+{"id": "1218ba0e4800c392", "label": "diet", "type": "organization", "description": "", "confidence": 0.7}
+{"id": "02f65b5ded8031bb", "label": "Potential Causes of Non-Hereditary DCM", "type": "concept", "description": "", "confidence": 0.6}
+{"id": "2807940803a699be", "label": "FDA Third Status Report (June 2019)", "type": "document", "description": "Intermediate report in the same chain", "confidence": 0.6}
+{"id": "5841466b8ee70612", "label": "al.", "type": "location", "description": "", "confidence": 0.7}
+{"id": "ee5e3dac6d7a7fd5", "label": "6, November 2023", "type": "event", "description": "", "confidence": 0.7}
+{"id": "009537187126f09c", "label": "12 weeks of age", "type": "event", "description": "", "confidence": 0.7}
+{"id": "fabf666e4c98138b", "label": "approximately 2 decades ago", "type": "event", "description": "", "confidence": 0.7}
+{"id": "886dfab5e83d5384", "label": "serum albumin", "type": "person", "description": "", "confidence": 0.7}
+{"id": "d5025275dcd38236", "label": "at least 12 months", "type": "event", "description": "", "confidence": 0.7}
+{"id": "7c77eab9a9c3652c", "label": "pre-2020", "type": "event", "description": "", "confidence": 0.7}
+{"id": "51dfce5505d0293a", "label": "6 months", "type": "event", "description": "", "confidence": 0.7}
+{"id": "46cd2f764765d240", "label": "Sykes et al.", "type": "document", "description": "A peer-reviewed consensus statement on leptospirosis in dogs", "confidence": 0.6}
+{"id": "f58606855af9c6a0", "label": "JVIM 2023", "type": "document", "description": "Journal of Veterinary Internal Medicine, volume 36, issue 6, November 2023", "confidence": 0.6}
+{"id": "5c1088565a5d6c95", "label": "2023", "type": "document", "description": "Year of publication of the consensus statement on leptospirosis in dogs", "confidence": 0.6}
+{"id": "058f84e060cdff70", "label": "leptospirosis vaccination", "type": "concept", "description": "Annual vaccination against leptospirosis", "confidence": 0.6}
+{"id": "03bcae434fa2ed6c", "label": "4-serovar vaccine", "type": "product", "description": "A specific type of leptospirosis vaccine", "confidence": 0.6}
+{"id": "c7c3f29372c2432d", "label": "small-breed dogs", "type": "breed", "description": "Dogs belonging to small breeds", "confidence": 0.6}
+{"id": "53e6d312475879ce", "label": "lepto_vaccine_adverse_reactions_2023", "type": "document", "description": "A document about adverse reactions to leptospirosis vaccines in 2023", "confidence": 0.6}
+{"id": "e57d75c9fdabcdfc", "label": "leptospirosis", "type": "concept", "description": "A zoonotic disease caused by Leptospira bacteria", "confidence": 0.6}
+{"id": "e7c8e6c226c43ca2", "label": "vaccine-associated adverse events", "type": "concept", "description": "Adverse reactions that occur after receiving vaccines", "confidence": 0.6}
+{"id": "64dde69330ff450e", "label": "<53 adverse events per 10,000 doses", "type": "concept", "description": "The rate of adverse reactions to leptospiral vaccines", "confidence": 0.6}
+{"id": "6b312aa805bb016e", "label": "bovine serum albumin", "type": "product", "description": "A component in some dog vaccines that could cause post-vaccinal IgE-based adverse events", "confidence": 0.6}
+{"id": "e0a9c0e374a0f01c", "label": "Leptospira component", "type": "concept", "description": "A part of some vaccines for dogs, potentially containing high concentrations of bovine serum albumin", "confidence": 0.6}
+{"id": "063f0402873ca0f1", "label": "bacterin vaccines", "type": "product", "description": "", "confidence": 0.6}
+{"id": "384e0f206c51eb2b", "label": "rabies vaccines", "type": "product", "description": "", "confidence": 0.6}
+{"id": "483ab9c1eeaa25ce", "label": "2023 ACVIM consensus", "type": "document", "description": "", "confidence": 0.6}
+{"id": "975688dfa60df48b", "label": "annually", "type": "concept", "description": "", "confidence": 0.6}
+{"id": "e4958c61e1c976c0", "label": "et al.", "type": "person", "description": "", "confidence": 0.6}
+{"id": "05d0a1ad56edf80a", "label": "AAHA 2022 Canine Vaccination Guidelines", "type": "document", "description": "Companion source for pre-consensus position on canine vaccination guidelines", "confidence": 0.6}
