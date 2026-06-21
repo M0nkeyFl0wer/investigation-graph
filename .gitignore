@@ -25,35 +25,18 @@ Thumbs.db
 # Eval evidence artifacts
 eval/evidence/
 
-# Fed Filing case: trainer-provided inputs stay local (not for the public repo)
-examples/fedfiling-case/inputs/*.pdf
-examples/fedfiling-case/inputs/*.mp4
-
-# Fed Filing case: raw captured evidence artifacts contain third-party PII and are
-# not republished. Integrity is provable from the committed manifest.jsonl SHA-256
-# hashes; the capture is reproducible from the committed code + the source URLs.
-examples/fedfiling-case/evidence/artifacts/
+# Fed Filing case — INSTRUCTOR COURSE MATERIAL, NOT PUBLIC.
+# The whole case (case study, viz, evidence, manifests, private report, inputs,
+# breach captures) stays local for the OSINT instructor; nothing Fed Filing ships
+# in this public repo. Integrity stays provable locally from the manifest SHA-256
+# hashes; the capture is reproducible from the code + source URLs. The reusable,
+# de-branded version of the viz/process template lives with the PUBLIC samples.
+examples/fedfiling-case/
 
 # Private OSINT toolkit: course tools/techniques + SpiderFoot/etc. skills. NEVER
 # committed to this public repo. Self-contained so it can be zipped and shared with
 # the course instructor privately.
 osint-toolkit/
 
-# Fed Filing FULL report (contains operators' personal details carried from the
-# trainer draft). Private — for the operator/instructor. The PUBLIC, minimized,
-# public-records-sourced version is examples/fedfiling-case/CASE-STUDY.md (tracked).
-examples/fedfiling-case/report-private/
-
 # Minimization denylist lists private PII tokens — never commit it (gate fail-closes if absent).
 scripts/minimization_denylist.txt
-
-# Breach/DeHashed captures: sensitive third-party PII — separate PRIVATE manifest + artifacts, never public.
-examples/fedfiling-case/evidence-private/
-
-# Fed Filing viz: verification screenshots are generated from PRIVATE findings at
-# build time (the rendered murder board / timeline expose third-party PII). The viz
-# CODE in examples/fedfiling-case/viz/ is public; the rendered output is not.
-examples/fedfiling-case/viz/_verify/
-# Any local data export the viz produces (kept out of the public repo by default).
-examples/fedfiling-case/viz/data-export/
-examples/fedfiling-case/viz/*.local.json
