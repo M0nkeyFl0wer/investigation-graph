@@ -1,0 +1,176 @@
+{"id": "person_rudolf_schenkel", "entity_type": "person", "label": "Rudolf Schenkel"}
+{"id": "pub_schenkel_1947_wolf_expression", "entity_type": "document", "label": "Expression Studies on Wolves (Schenkel 1947, Behaviour 1:81-129)"}
+{"id": "concept_dominance_theory", "entity_type": "concept", "label": "Dominance theory (canine behavior)"}
+{"id": "org_basel_zoo", "entity_type": "organization", "label": "Basel Zoo"}
+{"id": "person_l_david_mech", "entity_type": "person", "label": "L. David Mech"}
+{"id": "pub_mech_1999_alpha_status", "entity_type": "document", "label": "Alpha status, dominance, and division of labor in wolf packs (Mech 1999, CJZ 77:1196-1203)"}
+{"id": "org_usgs_npwrc", "entity_type": "organization", "label": "U.S. Geological Survey Northern Prairie Wildlife Research Center"}
+{"id": "concept_alpha_wolf", "entity_type": "concept", "label": "Alpha wolf concept"}
+{"id": "org_avsab", "entity_type": "organization", "label": "American Veterinary Society of Animal Behavior"}
+{"id": "pub_avsab_2008_dominance_position", "entity_type": "document", "label": "AVSAB Position Statement on the Use of Dominance Theory in Behavior Modification of Animals (2008)"}
+{"id": "concept_positive_reinforcement_training", "entity_type": "concept", "label": "Positive reinforcement training (animal behavior modification)"}
+{"id": "person_kelly_bollen", "entity_type": "person", "label": "Kelly S. Bollen"}
+{"id": "pub_bollen_horowitz_2012_safer_validity", "entity_type": "document", "label": "Investigating behavior assessment instruments to predict aggression in dogs (Bollen & Horowitz 2012, Applied Animal Behaviour Science 141:139-148)"}
+{"id": "concept_shelter_behavior_assessment", "entity_type": "concept", "label": "Shelter dog behavior assessment instruments"}
+{"id": "org_aspca", "entity_type": "organization", "label": "American Society for the Prevention of Cruelty to Animals"}
+{"id": "concept_safer_assessment", "entity_type": "concept", "label": "SAFER (Safety Assessment for Evaluating Rehoming) behavior evaluation"}
+{"id": "concept_cbaraq", "entity_type": "concept", "label": "Canine Behavioral Assessment and Research Questionnaire (C-BARQ)"}
+{"id": "concept_behavior_assessment_limitations", "entity_type": "concept", "label": "Shelter behavior assessment reliability and validity limitations"}
+{"id": "person_ana_catarina_vieira_de_castro", "entity_type": "person", "label": "Ana Catarina Vieira de Castro"}
+{"id": "pub_vieira_de_castro_2020_plos", "entity_type": "document", "label": "Does training method matter? Evidence for the negative impact of aversive-based methods on companion dog welfare (Vieira de Castro et al. 2020, PLOS ONE 15(12):e0225023)"}
+{"id": "concept_aversive_training", "entity_type": "concept", "label": "Aversive-based dog training methods"}
+{"id": "person_marina_watowich", "entity_type": "person", "label": "Marina M. Watowich"}
+{"id": "pub_watowich_2020_cognition_lifespan", "entity_type": "document", "label": "Age influences domestic dog cognitive performance independent of average breed lifespan (Watowich et al. 2020, Animal Cognition 23:795-805)"}
+{"id": "concept_cognitive_aging", "entity_type": "concept", "label": "Age-related cognitive decline in dogs"}
+{"id": "concept_dognition_project", "entity_type": "concept", "label": "Dognition citizen science cognitive assessment project"}
+{"id": "org_ear institute", "entity_type": "organization", "label": "University of Arizona Evolutionary Anthropology (EvoAmy lab)"}
+{"id": "concept_breed_lifespan_cognitive_tradeoff", "entity_type": "concept", "label": "Breed lifespan vs cognitive aging rate hypothesis"}
+{"id": "concept_dog_aging_project", "entity_type": "concept", "label": "Dog Aging Project"}
+{"id": "breed_american_staffordshire_terrier", "entity_type": "breed", "label": "American Staffordshire Terrier"}
+{"id": "breed_amstaff_abbreviation", "entity_type": "breed", "label": "AmStaff"}
+{"id": "pub_akc_amstaff_standard", "entity_type": "document", "label": "Official Standard of the American Staffordshire Terrier (AKC)"}
+{"id": "event_akc_amstaff_recognized_1936", "entity_type": "event", "label": "AKC recognizes Staffordshire Terrier as a distinct registered breed"}
+{"id": "breed_german_shepherd_dog", "entity_type": "breed", "label": "German Shepherd Dog"}
+{"id": "breed_gsd_abbreviation", "entity_type": "breed", "label": "GSD"}
+{"id": "org_akc", "entity_type": "organization", "label": "American Kennel Club"}
+{"id": "pub_akc_gsd_standard", "entity_type": "document", "label": "Official Standard of the German Shepherd Dog (AKC)"}
+{"id": "org_fci", "entity_type": "organization", "label": "F\u00e9d\u00e9ration Cynologique Internationale"}
+{"id": "org_tkc", "entity_type": "organization", "label": "The Kennel Club (UK)"}
+{"id": "org_ukc", "entity_type": "organization", "label": "United Kennel Club"}
+{"id": "concept_closed_stud_book", "entity_type": "concept", "label": "Closed stud book"}
+{"id": "concept_open_registry", "entity_type": "concept", "label": "Open registry"}
+{"id": "breed_group_fci_system", "entity_type": "concept", "label": "FCI breed group taxonomy"}
+{"id": "breed_group_akc_system", "entity_type": "concept", "label": "AKC breed group taxonomy"}
+{"id": "breed_alsatian", "entity_type": "breed", "label": "Alsatian"}
+{"id": "org_rkc", "entity_type": "organization", "label": "The Royal Kennel Club (UK)"}
+{"id": "pub_rkc_gsd_standard", "entity_type": "document", "label": "Royal Kennel Club Breed Standard: German Shepherd Dog (Pastoral Group)"}
+{"id": "breed_american_pit_bull_terrier", "entity_type": "breed", "label": "American Pit Bull Terrier"}
+{"id": "breed_apbt_abbreviation", "entity_type": "breed", "label": "APBT"}
+{"id": "breed_pit_bull_colloquial", "entity_type": "breed", "label": "Pit Bull"}
+{"id": "pub_ukc_apbt_standard", "entity_type": "document", "label": "American Pit Bull Terrier \u2014 Official UKC Breed Standard (Revised May 1, 2017)"}
+{"id": "event_ukc_apbt_first_registration_1898", "entity_type": "event", "label": "UKC issues first registration for American Pit Bull Terrier (Bennett's Ring, registration #1)"}
+{"id": "pub_nbc_grain_free_dcm_continuing_2020", "entity_type": "document", "label": "FDA investigation continues into dog heart damage associated with grain-free food"}
+{"id": "org_nbc_news", "entity_type": "organization", "label": "NBC News"}
+{"id": "pub_npr_shelter_adoption_pace_2024_01", "entity_type": "document", "label": "Pet adoptions are not keeping pace with the number of animals coming in (NPR, 2024-01-10)"}
+{"id": "org_npr", "entity_type": "organization", "label": "NPR (National Public Radio)"}
+{"id": "org_shelter_animals_count", "entity_type": "organization", "label": "Shelter Animals Count"}
+{"id": "org_humane_rescue_alliance", "entity_type": "organization", "label": "Humane Rescue Alliance"}
+{"id": "person_stephanie_filer", "entity_type": "person", "label": "Stephanie Filer"}
+{"id": "person_julie_depenbrock", "entity_type": "person", "label": "Julie Depenbrock"}
+{"id": "loc_washington_dc", "entity_type": "location", "label": "Washington, D.C."}
+{"id": "event_shelter_intake_adoption_gap_2023", "entity_type": "event", "label": "Post-pandemic shelter intake-vs-adoption gap (2023)"}
+{"id": "concept_post_pandemic_adoption_decline", "entity_type": "concept", "label": "Post-pandemic shelter adoption decline"}
+{"id": "pub_cpr_aurora_pit_bull_repeal_2024", "entity_type": "document", "label": "Aurora voters agree to repeal 20-year-old ban on pit bull dogs (CPR News, 2024-11-06)"}
+{"id": "org_cpr_news", "entity_type": "organization", "label": "Colorado Public Radio (CPR News)"}
+{"id": "loc_aurora_colorado", "entity_type": "location", "label": "Aurora, Colorado"}
+{"id": "org_aurora_city_council", "entity_type": "organization", "label": "Aurora City Council"}
+{"id": "event_aurora_question_3a_2024_11_05", "entity_type": "event", "label": "Aurora ballot Question 3A (pit bull ban repeal)"}
+{"id": "breed_staffordshire_bull_terrier", "entity_type": "breed", "label": "Staffordshire Bull Terrier"}
+{"id": "pub_colorado_dog_fanciers_v_denver_1991", "entity_type": "document", "label": "Colorado Dog Fanciers Association, Inc. v. City and County of Denver, 814 P.2d 646 (Colo. 1991)"}
+{"id": "pub_toledo_v_tellings_2007", "entity_type": "document", "label": "Toledo v. Tellings, 114 Ohio St.3d 278, 871 N.E.2d 1152 (Ohio 2007)"}
+{"id": "pub_danker_v_council_bluffs_2022", "entity_type": "document", "label": "Danker v. City of Council Bluffs, 57 F.4th 583 (8th Cir. 2023)"}
+{"id": "pub_aurora_v_acf", "entity_type": "document", "label": "American Canine Foundation v. City of Aurora (D. Colo. 2020)"}
+{"id": "event_colorado_dog_fanciers_decision", "entity_type": "event", "label": "Colorado Supreme Court decision in Colorado Dog Fanciers v. Denver"}
+{"id": "event_toledo_v_tellings_decision", "entity_type": "event", "label": "Ohio Supreme Court decision in Toledo v. Tellings"}
+{"id": "event_danker_council_bluffs_decision", "entity_type": "event", "label": "8th Circuit decision in Danker v. City of Council Bluffs"}
+{"id": "concept_due_process", "entity_type": "concept", "label": "Procedural due process (legal concept)"}
+{"id": "concept_equal_protection", "entity_type": "concept", "label": "Equal protection (legal concept)"}
+{"id": "concept_vagueness_doctrine", "entity_type": "concept", "label": "Vagueness doctrine (legal concept)"}
+{"id": "concept_rational_basis", "entity_type": "concept", "label": "Rational basis review (legal concept)"}
+{"id": "org_city_of_calgary", "entity_type": "organization", "label": "City of Calgary"}
+{"id": "loc_calgary_ab", "entity_type": "location", "label": "Calgary, AB, Canada"}
+{"id": "pub_calgary_rpob_47m2021", "entity_type": "document", "label": "City of Calgary Responsible Pet Ownership Bylaw 47M2021"}
+{"id": "pub_calgary_rpob_23m2006", "entity_type": "document", "label": "City of Calgary Responsible Pet Ownership Bylaw 23M2006 (predecessor, 2006)"}
+{"id": "event_calgary_rpob_in_force_2022", "entity_type": "event", "label": "Calgary Responsible Pet Ownership Bylaw 47M2021 takes effect"}
+{"id": "org_city_and_county_of_denver", "entity_type": "organization", "label": "City and County of Denver"}
+{"id": "loc_denver_co", "entity_type": "location", "label": "Denver, CO, USA"}
+{"id": "pub_denver_rmc_sec_8_55_1989", "entity_type": "document", "label": "Denver Revised Municipal Code Sec. 8-55, Ordinance No. 404, Series of 1989"}
+{"id": "pub_denver_ballot_measure_2j_2020", "entity_type": "document", "label": "Denver Ballot Measure 2J (2020)"}
+{"id": "event_denver_ban_enacted_1989", "entity_type": "event", "label": "Denver city council adoption of pit bull ban (Ordinance No. 404, Series of 1989)"}
+{"id": "event_denver_ballot_measure_2j_2020", "entity_type": "event", "label": "Denver voters approve Ballot Measure 2J repealing pit bull ban"}
+{"id": "event_denver_ban_repeal_effective", "entity_type": "event", "label": "Denver pit bull ban repeal takes effect"}
+{"id": "org_city_of_montreal", "entity_type": "organization", "label": "City of Montreal"}
+{"id": "loc_montreal_qc", "entity_type": "location", "label": "Montreal, QC, Canada"}
+{"id": "concept_pit_bull", "entity_type": "concept", "label": "Pit Bull"}
+{"id": "concept_bsl", "entity_type": "concept", "label": "Breed-specific legislation"}
+{"id": "event_montreal_bsl_lifecycle", "entity_type": "event", "label": "Montreal breed-specific-legislation lifecycle (2016 enactment through 2018 repeal)"}
+{"id": "event_montreal_council_vote_16_060", "entity_type": "event", "label": "Montreal city council adoption of Animal Control By-Law 16-060"}
+{"id": "pub_montreal_2016_bsl_bylaw", "entity_type": "document", "label": "Montreal By-Law Concerning Animal Control 16-060 (2016)"}
+{"id": "pub_montreal_2018_repeal_bylaw", "entity_type": "document", "label": "Montreal replacement animal-control bylaw (2018, post-repeal of 16-060)"}
+{"id": "event_montreal_bsl_repeal_2018", "entity_type": "event", "label": "Montreal city council adoption of replacement animal-control bylaw replacing 16-060"}
+{"id": "concept_calgary_model", "entity_type": "concept", "label": "Calgary model (responsible-pet-ownership / behaviour-based dangerous-dog framework)"}
+{"id": "org_government_of_ontario", "entity_type": "organization", "label": "Government of Ontario"}
+{"id": "loc_ontario_ca", "entity_type": "location", "label": "Ontario, Canada"}
+{"id": "pub_ontario_dola_statute", "entity_type": "document", "label": "Dog Owners' Liability Act, R.S.O. 1990, c. D.16 (Ontario)"}
+{"id": "pub_ontario_bill_132_2005", "entity_type": "document", "label": "Public Safety Related to Dogs Statute Law Amendment Act, 2005 (Ontario Bill 132)"}
+{"id": "event_ontario_pit_bull_ban_in_force", "entity_type": "event", "label": "Ontario pit-bull restrictions take effect under DOLA as amended by Bill 132"}
+{"id": "event_ontario_bill_132_royal_assent", "entity_type": "event", "label": "Bill 132 receives Royal Assent (Ontario)"}
+{"id": "org_menu_foods", "entity_type": "organization", "label": "Menu Foods Inc."}
+{"id": "org_us_fda", "entity_type": "organization", "label": "U.S. Food and Drug Administration"}
+{"id": "org_chemnutra", "entity_type": "organization", "label": "ChemNutra LLC"}
+{"id": "org_wilbur_ellis", "entity_type": "organization", "label": "Wilbur-Ellis Company"}
+{"id": "org_hills_pet_nutrition", "entity_type": "organization", "label": "Hill's Pet Nutrition"}
+{"id": "org_del_monte", "entity_type": "organization", "label": "Del Monte Pet Products"}
+{"id": "org_nestle_purina", "entity_type": "organization", "label": "Nestl\u00e9 Purina PetCare Company"}
+{"id": "concept_melamine_contamination", "entity_type": "concept", "label": "Melamine contamination of pet food (2007)"}
+{"id": "concept_cyanuric_acid", "entity_type": "concept", "label": "Cyanuric acid co-contamination with melamine"}
+{"id": "event_melamine_2007_recall", "entity_type": "event", "label": "2007 melamine pet food recall"}
+{"id": "pub_melamine_2007_initial_recall", "entity_type": "document", "label": "FDA 2007 Melamine Pet Food Recall \u2014 Initial Announcement and Investigation (2007-03-16)"}
+{"id": "concept_raw_pet_food_safety", "entity_type": "concept", "label": "Raw pet food safety risk"}
+{"id": "concept_salmonella_petfood", "entity_type": "concept", "label": "Salmonella contamination in pet food"}
+{"id": "concept_listeria_petfood", "entity_type": "concept", "label": "Listeria monocytogenes contamination in pet food"}
+{"id": "event_fda_raw_food_study_2010_2012", "entity_type": "event", "label": "FDA CVM raw pet food pathogen study (2010-2012)"}
+{"id": "event_performance_dog_recall_2019", "entity_type": "event", "label": "Bravo Packing Performance Dog raw pet food recall (2019)"}
+{"id": "pub_fda_raw_pet_food_factsheet_2018", "entity_type": "document", "label": "FDA Raw Pet Food Diets can be Dangerous to You and Your Pet (2018-02-22)"}
+{"id": "org_bravo_packing", "entity_type": "organization", "label": "Bravo Packing Inc."}
+{"id": "product_performance_dog_raw", "entity_type": "product", "label": "Performance Dog frozen raw pet food"}
+{"id": "pub_fda_raw_meat_guidance_2004", "entity_type": "document", "label": "FDA Guidance for Industry #122 \u2014 Manufacture and Labeling of Raw Meat Foods for Companion Animals (2004)"}
+{"id": "brand_hills_science_diet", "entity_type": "product", "label": "Hill's Science Diet"}
+{"id": "brand_hills_prescription_diet", "entity_type": "product", "label": "Hill's Prescription Diet"}
+{"id": "concept_vitamin_d_toxicity", "entity_type": "concept", "label": "Vitamin D toxicity in dogs"}
+{"id": "event_hills_vitd_recall_2019", "entity_type": "event", "label": "Hill's Pet Nutrition vitamin D recall (2019)"}
+{"id": "pub_hills_vitd_announcement_2019_01", "entity_type": "document", "label": "Hill's Pet Nutrition Voluntarily Recalls Select Canned Dog Food for Excessive Vitamin D (2019-01-31)"}
+{"id": "pub_hills_vitd_expansion_2019_03", "entity_type": "document", "label": "Hill's Pet Nutrition Expands Voluntary Recall of Select Canned Dog Food for Elevated Vitamin D (2019-03-20)"}
+{"id": "pub_hills_vitd_expansion_2019_05", "entity_type": "document", "label": "Hill's Pet Nutrition Additionally Expands Voluntary Recall of Select Canned Dog Food for Elevated Vitamin D (2019-05-20)"}
+{"id": "pub_hills_warning_letter_2019_11", "entity_type": "document", "label": "FDA Warning Letter to Hill's Pet Nutrition Inc., MARCS-CMS 576564 (2019-11-20)"}
+{"id": "event_hills_warning_letter_2019_11", "entity_type": "event", "label": "FDA Warning Letter issued to Hill's Pet Nutrition (regulatory followup to 2019 vitamin D recall)"}
+{"id": "pub_brourman_1996_gdv_mortality", "entity_type": "document", "label": "Factors associated with perioperative mortality in dogs with surgically managed gastric dilatation-volvulus: 137 cases (1988\u20131993)"}
+{"id": "person_jeff_brourman", "entity_type": "person", "label": "Jeff D. Brourman"}
+{"id": "concept_gdv", "entity_type": "concept", "label": "Gastric dilatation-volvulus"}
+{"id": "concept_gastric_necrosis", "entity_type": "concept", "label": "Gastric necrosis secondary to GDV"}
+{"id": "concept_prophylactic_gastropexy", "entity_type": "concept", "label": "Prophylactic gastropexy"}
+{"id": "breed_great_dane", "entity_type": "breed", "label": "Great Dane"}
+{"id": "breed_st_bernard", "entity_type": "breed", "label": "Saint Bernard"}
+{"id": "concept_dcm", "entity_type": "concept", "label": "Canine Dilated Cardiomyopathy"}
+{"id": "concept_grain_free_diet", "entity_type": "concept", "label": "Grain-free pet diet"}
+{"id": "event_fda_dcm_investigation_open_2018_07", "entity_type": "event", "label": "FDA opens investigation into diet-DCM link"}
+{"id": "pub_fda_dcm_investigation_main", "entity_type": "document", "label": "FDA Investigation into Potential Link between Certain Diets and Canine Dilated Cardiomyopathy"}
+{"id": "pub_cdc_brucellosis_canis_2018", "entity_type": "document", "label": "Brucellosis in Dogs and Public Health Risk"}
+{"id": "org_cdc", "entity_type": "organization", "label": "Centers for Disease Control and Prevention"}
+{"id": "org_usda_aphis", "entity_type": "organization", "label": "U.S. Department of Agriculture Animal and Plant Health Inspection Service"}
+{"id": "concept_brucellosis_canis", "entity_type": "concept", "label": "Canine brucellosis (Brucella canis)"}
+{"id": "concept_brucellosis_treatment", "entity_type": "concept", "label": "Antimicrobial treatment of canine brucellosis"}
+{"id": "concept_brucellosis_testing", "entity_type": "concept", "label": "Diagnostic testing for canine brucellosis"}
+{"id": "pub_tufts_petfoodology_beg_2018", "entity_type": "document", "label": "It's Not Just Grain-Free: An Update on Diet-Associated Dilated Cardiomyopathy"}
+{"id": "concept_beg_diet", "entity_type": "concept", "label": "BEG diet (boutique, exotic-ingredient, or grain-free)"}
+{"id": "pub_fda_dcm_third_status_report_2019", "entity_type": "document", "label": "FDA Third Status Report on Investigation into Potential Connection Between Certain Diets and Cases of Canine Heart Disease"}
+{"id": "event_fda_dcm_third_status_report_2019_06", "entity_type": "event", "label": "FDA issues Third Status Report on diet-DCM investigation"}
+{"id": "concept_pulses", "entity_type": "concept", "label": "Pulses (peas, lentils, and other legume seeds)"}
+{"id": "pub_freeman_2022_jvim_prospective", "entity_type": "document", "label": "Prospective study of dilated cardiomyopathy in dogs eating nontraditional or traditional diets and in dogs with subclinical cardiac abnormalities"}
+{"id": "person_lisa_freeman", "entity_type": "person", "label": "Lisa M. Freeman"}
+{"id": "person_john_rush", "entity_type": "person", "label": "John E. Rush"}
+{"id": "person_darcy_adin", "entity_type": "person", "label": "Darcy Adin"}
+{"id": "org_tufts_cummings", "entity_type": "organization", "label": "Cummings School of Veterinary Medicine at Tufts University"}
+{"id": "concept_nontraditional_diet", "entity_type": "concept", "label": "Nontraditional pet diet"}
+{"id": "pub_fda_dcm_qa_non_hereditary", "entity_type": "document", "label": "Questions & Answers: FDA's Work on Potential Causes of Non-Hereditary DCM in Dogs"}
+{"id": "concept_non_hereditary_dcm", "entity_type": "concept", "label": "Non-hereditary canine dilated cardiomyopathy"}
+{"id": "pub_acvim_leptospirosis_consensus_2023", "entity_type": "document", "label": "ACVIM consensus statement on leptospirosis in dogs"}
+{"id": "person_jane_sykes", "entity_type": "person", "label": "Jane E. Sykes"}
+{"id": "org_acvim", "entity_type": "organization", "label": "American College of Veterinary Internal Medicine"}
+{"id": "concept_leptospirosis", "entity_type": "concept", "label": "Canine leptospirosis"}
+{"id": "concept_leptospirosis_vaccine", "entity_type": "concept", "label": "Leptospirosis vaccination in dogs"}
+{"id": "concept_leptospiral_bacterin", "entity_type": "concept", "label": "Leptospiral bacterin vaccine"}
+{"id": "concept_4_serovar_vaccine", "entity_type": "concept", "label": "Four-serovar leptospirosis vaccine"}
+{"id": "pub_avma_2014_breed_bite_risk", "entity_type": "document", "label": "Literature Review on the Welfare Implications of The Role of Breed in Dog Bite Risk and Prevention (AVMA, 2014)"}
+{"id": "pub_legacy_lepto_vaccine_reaction_consensus", "entity_type": "concept", "label": "pub_legacy_lepto_vaccine_reaction_consensus"}
+{"id": "concept_breed_group_fci_system", "entity_type": "concept", "label": "concept_breed_group_fci_system"}

@@ -66,6 +66,7 @@ def ground_and_resolve(
     fuzzy_threshold: float = 0.92,
     embeddings: dict | None = None,
     threshold: float | None = None,
+    alias_merge: bool = True,
 ) -> tuple[dict, dict]:
     """Run grounding + entity resolution over extracted candidates.
 
@@ -174,6 +175,73 @@ def ground_and_resolve(
             continue
         ed = {**ed, "source_id": src, "target_id": tgt}
         resolved_edges.append(ed)
+
+    # ── 2b. Alias-driven merge (use the extractor's ALIAS_OF judgments) ────
+    # Similarity-only resolution leaves recurring entities fragmented across
+    # documents — "GSD" / "German Shepherd Dog" / "Alsatian" survive as three
+    # nodes because their strings/embeddings aren't close enough. But the
+    # extractor ALSO emitted explicit ALIAS_OF edges meaning "same canonical
+    # entity". Use them as a high-precision merge signal: union the endpoints of
+    # each SAME-TYPE ALIAS_OF edge, collapse each group to one node (the longest
+    # surface form), and re-point edges. Same-type only — never fuse a breed with
+    # a person (the wrong-merge / libel risk). This is what connects the
+    # otherwise-islanded document clusters into a navigable graph.
+    if alias_merge:
+        parent: dict[str, str] = {}
+
+        def _find(x: str) -> str:
+            parent.setdefault(x, x)
+            root = x
+            while parent[root] != root:
+                root = parent[root]
+            while parent[x] != root:          # path compression
+                parent[x], x = root, parent[x]
+            return root
+
+        def _union(a: str, b: str) -> None:
+            ra, rb = _find(a), _find(b)
+            if ra != rb:
+                parent[rb] = ra
+
+        for ed in resolved_edges:
+            if ed.get("edge_type") != "ALIAS_OF":
+                continue
+            s, t = ed["source_id"], ed["target_id"]
+            es, et = canonical.get(s), canonical.get(t)
+            if es and et and es.get("entity_type") == et.get("entity_type"):
+                _union(s, t)
+
+        # Group the canonical nodes; pick each group's keeper = longest label
+        # (tie-break by id, so the choice is deterministic across runs).
+        groups: dict[str, list[str]] = {}
+        for cid in canonical:
+            groups.setdefault(_find(cid), []).append(cid)
+        alias_map: dict[str, str] = {}
+        for members in groups.values():
+            keeper = max(members, key=lambda i: (len(canonical[i].get("label", "")), i))
+            for m in members:
+                alias_map[m] = keeper
+                if m != keeper:
+                    merge_records.append({
+                        "kept_id": keeper,
+                        "kept_label": canonical[keeper].get("label", ""),
+                        "merged_id": m,
+                        "merged_label": canonical[m].get("label", ""),
+                        "entity_type": canonical[m].get("entity_type", ""),
+                        "via_alias": True,
+                    })
+
+        # Keep only group keepers; re-point every edge through the alias map and
+        # drop self-loops (incl. the ALIAS_OF edges we just merged along).
+        canonical = {cid: e for cid, e in canonical.items() if alias_map.get(cid) == cid}
+        aliased_edges = []
+        for ed in resolved_edges:
+            s = alias_map.get(ed["source_id"], ed["source_id"])
+            t = alias_map.get(ed["target_id"], ed["target_id"])
+            if s == t:
+                continue
+            aliased_edges.append({**ed, "source_id": s, "target_id": t})
+        resolved_edges = aliased_edges
 
     report_dict = {
         "entities_in": len(entities),
