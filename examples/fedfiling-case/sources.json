@@ -46,7 +46,7 @@
     "artifact_id": "tina-usa-filing",
     "url": "https://truthinadvertising.org/articles/usa-filing-government-imposter-scam/",
     "type": "web",
-    "notes": "TINA advisory on 'USA Filing' (samfiling.com) — the sibling SAM-imposter TINA named. Grounds network-usafiling; note USA Filing is San Diego CA (NOT proven same operator as Fed Filing)."
+    "notes": "TINA advisory on 'USA Filing' (samfiling.com) \u2014 the sibling SAM-imposter TINA named. Grounds network-usafiling; note USA Filing is San Diego CA (NOT proven same operator as Fed Filing)."
   },
   {
     "artifact_id": "valor-bizprofile",
@@ -76,7 +76,7 @@
     "artifact_id": "bbb-fed-filing-complaints",
     "url": "https://www.bbb.org/us/fl/tampa/profile/business-opportunities/fed-filing-llc-0653-90422345/complaints",
     "type": "web",
-    "notes": "BBB complaints tab — showed 0 complaints at research time. Harm-scale evidence (conservative)."
+    "notes": "BBB complaints tab \u2014 showed 0 complaints at research time. Harm-scale evidence (conservative)."
   },
   {
     "artifact_id": "tina-federal-filing-brand",
@@ -89,5 +89,11 @@
     "url": "https://www.scampulse.com/fedfilingcom-reviews",
     "type": "web",
     "notes": "ScamPulse consumer reports on fedfiling.com (source of the $499 figure + 'Government Agency Imposter'). WebFetch got 410; try browser capture; if it fails = documented gap."
+  },
+  {
+    "artifact_id": "no-mercy-wikipedia",
+    "url": "https://en.wikipedia.org/wiki/No_Mercy_(pop_band)",
+    "type": "web",
+    "notes": "No Mercy (pop band): roster (Cintron + twins Ariel & Gabriel Hernandez), label, hits. Identity anchor for Hernandez (CEO == band member); public encyclopedia source."
   }
 ]

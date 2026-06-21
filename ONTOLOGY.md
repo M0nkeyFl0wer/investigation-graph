@@ -51,6 +51,9 @@ The system tracks quality metadata on entities and edges:
 | OPERATED_BY | organization → person | De-facto operational control of an entity, distinct from formal ownership/employment | Who actually runs a shell whose ownership is obscured (e.g. behind trusts) |
 | REGISTERED_AGENT_OF | person/organization → organization | Statutory registered agent named on a corporate filing | Links a named human/firm to a shell company via the corporate registry |
 | IMPERSONATES | organization/domain → organization | Poses as or mimics another (often official) entity | Core of imposter/scam schemes; maps the deception target |
+| MEMBER_OF | person → organization | Membership in a group/band/club (distinct from formal employment) | Affiliations, pre-history, shared-group networks |
+| FAMILY_OF | person → person | Kinship (spouse/sibling/parent/child — specify in a `relation` property) | Beneficial ownership via family; trusted-circle networks |
+| OPERATES_DOMAIN | organization → domain | An entity runs/controls this website/domain | Ties a company to its web presence and to sibling sites |
 | ASSOCIATED_WITH | any → any | Unspecified relationship | **Use sparingly** — prefer a typed edge |
 
 ## Extending This Ontology
