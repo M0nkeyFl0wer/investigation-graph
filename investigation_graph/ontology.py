@@ -27,6 +27,7 @@ YAML dialect:
   own MENTIONED_IN relation, so it is excluded from the RELATES_TO vocabulary.
 """
 import logging
+import os
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -112,7 +113,11 @@ class Ontology(_KGOntology):
 
     def __init__(self, ontology_path: str | None = None):
         if ontology_path is None:
-            ontology_path = str(Path(__file__).resolve().parent.parent / "ONTOLOGY.md")
+            # Default to the env-selected ontology (a beat/sample sets ONTOLOGY_PATH
+            # to its own file), falling back to the investigation-generic root.
+            ontology_path = os.environ.get(
+                "ONTOLOGY_PATH",
+                str(Path(__file__).resolve().parent.parent / "ONTOLOGY.md"))
         self.path = Path(ontology_path)
         # Rich metadata (kept for prompts + validate_ontology reporting).
         self.entity_types: dict[str, EntityType] = {}

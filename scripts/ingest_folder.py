@@ -64,8 +64,18 @@ def main():
         print(f"Created ingest directory: {ingest_dir}/\nAdd documents there and run again.")
         return
 
-    supported = [f for f in ingest_dir.iterdir()
-                 if f.is_file() and f.suffix.lower() in SUPPORTED]
+    # Recurse so foldered corpora (e.g. the good-dogs sample, organized into
+    # domain subdirs) ingest fully — not just files at the top level. Skip
+    # dot/underscore files and any hidden directory (vendored ontology sources,
+    # .git, editor state) so only real documents are picked up. Sorted for a
+    # stable, reproducible ingest order.
+    supported = sorted(
+        f for f in ingest_dir.rglob("*")
+        if f.is_file()
+        and f.suffix.lower() in SUPPORTED
+        and not f.name.startswith((".", "_"))
+        and not any(part.startswith(".") for part in f.relative_to(ingest_dir).parts)
+    )
     if not supported:
         print(f"No supported documents in {ingest_dir}/\nSupported: {', '.join(SUPPORTED)}")
         return

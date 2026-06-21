@@ -16,14 +16,21 @@ _PROJECT_ROOT = Path(__file__).resolve().parent.parent
 # PATHS
 # =============================================================================
 
-# Where the graph database lives (LadybugDB directory)
-GRAPH_DIR = _PROJECT_ROOT / "data" / "graph.lbug"
+# Where the graph database lives (LadybugDB directory).
+# Env-overridable so a self-contained example/case (e.g. examples/good-dogs) can
+# keep its OWN graph beside its corpus without touching the default data/ dir.
+GRAPH_DIR = Path(os.environ.get("GRAPH_DIR", _PROJECT_ROOT / "data" / "graph.lbug"))
 
-# Where documents go for ingestion
-INGEST_DIR = _PROJECT_ROOT / "ingest"
+# Where documents go for ingestion (env-overridable — point it at a sample corpus).
+INGEST_DIR = Path(os.environ.get("INGEST_DIR", _PROJECT_ROOT / "ingest"))
 
 # Where daily briefings are written
-BRIEFING_DIR = _PROJECT_ROOT / "briefings"
+BRIEFING_DIR = Path(os.environ.get("BRIEFING_DIR", _PROJECT_ROOT / "briefings"))
+
+# The ontology the run validates against. Defaults to the investigation-generic
+# root ONTOLOGY.md; a beat/sample sets ONTOLOGY_PATH to its own file so the root
+# stays generic (see examples/good-dogs/ONTOLOGY.md).
+ONTOLOGY_PATH = os.environ.get("ONTOLOGY_PATH", str(_PROJECT_ROOT / "ONTOLOGY.md"))
 
 # Optional: path to your Obsidian vault for briefing delivery
 # Leave empty to skip Obsidian integration
@@ -34,8 +41,9 @@ OBSIDIAN_VAULT = ""  # e.g., "~/obsidian-vault/investigations"
 # =============================================================================
 
 # Chunks, embeddings, and BM25 full-text search live here. Single file, easy to
-# back up (plain copy). Path is fixed; there is no substrate choice.
-CHUNK_DB = _PROJECT_ROOT / "data" / "chunks.duckdb"
+# back up (plain copy). Env-overridable so an example keeps its own base beside
+# its graph (defaults to the shared data/ dir — there is no substrate choice).
+CHUNK_DB = Path(os.environ.get("CHUNK_DB", _PROJECT_ROOT / "data" / "chunks.duckdb"))
 
 # =============================================================================
 # PRIVACY MODE
