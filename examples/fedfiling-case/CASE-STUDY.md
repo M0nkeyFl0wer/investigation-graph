@@ -226,9 +226,12 @@ the structure:
    inference begins. The graph refuses to let an inference masquerade as a fact.
 
 A companion offline visualization of this graph (two linked views — a "murder
-board" and an investigative timeline) lives in [`viz/`](viz/README.md); it renders
+board" and an investigative timeline) lives in [`viz/`](viz/README.md). It renders
 the verified spine solid and the inferred reach dashed, and every edge is clickable
-back to its evidence artifact.
+back to its evidence artifact. The viz is an **operator-side** tool: it reads the
+working findings + evidence manifest at runtime, so it runs against your local case
+data (which, in this public repository, is kept private). See `viz/README.md` to
+run it on your own corpus.
 
 ---
 
