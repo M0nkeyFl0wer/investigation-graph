@@ -43,3 +43,5 @@ scripts/minimization_denylist.txt
 
 # good-dogs build artifacts
 examples/good-dogs/ingest-run.log
+examples/good-dogs/data-gold/
+analysis-report-2026-06-21.json
