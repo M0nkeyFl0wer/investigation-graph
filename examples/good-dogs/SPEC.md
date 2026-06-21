@@ -1,190 +1,194 @@
 # SPEC — "Good Dogs": the public-facing flagship sample investigation
 
-**Status:** SPEC (for review before build) · **Audience:** public repo sample ·
-**Privacy:** fully public, **zero PII** by construction (every entity is fictional
-or a dog).
+**Status:** SPEC (build deferred — operator said "spec only for now") ·
+**Audience:** public repo sample · **Privacy:** fully public, **zero PII** by
+construction (entities are breeds, public researchers/officials, agencies,
+studies, bylaws — all from public sources).
 
-> **Why this exists.** Our only public-safe graph today is the fictional Harbor
-> City graft case (`examples/sample-investigation/`, the "good doggo" baseline).
-> Fed Filing — our richest worked case — is private (real people, instructor
-> course material). We want a *second* public sample that shows off the
-> full method (capture → extract → ground → build → analyze) **and** the data-viz
-> template, on a subject that is delightful, shareable, and carries no privacy
-> risk. So: **a graph that finds the good dogs and the good dog people.**
->
-> Same rigor as a real investigation — every claim sourced to a corpus document,
-> confidence-tagged, inferences kept dashed, each step documented — but the
-> "investigation" is wholesome. It teaches the discipline without any of the
-> ethical weight, which makes it the ideal thing to put in front of newcomers.
+> **Correction to an earlier draft of this spec:** an earlier version invented a
+> fictional "Maple Hollow / find the good boy" corpus. That was wrong — there is
+> already a real, reused **good-dog-corpus**. This spec is rewritten against the
+> actual corpus.
 
 ---
 
-## 1. Mission (the playful triage)
+## 1. What the corpus actually is
 
-A neighborhood (fictional **Maple Hollow**) has a lively dog community. From a pile
-of ordinary documents — adoption papers, a dog-park sign-in sheet, a "best in
-show" writeup, vet newsletters, a lost-and-found post — answer:
+**Source:** `~/Projects/second-brain-hybrid-graph/examples/good-dog-corpus`
+(canonical home; also used by `multipass-sme-cde-expansion` and others as a shared
+demo corpus). **It is not yet copied into investigation-graph** — build step 1 is
+to vendor it in (see §6).
 
-1. **Who are the good dogs?** Which dogs are documented as well-behaved / awarded /
-   beloved — and on what evidence?
-2. **Who are the good dog people?** Owners, volunteers, trainers, the vet — the
-   humans who make the community work.
-3. **What connects them?** Which dogs and people are linked through parks, the
-   shelter, a shared trainer, littermates, friendships — and **where are the gaps**
-   (the dog everyone mentions but no record explains; the trainer who is the only
-   bridge between two packs)?
+**36 markdown notes across six domains**, drawn from public dog-related sources:
 
-These are deliberately the same *shapes* of question a real investigation asks
-(identity, affiliation, network, structural holes) — just answered about dogs.
+| Domain | Notes | Examples |
+|--------|-------|----------|
+| `veterinary_research` | 8 | FDA DCM investigation, leptospirosis consensus, GDV mortality |
+| `behavioral_research` | 6 | Schenkel 1947, Mech alpha-status self-correction, AVSAB dominance position |
+| `nutrition_safety` | 6 | melamine recall (2007), Hill's vitamin-D recall (2019), grain-free signal |
+| `municipal_policy` | 6 | Denver/Montreal/Calgary BSL, Ontario DOLA, court challenges |
+| `community_journalism` | 5 | Aurora pit-bull-ban repeal, shelter adoption pace, recall reporting |
+| `breed_standards` | 5 | AKC/UKC/FCI/RKC breed definitions |
 
-**Output:** a public `CASE-STUDY.md` + the interactive viz, framed as a teaching
-demo: "here is how the graph turns a folder of documents into a network, and how
-to read it honestly."
+Each note has **typed frontmatter** (`mentions_entities:` lists entities already
+tagged by type, `authored_by`, `source_url`, `source_date`, `license`) — so the
+graph has strong structured anchors, not just free text.
 
----
-
-## 2. Corpus design (the heart of the spec)
-
-The corpus is **purpose-built and fictional** (no real animals, people, or
-addresses), engineered like Harbor City so the graph has both **connections** and
-**gaps** to find. ~7 short documents in mixed formats (the pipeline reads
-txt/md/html/PDF), with **deliberately shared entities** so edges emerge across
-documents and one or two entities are referenced but never explained (the gaps).
-
-| # | Document (fictional) | Format | What it seeds | Planted connections / gaps |
-|---|----------------------|--------|---------------|----------------------------|
-| 1 | *Maple Hollow Gazette* — "Best in Show 2025" writeup | md | dogs, owners, the award, the park | names the winner + 2 runners-up; mentions a trainer |
-| 2 | Happy Tails Shelter — adoption records | html | dogs ↔ adopters, adoption dates | links several dogs to their people; one dog adopted by two docs' people |
-| 3 | Riverbend Dog Park — weekly sign-in sheet | txt | dogs, owners, the park, dates | the "pack" cliques (community detection); recurring regulars |
-| 4 | Paws & Train — class roster | md | dogs ↔ trainer | the trainer is the **bridge** between two otherwise-separate packs |
-| 5 | Maple Hollow Vet — newsletter "patients of the month" | html | dogs, the vet, health notes | corroborates some dogs; introduces one dog **no other doc mentions** (gap) |
-| 6 | Lost & Found community post | txt | a dog + a finder | a **claim** ("good boy returned a wallet") to validate / flag |
-| 7 | Littermate registry excerpt | md | LITTERMATE_OF edges | family structure; one littermate is referenced but absent (gap) |
-
-**Goodness, honestly.** "Good dog" is never just asserted — it is *derived* and
-**confidence-tagged** exactly like a real finding:
-- **VERIFIED** good dog = an award/title in a primary doc (the show writeup).
-- **CORROBORATED** = praised in ≥2 independent docs (park + vet).
-- **CAPTURED** = a single mention.
-- **INFERRED** (dashed) = "probably a good dog" from indirect signal (e.g., a
-  therapy-visit note) — shown as inference, never as fact.
-- The wallet-returning "good boy" is a **claim** from one source → flagged for
-  validation, mirroring the verify-before-publish discipline.
-
-This is the trick that makes a silly subject a *real* teaching tool: it
-demonstrates source tiers, corroboration, and the honesty-of-uncertainty grammar
-without any privacy stakes.
+**It ships with its own ontology** (`ontology.yaml` + a design-rationale
+`ONTOLOGY.md`): 8 entity types and 12 edge types, hand-designed against an SME
+evaluation framework. We **reuse that ontology**, we do not invent one.
 
 ---
 
-## 3. Ontology (beat extension — validate before adding)
+## 2. Mission — the friendly hook over a real demonstration
 
-Reuse the base ontology where it fits; propose a small, OntoClean-validated
-extension for the dog beat (run `taxonomy-validation` before editing `ONTOLOGY.md`):
+"**Find the good dogs and the good dog people**" is the inviting framing; the
+substance is what makes the graph earn its keep:
 
-**Entity types:** `person` (owner/volunteer/trainer/vet), `organization`
-(shelter, dog park, training school, vet clinic, kennel club), `location` (park,
-neighborhood), `event` (adoption, show, class), `award` (title/ribbon), `claim`
-(the good-boy assertion), and **`dog`** (the one genuinely new type — a named
-animal; archetypical "Biscuit", exotypical "the dog park" → organization).
+- **The good dogs** = the `breed` entities (German Shepherd, American Pit Bull
+  Terrier, Golden Retriever, …) — the spine everything else hangs off.
+- **The good dog people (and institutions)** = the `person` + `organization`
+  entities: researchers, vets, journalists, council members, kennel clubs,
+  universities, regulators (FDA, AVSAB, AKC) — the humans/bodies behind the
+  knowledge.
+- **The investigation** = how knowledge *about* dogs connects across six domains:
+  a behavioral finding that drives a municipal bylaw; a recall that ripples from
+  FDA notice to vet research to local reporting.
 
-**Edge types** (each with a clear investigative purpose, mirroring the real beats):
-| Edge | From → To | Why it matters |
-|------|-----------|----------------|
-| `OWNS` (reuse) | person → dog | who belongs to whom |
-| `ADOPTED_FROM` | dog → organization | origin story; shelter ties |
-| `WALKS_AT` | dog/person → location | the park cliques (communities) |
-| `TRAINED_BY` | dog → person | the bridge trainer |
-| `WON` | dog → award | the VERIFIED good-dog signal |
-| `MEMBER_OF` (reuse) | dog/person → organization | club/class affiliation |
-| `FRIEND_OF` | dog → dog | the social graph (use sparingly) |
-| `LITTERMATE_OF` | dog → dog | family structure |
-| `TREATED_BY` | dog → person/org (vet) | corroboration source |
-
-`ASSOCIATED_WITH` stays the capped catch-all. No `dog`-specific edge gets added
-without 3+ real instances in the corpus (the project's "earn the type" rule).
+This is the same shape as a real investigation (identity, affiliation, network,
+contradiction, timeline, gaps) — but the subject is wholesome and public, which is
+exactly why it's the right public flagship.
 
 ---
 
-## 4. Process (the same five stages, documented + validated)
+## 3. Investigative questions (the corpus already seeds these)
 
-Run and **document each step** in an investigation log (same JSONL shape as the
-real cases), so the case study can show the path:
+The corpus was *designed* against SME eval categories; each maps to a crisp
+"good-dogs" investigation beat the case study walks through:
 
-1. **Scope** — confirm the ontology + corpus.
-2. **Ingest** — chunk + embed the 7 docs → DuckDB.
-3. **Extract** — three-phase typed entities + evidence-bearing edges (each edge
-   quotes the corpus sentence that states it — the same `evidence` discipline).
-4. **Ground** — drop unsupported items, resolve duplicate dog/person names
-   (the merge-review demonstrates entity resolution: "Biscuit" vs "Biscuit the
-   beagle"), assign confidence tiers.
-5. **Build** — reconstruct-and-swap the graph; then `run_analysis.py`.
+| Beat | Question | What the graph shows | Corpus seed |
+|------|----------|----------------------|-------------|
+| **Identity / alias** | Is "GSD" the same good dog as "Alsatian" and "German Shepherd Dog"? | entity resolution collapses 3 surface forms to 1 `breed` (merge-review) | `alias_of` (GSD; APBT≠AmStaff is the trap) |
+| **Network / multi-hop** | Which good dog *person* links a behavioral study to a city's breed law? | a `person`→`affiliated_with`→`org`→`authored`→`publication`→`subject_of`→`concept(BSL)` path | Aurora pit-bull repeal ties breed+BSL+people+policy |
+| **Contradiction** | Where do the good dog people *disagree*? | a `contradicts` edge kept as a contradiction, **not averaged away** | grain-free → DCM (2018 signal vs 2022 reassessment) |
+| **Temporal / supersession** | How did "good dog" consensus *change*? | a `supersedes` chain on a real time axis | dominance theory → positive reinforcement (1970s→AVSAB 2009) |
+| **Structural gap** | What's the good dog everyone talks about but no record explains? | a high-mention entity with a missing connecting document | breeds referenced across domains with no direct link |
 
-**Validation:** every "good dog" / "good dog person" claim in the final write-up
-cites the corpus document that supports it; inferred goodness is labelled INFERRED.
-Because the corpus is fictional and public, **no minimization gate is needed** —
-but we still run the provenance + ledger gates to prove the chain-of-evidence
-discipline holds even here.
+Answering these *is* the case study. Every answer cites the note(s) that support
+it; contradictions and human-grounded edges are flagged, never asserted as
+machine-certain.
 
 ---
 
-## 5. The nifty data-viz (reuse the de-branded template)
+## 4. Ontology — reuse the corpus's, translate to our format
 
-De-brand the Fed Filing viz (currently private) into a generic, reusable
-`viz/` template and apply it here — this is the "same template for other public
-sample work" the operator asked for. Two linked, offline views:
+The corpus's `ontology.yaml` is the source of truth: **8 entity types** (`breed`,
+`person`, `organization`, `publication`, `concept`, `product`, `event`,
+`location`) and **12 edge types** (`mentions`, `alias_of`, `supersedes`,
+`contradicts`, `cites`, `authored_by`, `affiliated_with`, `regulates`,
+`subject_of`, `member_of`, `grouped_under`, `located_in`), each with an
+**evidence rule** (lexical / registry / explicit-marker / claim-pair / byline /
+…) and several requiring **human grounding** (`contradicts`, `subject_of`).
 
-- **View B — "The Pack Board"** (Cytoscape): the dog/person/place network.
-  - node glyph = entity type (a paw glyph for `dog`); node size = degree.
-  - **community detection** colors the dog-park packs; the **bridge trainer** pops
-    as the high-betweenness connector between packs (the "nifty" structural
-    reveal).
-  - the **gap dog** (mentioned, unexplained) renders as the GAP node — the same
-    "the hole is the finding" lesson, but charming instead of alarming.
-  - edge style = inference (dashed = inferred goodness), color = source tier.
-- **View A — Timeline**: adoptions + shows over time (a real calendar axis here,
-  since the events are genuinely dated — no work-order decoupling needed, which
-  also sidesteps the lie-factor caveat from the Fed Filing timeline review).
-- Click any node/edge → provenance panel: which corpus document, which verbatim
-  sentence, what confidence. (No SHA-256 capture layer needed for fictional docs;
-  provenance = the corpus file + line.)
-
-**Apply the Fed Filing viz review fixes from the start:** flex layout (no
-hardcoded topbar offset), legend that doesn't occlude data, legend↔render parity
-(every glyph in the legend is actually drawn).
+Build task: translate this YAML into investigation-graph's `ONTOLOGY.md` table
+format (validate with `taxonomy-validation` to confirm the translation preserves
+the OntoClean discipline — the corpus already split `member_of` vs `grouped_under`
+on identity grounds, a good model). **No new types invented.** This also proves a
+nice point for the repo: investigation-graph can adopt an externally-authored,
+discipline-checked ontology wholesale.
 
 ---
 
-## 6. Deliverables & layout
+## 5. Process — the five stages, documented + validated
+
+Run the standard pipeline on the vendored corpus and **log every step** (same
+`investigation-log.jsonl` shape the cases use), so the write-up shows the path:
+
+1. **Scope** — adopt the translated ontology; point ingest at the corpus vault.
+2. **Ingest** — chunk + embed 36 notes → DuckDB (frontmatter `mentions_entities`
+   gives high-precision deterministic anchors alongside spaCy/LLM extraction).
+3. **Extract** — typed entities + evidence-bearing edges; `alias_of` comes from
+   the registry (not free LLM extraction), per the evidence rule.
+4. **Ground** — resolve aliases (GSD/Alsatian → one breed; **keep APBT≠AmStaff**),
+   preserve the seeded `contradicts` pair, assign confidence; the **merge-review**
+   artifact shows the alias collapse for human confirmation.
+5. **Build** — reconstruct-and-swap; then `run_analysis.py` for communities,
+   bridges, and gaps.
+
+**Validation:** every claim in the case study cites a corpus note; the
+contradiction is shown as a contradiction; human-grounding-required edges
+(`contradicts`, `subject_of`) are labelled as such. Fictional? No — but public and
+non-sensitive, so **no minimization gate is needed**; we still run the provenance +
+ledger gates to show the chain-of-evidence discipline holds.
+
+---
+
+## 6. The data-viz (de-branded reusable template)
+
+De-brand the (now-private) Fed Filing viz into a generic `viz/` template — the
+"same template for other public sample work" — and theme it for dogs. Two linked,
+offline views:
+
+- **View B — the knowledge network** (Cytoscape):
+  - node glyph = entity type (breed / person / org / publication / concept / …),
+    size = degree.
+  - **community detection** colors the six domains; the **nifty reveal** is the
+    *cross-domain bridges* — a `breed` or `concept` (e.g. BSL, German Shepherd)
+    that connects research ↔ policy ↔ journalism, which flat search misses.
+  - the **`contradicts` edge** gets a distinct style (the grain-free/DCM pair) —
+    the "the graph records disagreement instead of averaging it" lesson, visible.
+  - the **gap** entity renders as the GAP node — charming, not alarming.
+  - edge style = evidence strength / human-grounded vs lexical; color = … (reuse
+    the tier ramp idea, re-keyed to the corpus's evidence-rule types).
+- **View A — timeline** (D3): the `supersedes` chains and recall timelines on a
+  **real calendar axis** (events are genuinely dated — no work-order decoupling,
+  which sidesteps the lie-factor caveat from the Fed Filing timeline review).
+- Click any node/edge → provenance panel: which note, which frontmatter/sentence,
+  which evidence rule, confidence. (Provenance = the corpus file + line; no SHA-256
+  capture layer needed for public published sources.)
+
+**Carry over the Fed Filing viz review fixes from the start:** flex layout (no
+hardcoded topbar offset), legend that does not occlude data, legend↔render parity.
+
+**Prior art:** `~/Projects/multipass-sme-cde-expansion/tools/good-dog-graph-pipeline/`
+already builds a graph from this corpus (`good-dog-ontology-build.yaml`, demo,
+workflows). Review it before building so we align with the established pattern
+rather than fork it.
+
+---
+
+## 7. Deliverables & layout
 
 ```
 examples/good-dogs/
   SPEC.md                 ← this file
-  corpus/                 ← the 7 fictional source documents (PUBLIC, tracked)
-  ONTOLOGY-good-dogs.md   ← the beat extension (or fold into root ONTOLOGY.md)
-  CASE-STUDY.md           ← the public worked write-up (tracked)
-  investigation-log.jsonl ← the documented steps (tracked — it's fictional)
-  findings/               ← entities.jsonl + edges.jsonl (tracked)
-  viz/                    ← the de-branded reusable template, themed for dogs
+  corpus/                 ← VENDORED copy of good-dog-corpus/vault (36 notes, PUBLIC)
+  ONTOLOGY.md             ← the corpus ontology translated to our table format
+  CASE-STUDY.md           ← the public worked write-up (the five beats, sourced)
+  investigation-log.jsonl ← documented steps
+  findings/               ← entities.jsonl + edges.jsonl
+  viz/                    ← de-branded reusable template, themed for dogs
 ```
 
-Everything tracked and public (it's fiction). Linked from the README as the
-**public flagship** (replacing the Fed Filing link we just removed).
+All tracked and public. Linked from the README as the **public flagship**
+(filling the slot we just removed when Fed Filing went private). The Harbor City
+sample stays as the tiny quick-start; Good Dogs becomes the richer showcase.
 
 ---
 
-## 7. Open decisions to confirm before build
+## 8. Open decisions to confirm before build
 
-1. **Corpus source.** This spec builds a **purpose-built fictional** Maple Hollow
-   corpus (recommended — total control, zero PII, designed-in gaps). Alternative:
-   mine an *existing* corpus you have in mind for dog content — if so, point me at
-   it and I'll adapt. (The phrase "existing corpus" in your note — did you mean a
-   specific dataset, or "the existing pipeline/sample machinery"? Defaulting to
-   purpose-built unless you say otherwise.)
-2. **Tone.** Wholesome-and-earnest (gentle parody of an investigation) vs.
-   deadpan-noir ("the case of the very good boy"). Defaulting to wholesome with a
-   light wink.
-3. **Scope tonight.** Spec only (this), or proceed to author the corpus + run the
-   pipeline + build the viz? It's all zero-risk fiction, so I can build it end to
-   end on your nod.
-```
+1. **Vendoring.** Copy the corpus into `examples/good-dogs/corpus/` (recommended —
+   self-contained, matches how you reuse it elsewhere) vs. git submodule vs.
+   read it from its canonical path. *Default: copy in.*
+2. **Ontology home.** Translate the corpus ontology into a sample-local
+   `examples/good-dogs/ONTOLOGY.md`, or promote it to the repo-root `ONTOLOGY.md`?
+   *Default: sample-local, to keep the root ontology investigation-generic.*
+3. **Align with prior art.** Reuse / adapt the `multipass` good-dog-graph-pipeline
+   build, or build fresh against investigation-graph's `ingest_folder.py`?
+   *Default: build on `ingest_folder.py` (our stack), borrowing the ontology-build
+   YAML as reference.*
+4. **Extraction compute.** Local Ollama vs the seshat tunnel (same choice as the
+   cases). *Default: local first; corpus is small.*
+
+Build is **deferred** per your "spec only for now." On your nod I'll execute §5–§7.
