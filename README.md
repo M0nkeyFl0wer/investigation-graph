@@ -101,6 +101,12 @@ cp examples/sample-investigation/* ingest/
 python scripts/ingest_folder.py
 ```
 
+For a **richer, fully worked example**, see the **[Good Dogs case study](examples/good-dogs/CASE-STUDY.md)**
+— a wholesome, public-records walk-through (veterinary science, breed standards,
+and municipal policy) that builds the graph, finds a structural gap with topology,
+closes it with one sourced document, and visualizes the result. It's the flagship
+demonstration of the whole loop.
+
 Then swap in your own documents:
 
 ```bash

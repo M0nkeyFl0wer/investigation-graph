@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Good Dogs &amp; Good Dog People — a knowledge graph</title>
+  <!-- Fully offline / privacy-first: every library is vendored locally, the
+       graph is inlined in data.js, and there are NO runtime network calls.
+       Opens from file:// or any static server. -->
+  <link rel="stylesheet" href="style.css" />
+  <script src="vendor/d3.v7.min.js"></script>
+  <script src="vendor/cytoscape.min.js"></script>
+</head>
+<body>
+  <header id="topbar">
+    <div class="brand">
+      <span class="mark" aria-hidden="true">&#128062;</span>
+      <span class="title">Good&nbsp;Dogs <span class="amp">&amp;</span> Good&nbsp;Dog&nbsp;People</span>
+      <span class="counts" id="counts"></span>
+    </div>
+
+    <nav class="views" role="tablist" aria-label="View">
+      <button id="tab-b" class="tab active" role="tab" aria-selected="true">The network</button>
+      <button id="tab-a" class="tab" role="tab" aria-selected="false">The timeline</button>
+    </nav>
+
+    <div class="toggles" id="toggles">
+      <!-- BEFORE / AFTER loop-demo toggle (View B) -->
+      <div class="loop" id="loop-wrap" title="Show the AVMA review that bridges behavioural research and breed-specific legislation">
+        <span class="loop-cap">research&nbsp;&rarr;&nbsp;policy gap</span>
+        <label class="switch">
+          <input type="checkbox" id="t-bridge" />
+          <span class="track"><span class="thumb"></span></span>
+        </label>
+        <span class="loop-state" id="loop-state">open</span>
+      </div>
+
+      <select id="t-domain" title="Focus one knowledge domain">
+        <option value="all">All six domains</option>
+        <option value="veterinary_research">Veterinary research</option>
+        <option value="behavioral_research">Behavioural research</option>
+        <option value="nutrition_safety">Nutrition &amp; safety</option>
+        <option value="municipal_policy">Municipal policy</option>
+        <option value="community_journalism">Community journalism</option>
+        <option value="breed_standards">Breed standards</option>
+      </select>
+
+      <label class="chk"><input type="checkbox" id="t-contradict" /> trace the disagreements</label>
+    </div>
+  </header>
+
+  <main id="stage">
+    <section id="view-b" class="view active" aria-label="The knowledge network">
+      <div id="cy"></div>
+      <!-- a quiet caption that narrates the current state of the loop demo -->
+      <div id="story" aria-live="polite"></div>
+    </section>
+
+    <section id="view-a" class="view" aria-label="The timeline">
+      <div id="timeline"></div>
+    </section>
+
+    <!-- shared legend (the grammar) — anchored bottom-left, collapsible, never
+         drawn over the data nucleus -->
+    <aside id="legend" aria-label="Legend">
+      <button id="legend-toggle" title="Toggle legend">legend</button>
+      <div id="legend-body">
+        <h4>The good dogs &amp; people <span class="by-shape">— by shape</span></h4>
+        <ul class="glyphs">
+          <li><span class="g g-breed"></span> breed</li>
+          <li><span class="g g-person"></span> person</li>
+          <li><span class="g g-organization"></span> organization</li>
+          <li><span class="g g-document"></span> document / study</li>
+          <li><span class="g g-concept"></span> concept</li>
+          <li><span class="g g-event"></span> event</li>
+          <li><span class="g g-product"></span> product</li>
+          <li><span class="g g-location"></span> location</li>
+        </ul>
+        <h4>Six knowledge domains <span class="by-shape">— by colour</span></h4>
+        <ul id="domain-ramp" class="domains"></ul>
+        <h4>How the lines read</h4>
+        <ul class="lines">
+          <li><span class="ln solid"></span> connection (width&nbsp;=&nbsp;confidence)</li>
+          <li><span class="ln contra"></span> <b>contradicts</b> — disagreement kept, not averaged</li>
+          <li><span class="ln bridge"></span> the AVMA bridge (toggle above)</li>
+        </ul>
+        <p class="note">Click any dog, person, study, or line to read its evidence.</p>
+      </div>
+    </aside>
+
+    <!-- shared provenance / evidence side-panel -->
+    <aside id="panel" class="hidden" aria-label="Evidence">
+      <button id="panel-close" title="Close">&times;</button>
+      <div id="panel-body"></div>
+    </aside>
+  </main>
+
+  <div id="loading">fetching the good dogs&hellip;</div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
