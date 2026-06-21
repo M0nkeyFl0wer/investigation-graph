@@ -54,6 +54,8 @@ The system tracks quality metadata on entities and edges:
 | MEMBER_OF | person → organization | Membership in a group/band/club (distinct from formal employment) | Affiliations, pre-history, shared-group networks |
 | FAMILY_OF | person → person | Kinship (spouse/sibling/parent/child — specify in a `relation` property) | Beneficial ownership via family; trusted-circle networks |
 | OPERATES_DOMAIN | organization → domain | An entity runs/controls this website/domain | Ties a company to its web presence and to sibling sites |
+| SIBLING_OF | domain → domain | Two domains are run by the same operator (e.g. shared analytics/Ads IDs) | Maps a single operator's family of interchangeable sites |
+| CO_HOSTED_WITH | domain → domain | Two domains resolve to the same hosting IP / tenant (weaker than SIBLING_OF — infra adjacency, not proven common operator) | Surfaces hosting-layer leads; render as a lead, not a same-operator claim |
 | ASSOCIATED_WITH | any → any | Unspecified relationship | **Use sparingly** — prefer a typed edge |
 
 ## Extending This Ontology
