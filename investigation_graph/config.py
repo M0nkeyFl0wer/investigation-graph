@@ -99,7 +99,10 @@ EMBED_TIMEOUT = 120
 # Per-CHUNK extraction call (chunks are ~1000 chars), so this is well under the
 # old whole-doc value: a healthy 3B model answers in seconds; a contended/cold
 # one hits this ceiling and trips the per-run circuit breaker (see extract.py).
-EXTRACT_TIMEOUT = 90
+# Env-overridable: a remote GPU box reached over a tunnel can need a longer
+# ceiling for the FIRST (cold model-load) call — pre-warm the model and/or raise
+# this so one cold start doesn't trip the breaker for the whole run.
+EXTRACT_TIMEOUT = int(os.environ.get("EXTRACT_TIMEOUT", "90"))
 
 # =============================================================================
 # VISUAL BACKEND (optional — image captioning / visual retrieval, P2.1)

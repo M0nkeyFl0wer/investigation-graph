@@ -214,9 +214,21 @@ Text to analyze:
             logger.warning("LLM extraction failed: %s", e)
             return None
 
-        # Convert LLM output to our format
+        # Convert LLM output to our format. LLMs occasionally emit malformed JSON
+        # even under format="json" — e.g. a bare string inside the entities array
+        # ("entities": ["German Shepherd", ...]) or a non-list value. Defend
+        # against it: a single bad chunk must NOT crash a whole multi-doc ingest.
+        raw_entities = result.get("entities", [])
+        raw_edges = result.get("edges", [])
+        if not isinstance(raw_entities, list):
+            raw_entities = []
+        if not isinstance(raw_edges, list):
+            raw_edges = []
+
         entities = []
-        for e in result.get("entities", []):
+        for e in raw_entities:
+            if not isinstance(e, dict):
+                continue  # skip bare strings / malformed elements
             etype = e.get("type", "").lower()
             label = e.get("label", "")
             if not label or not self.ontology.validate_entity_type(etype):
@@ -226,7 +238,9 @@ Text to analyze:
                 0.6, source_url, f"llm_{config.LOCAL_EXTRACTION_MODEL}", now))
 
         edges = []
-        for e in result.get("edges", []):
+        for e in raw_edges:
+            if not isinstance(e, dict):
+                continue  # skip bare strings / malformed elements
             etype = e.get("type", "").upper()
             if not self.ontology.validate_edge_type(etype):
                 continue

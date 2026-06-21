@@ -18,6 +18,7 @@ are deleted before it is re-ingested. The graph is always rebuilt from the full
 DuckDB record set, so adding documents never corrupts the existing graph.
 """
 import hashlib
+import re
 import sys
 import time
 from pathlib import Path
@@ -41,15 +42,34 @@ from kg_common.media import SUPPORTED_SUFFIXES, process_media
 SUPPORTED = SUPPORTED_SUFFIXES
 
 
+# Matches a leading YAML frontmatter block: '---' on the first line through the
+# next '---' line. Markdown notes (Obsidian, Jekyll, annotated corpora) put
+# metadata here.
+_FRONTMATTER_RE = re.compile(r"\A---\r?\n.*?\r?\n---\r?\n", re.DOTALL)
+
+
+def strip_frontmatter(text: str) -> str:
+    """Drop a leading YAML frontmatter block before extraction.
+
+    Frontmatter is document *metadata* (license, date, tags), not prose — and in
+    an annotated corpus it can even hold the gold entity/edge answer key. Either
+    way we don't want the extractor mining it: that would pull metadata keys in as
+    entities, or (worse) let the tool parrot a corpus's own labels instead of
+    honestly extracting from the body. The frontmatter stays on disk for separate
+    evaluation; the graph is built from the prose."""
+    return _FRONTMATTER_RE.sub("", text, count=1)
+
+
 def read_document(path: Path) -> str:
     """Read a source's text via the media subsystem (P2.1). Thin wrapper over
     ``process_media`` so ingest doesn't care whether the bytes came from a text
-    layer, OCR, or (later) a vision model."""
+    layer, OCR, or (later) a vision model. Strips leading YAML frontmatter so
+    extraction runs on prose, not metadata."""
     result = process_media(path)
     if result.metadata.get("ocr_used"):
         print(f"  ({result.metadata.get('kind')} — recovered "
               f"{len(result.text)} chars via OCR)")
-    return result.text
+    return strip_frontmatter(result.text)
 
 
 # chunk_text now lives in investigation_graph.chunking (shared with extraction so
