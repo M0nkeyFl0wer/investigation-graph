@@ -42,6 +42,12 @@ that invents a connection is a libel risk.
 > read gaps/bridges as leads, the verification discipline, OPSEC, and the honest
 > limitations. Start there if you're an investigator, not a developer.
 
+> **🔎 See it in action: [`examples/fedfiling-case/CASE-STUDY.md`](examples/fedfiling-case/CASE-STUDY.md).**
+> A complete worked investigation — from one spam email to a 23-entity / 28-edge
+> operator network — built on this stack, with every claim sourced and
+> confidence-tagged, inferences kept dashed, and minimization applied. It's the
+> flagship demonstration of the method end to end.
+
 ---
 
 ## Quick Start
