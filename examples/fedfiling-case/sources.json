@@ -95,5 +95,17 @@
     "url": "https://en.wikipedia.org/wiki/No_Mercy_(pop_band)",
     "type": "web",
     "notes": "No Mercy (pop band): roster (Cintron + twins Ariel & Gabriel Hernandez), label, hits. Identity anchor for Hernandez (CEO == band member); public encyclopedia source."
+  },
+  {
+    "artifact_id": "fedfiling-home",
+    "url": "https://fedfiling.com/",
+    "type": "web",
+    "notes": "fedfiling.com homepage (the spam email's domain) \u2014 check shared GA4/GTM IDs vs federalfiling.com (same-operator test)."
+  },
+  {
+    "artifact_id": "samfiling-home",
+    "url": "https://samfiling.com/",
+    "type": "web",
+    "notes": "USA Filing (samfiling.com) homepage \u2014 sibling-operator test: shared analytics IDs with Fed Filing would be a real link (WHOIS only shows registrar-family)."
   }
 ]
