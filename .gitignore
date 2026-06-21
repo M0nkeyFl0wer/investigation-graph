@@ -46,3 +46,6 @@ examples/fedfiling-case/report-private/
 
 # Minimization denylist lists private PII tokens — never commit it (gate fail-closes if absent).
 scripts/minimization_denylist.txt
+
+# Breach/DeHashed captures: sensitive third-party PII — separate PRIVATE manifest + artifacts, never public.
+examples/fedfiling-case/evidence-private/

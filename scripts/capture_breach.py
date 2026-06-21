@@ -59,7 +59,7 @@ PAGE_SIZE = 100
 
 # Accepted selector prefixes → the DeHashed query field they map to. A selector is
 # given on the CLI as `email:<addr>` or `username:<name>`.
-SELECTOR_FIELDS = ("email", "username")
+SELECTOR_FIELDS = ("email", "username", "phone", "name", "address")
 
 
 def slugify(text: str) -> str:
@@ -140,7 +140,10 @@ def capture_selector(manifest: EvidenceManifest, api_key: str, raw_selector: str
     sensitive PII that must not reach stdout or any non-gitignored sink.
     """
     field, value = parse_selector(raw_selector)
-    query = f"{field}:{value}"
+    # Quote the value for an EXACT-match query. Unquoted, DeHashed v2 tokenizes the
+    # value (e.g. email:a@b.com → a broad OR-search across a/b/com), returning
+    # hundreds of unrelated people instead of the one selector. Quoting pins it.
+    query = f'{field}:"{value}"'
     art_dir = manifest.root / "artifacts" / "breach"
     art_dir.mkdir(parents=True, exist_ok=True)
 
