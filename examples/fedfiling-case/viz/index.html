@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fed Filing — Investigation Visualization</title>
+  <!-- Offline / privacy-first: all libraries vendored locally; no runtime CDN. -->
+  <link rel="stylesheet" href="style.css" />
+  <script src="vendor/d3.v7.min.js"></script>
+  <script src="vendor/cytoscape.min.js"></script>
+</head>
+<body>
+  <header id="topbar">
+    <div class="brand">
+      <strong>FED FILING</strong> &mdash; investigation viz
+      <span class="counts" id="counts"></span>
+    </div>
+    <nav class="views" role="tablist" aria-label="View">
+      <button id="tab-b" class="tab active" role="tab" aria-selected="true">B &middot; Murder board</button>
+      <button id="tab-a" class="tab" role="tab" aria-selected="false">A &middot; Timeline</button>
+    </nav>
+    <div class="toggles" id="toggles">
+      <label><input type="checkbox" id="t-bio" checked /> biographical context</label>
+      <label><input type="checkbox" id="t-inf" /> inferred only</label>
+      <label><input type="checkbox" id="t-primary" /> primary-source only</label>
+      <select id="t-question" title="Small multiples / investigative question">
+        <option value="all">All edges</option>
+        <option value="owns">Who owns it?</option>
+        <option value="operates">Who runs it?</option>
+        <option value="impersonates">What it impersonates</option>
+        <option value="located">Where it lives</option>
+        <option value="identity">Who is Hernandez?</option>
+      </select>
+    </div>
+  </header>
+
+  <main id="stage">
+    <section id="view-b" class="view active" aria-label="Murder board">
+      <div id="cy"></div>
+    </section>
+    <section id="view-a" class="view" aria-label="Timeline">
+      <div id="timeline"></div>
+    </section>
+
+    <!-- shared legend (explains the grammar) -->
+    <aside id="legend" aria-label="Legend">
+      <button id="legend-toggle" title="Toggle legend">legend</button>
+      <div id="legend-body">
+        <h4>Node glyph &mdash; entity type</h4>
+        <ul class="glyphs">
+          <li><span class="g g-person"></span> person</li>
+          <li><span class="g g-org"></span> organization</li>
+          <li><span class="g g-trust"></span> trust (double border)</li>
+          <li><span class="g g-domain"></span> domain</li>
+          <li><span class="g g-location"></span> location</li>
+          <li><span class="g g-document"></span> document</li>
+          <li><span class="g g-gov"></span> gov (SAM.gov)</li>
+          <li><span class="g g-gap"></span> GAP / unknown</li>
+        </ul>
+        <h4>Edge line &mdash; inference</h4>
+        <ul class="lines">
+          <li><span class="ln solid"></span> verified / captured</li>
+          <li><span class="ln dashed"></span> inferred (not on record)</li>
+          <li><span class="ln faint"></span> opacity / width = confidence</li>
+        </ul>
+        <h4>Edge colour &mdash; source tier</h4>
+        <ul id="tier-ramp" class="tiers"></ul>
+        <p class="note">Click any node or edge for its chain of custody.</p>
+      </div>
+    </aside>
+
+    <!-- shared provenance side-panel (chain of custody) -->
+    <aside id="panel" class="hidden" aria-label="Provenance">
+      <button id="panel-close" title="Close">&times;</button>
+      <div id="panel-body"></div>
+    </aside>
+  </main>
+
+  <div id="loading">loading findings&hellip;</div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

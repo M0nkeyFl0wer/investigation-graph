@@ -49,3 +49,11 @@ scripts/minimization_denylist.txt
 
 # Breach/DeHashed captures: sensitive third-party PII — separate PRIVATE manifest + artifacts, never public.
 examples/fedfiling-case/evidence-private/
+
+# Fed Filing viz: verification screenshots are generated from PRIVATE findings at
+# build time (the rendered murder board / timeline expose third-party PII). The viz
+# CODE in examples/fedfiling-case/viz/ is public; the rendered output is not.
+examples/fedfiling-case/viz/_verify/
+# Any local data export the viz produces (kept out of the public repo by default).
+examples/fedfiling-case/viz/data-export/
+examples/fedfiling-case/viz/*.local.json
