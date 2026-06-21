@@ -80,6 +80,17 @@ def capture_url(
     ``artifact_id`` is the base id; per-file ids are suffixed (``-screenshot`` etc.)
     and the shared ``capture_group`` equals ``artifact_id``.
     """
+    # CDP_ENDPOINT (e.g. http://127.0.0.1:9222) routes capture through an already-running
+    # real-profile browser (the osint-browser) — needed for bot-walled / Cloudflare-gated
+    # sites that block headless Playwright. We drive it via RAW CDP (cdp.py): Playwright's
+    # connect_over_cdp handshake hangs against very-new Chrome through the socat relay,
+    # whereas raw CDP is protocol-stable and verified working. Empty = headless Playwright.
+    cdp = os.environ.get("CDP_ENDPOINT", "")
+    if cdp:
+        from investigation_graph.capture.cdp import capture_url_cdp
+        return capture_url_cdp(cdp, url, manifest, artifact_id=artifact_id,
+                               out_subdir=out_subdir, notes=notes)
+
     # Lazy import so the package imports without the [capture] extra installed.
     from playwright.sync_api import sync_playwright
 
@@ -89,19 +100,10 @@ def capture_url(
 
     recorded: list[Artifact] = []
 
-    # CDP_ENDPOINT (e.g. http://127.0.0.1:9222) routes capture through an already-running
-    # real-profile browser (the osint-browser) — needed for bot-walled sites that block
-    # headless Playwright. Empty = launch our own throwaway headless chromium.
-    cdp = os.environ.get("CDP_ENDPOINT", "")
     with sync_playwright() as p:
-        if cdp:
-            browser = p.chromium.connect_over_cdp(cdp)
-            context = browser.contexts[0] if browser.contexts else browser.new_context()
-            owns_browser = False  # shared real-profile browser — never close it
-        else:
-            browser = p.chromium.launch(headless=True)
-            context = browser.new_context(user_agent=_DESKTOP_UA, viewport={"width": 1366, "height": 1000})
-            owns_browser = True
+        browser = p.chromium.launch(headless=True)
+        context = browser.new_context(user_agent=_DESKTOP_UA, viewport={"width": 1366, "height": 1000})
+        owns_browser = True
         page = context.new_page()
         try:
             # networkidle gives JS-heavy pages time to settle; fall back to a plain
