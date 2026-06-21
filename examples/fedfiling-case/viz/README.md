@@ -8,7 +8,7 @@ one visual grammar, one provenance side-panel, and cross-view highlight.
   Nucleus = `FED FILING, LLC` + `Humberto (Gabriel) Hernandez`; concentric rings =
   *evidential distance* (inner = documented controllers on the registry record;
   outer = inferred operators + the biographical No Mercy cluster). Node size =
-  degree (the Valor / 2407 Courtney Meadows hubs bulge).
+  degree (the Valor Media Group / shared registered-agent-address hubs bulge).
 - **View A — dual-track branching timeline** (D3 v7). A **LIFE** lane on a shared
   calendar axis (1971 born → 1995 No Mercy → 2019 Fed Filing LLC + domains) over a
   **CASE** lane that lays the `investigation-log.jsonl` pivots out by **work order**
