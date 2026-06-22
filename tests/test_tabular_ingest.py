@@ -56,10 +56,10 @@ def test_provenance_and_extraction_source_on_every_record():
 def test_edge_properties_and_temporal_carry_through():
     out = _load()
     by_pair = {(e["source_id"], e["target_id"]): e for e in out["edges"]}
-    # Every OWNS edge carries the share % and the as_of date.
+    # Every OWNS edge carries the share % (typed float) and the as_of date (ms).
     for ed in out["edges"]:
-        assert "share_pct" in ed
-        assert ed["valid_from"].startswith("2024-")
+        assert isinstance(ed["share_pct"], float) and ed["share_pct"] > 0
+        assert isinstance(ed["valid_at_ms"], int) and ed["valid_at_ms"] > 0
     assert len(by_pair) == 3  # three distinct ownership relationships
 
 
@@ -152,3 +152,28 @@ def test_media_shaped_processor_returns_structured_records():
     assert result.metadata["mapped"] is True
     assert len(result.structured["entities"]) == 4
     assert len(result.structured["edges"]) == 3
+
+
+def test_share_pct_survives_the_graph_write(tmp_path):
+    # Regression: share_pct/amount/currency are first-class edge columns, NOT the
+    # fragile properties JSON blob — so they must round-trip through build_graph and
+    # be Cypher-queryable (P2.7 reads share_pct, P2.8 reads amount off the graph).
+    from investigation_graph.graph import build_graph
+    out = _load()
+    graph_dir = tmp_path / "g.lbug"
+    build_graph({"documents": [], "entities": out["entities"],
+                 "edges": out["edges"], "mentions": []},
+                graph_dir=graph_dir, ontology=ONT)
+    try:
+        import ladybug as lb
+    except ImportError:
+        import real_ladybug as lb
+    conn = lb.Connection(lb.Database(str(graph_dir), read_only=True))
+    r = conn.execute("MATCH ()-[e:RELATES_TO]->() RETURN e.share_pct, e.valid_at_ms "
+                     "ORDER BY e.share_pct")
+    shares = []
+    while r.has_next():
+        shares.append(r.get_next())
+    # The three OWNS edges' shares (100/55/30) all survived as typed doubles.
+    assert sorted(s[0] for s in shares) == [30.0, 55.0, 100.0]
+    assert all(s[1] > 0 for s in shares)  # valid_at_ms persisted too

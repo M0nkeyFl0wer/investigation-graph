@@ -276,10 +276,21 @@ class Ontology(_KGOntology):
         return schema
 
     def edge_field_schema(self):
-        """kg-common edge defaults (incl. the bi-temporal trio) + extraction_source."""
+        """kg-common edge defaults (incl. the bi-temporal trio) + this project's
+        first-class edge columns.
+
+        ``amount``/``currency``/``share_pct`` are typed columns (not buried in the
+        ``properties`` JSON blob) so they (a) survive the graph write reliably and
+        (b) are Cypher-queryable — money-flow tracing (P2.8) sums amounts and
+        ownership-control inference (P2.7) reads share_pct off the graph. Sentinel
+        defaults (0.0 / "") mean "unset", matching the temporal-field convention.
+        """
         schema = super().edge_field_schema()
         schema.update({
             "extraction_source": ("STRING", "unknown"),
+            "amount": ("DOUBLE", 0.0),       # money value (with currency below)
+            "currency": ("STRING", ""),      # ISO currency code for `amount`
+            "share_pct": ("DOUBLE", 0.0),    # ownership share %, e.g. 55.0 (P2.7)
         })
         return schema
 

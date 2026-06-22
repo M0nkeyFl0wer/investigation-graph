@@ -26,11 +26,15 @@ silently at write):
       - source: owner            # must reference an entity column above
         type: OWNS               # an ontology edge type
         target: asset
-        properties:              # optional extra edge properties
-          share_pct: share_pct   #   edge_property_name: csv_column
-        amount: amount           # optional money column ...
+        share_pct: share_pct     # optional ownership-% column -> typed share_pct
+        amount: amount           # optional money column -> typed amount ...
         currency: currency       # ... REQUIRED with amount (never a bare number)
-        date: as_of              # optional ISO date column -> valid_from
+        date: as_of              # optional ISO date column -> valid_at_ms
+
+    amount/currency/share_pct land in dedicated typed edge columns (see
+    Ontology.edge_field_schema) — NOT the fragile ``properties`` JSON blob — so they
+    survive the graph write and money-flow (P2.8) / control inference (P2.7) can read
+    them back off the graph.
 
 Design notes / failure modes guarded (per the kg-ingestion skill):
 - **Types validated up front.** Literal entity/edge types are checked against the
@@ -80,10 +84,10 @@ class _EdgeMap:
     source: str                      # an entity column
     type: str                        # an ontology edge type
     target: str                      # an entity column
-    properties: dict[str, str] = field(default_factory=dict)  # edge_prop -> column
-    amount: str | None = None        # money column
+    share_pct: str | None = None     # ownership-% column -> typed share_pct edge col
+    amount: str | None = None        # money column -> typed amount edge col
     currency: str | None = None      # currency column (required with amount)
-    date: str | None = None          # ISO date column -> valid_from
+    date: str | None = None          # ISO date column -> valid_at_ms
 
 
 @dataclass
@@ -152,9 +156,28 @@ def _parse_edge_map(d: Any, path) -> _EdgeMap:
             raise SpecError(f"{path}: each edge needs 'source', 'type', 'target' "
                             f"(got {d!r})")
     return _EdgeMap(source=d["source"], type=d["type"], target=d["target"],
-                    properties=dict(d.get("properties") or {}),
-                    amount=d.get("amount"), currency=d.get("currency"),
-                    date=d.get("date"))
+                    share_pct=d.get("share_pct"), amount=d.get("amount"),
+                    currency=d.get("currency"), date=d.get("date"))
+
+
+def _to_float(raw) -> float | None:
+    """Parse a numeric cell ("55", "55%", "50000") to float, or None if not numeric."""
+    try:
+        return float(str(raw).strip().rstrip("%").replace(",", ""))
+    except (ValueError, AttributeError):
+        return None
+
+
+def _iso_to_ms(raw: str) -> int | None:
+    """Parse an ISO-8601 date/datetime to epoch milliseconds (valid_at_ms), or None."""
+    from datetime import datetime, timezone
+    try:
+        dt = datetime.fromisoformat(str(raw).strip())
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        return int(dt.timestamp() * 1000)
+    except ValueError:
+        return None
 
 
 def _delimiter(path: Path) -> str:
@@ -235,14 +258,14 @@ def ingest_table(path: str | Path, spec: MappingSpec, *,
                     "extraction_source": _EXTRACTION_SOURCE,
                     "evidence": _row_evidence(i, row, ed)[:_EVIDENCE_CAP],
                 }
-                for prop, col in ed.properties.items():
-                    if row.get(col) not in (None, ""):
-                        edge[prop] = row[col]
-                if ed.amount and row.get(ed.amount) not in (None, ""):
-                    edge["amount"] = row[ed.amount]
-                    edge["currency"] = row.get(ed.currency, "")
-                if ed.date and row.get(ed.date) not in (None, ""):
-                    edge["valid_from"] = row[ed.date]
+                # Typed edge columns (survive the graph write + Cypher-queryable):
+                if ed.share_pct and (pct := _to_float(row.get(ed.share_pct))) is not None:
+                    edge["share_pct"] = pct
+                if ed.amount and (amt := _to_float(row.get(ed.amount))) is not None:
+                    edge["amount"] = amt
+                    edge["currency"] = (row.get(ed.currency) or "").strip()
+                if ed.date and (ms := _iso_to_ms(row.get(ed.date, ""))) is not None:
+                    edge["valid_at_ms"] = ms
                 edges.append(edge)
 
     return {"entities": list(entities.values()), "edges": edges,

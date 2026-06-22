@@ -9,6 +9,5 @@ edges:
   - source: owner
     type: OWNS                # OWNS: person/organization -> asset/organization
     target: asset
-    properties:
-      share_pct: share_pct    # carry the ownership % (P2.7 uses it for the threshold)
-    date: as_of               # ISO date -> edge valid_from
+    share_pct: share_pct      # ownership % -> typed share_pct column (P2.7 threshold)
+    date: as_of               # ISO date -> edge valid_at_ms
