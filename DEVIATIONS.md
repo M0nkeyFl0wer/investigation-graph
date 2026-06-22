@@ -91,9 +91,17 @@ Each is a place the plan adapts to ground truth. Update as implementation procee
   `Membership(member→organization)`, `Family(person→relative)`,
   `UnknownLink(subject→object, role)`. The crosswalk is built against this dump, not
   the brief. Re-pin if the dep bumps (`FTM_VERSION_VERIFIED` in `interop/ftm.py`).
-- (P2.6) **OpenSanctions licensing** — free for journalism, commercial use needs a
-  license + attribution; **verify current terms** before this ships publicly.
-  Wikidata = CC0. Pick/confirm the ownership-control threshold default (~25%).
+- (P2.6) **OpenSanctions licensing — VERIFIED 2026-06-22** (opensanctions.org/licensing
+  + commercial-use FAQ): the **data is CC BY-NC 4.0** (NonCommercial), with an explicit
+  **journalism/activist exemption** (free use + free API keys for public-interest
+  journalism / anti-corruption / sanctions academics); commercial users need a paid
+  data licence or API. Consequence for a publicly-shipping repo: **ship the linking
+  CODE only (nomenklatura/ftm = MIT), do NOT bundle/redistribute an OpenSanctions
+  data snapshot** (redistribution couples the repo to NC + the consolidated
+  collections can be stricter). User brings their own snapshot/API key under their
+  exemption; a match is surfaced as an **attributed claim** ("linked to OpenSanctions
+  entity X"), P1.3-gated, never laundered. Wikidata = CC0. Confirm the ~25%
+  ownership-control threshold default separately.
 - (PUB.5 / P2.4) **Splink default model** — adopting Splink for structured dedup
   trades today's zero-config resolver for a small bundled Fellegi-Sunter settings
   file on the tabular path (advanced override available). Confirm shipping that
