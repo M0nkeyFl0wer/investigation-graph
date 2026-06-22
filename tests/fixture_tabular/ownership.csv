@@ -1,0 +1,4 @@
+owner,owner_type,asset,asset_type,share_pct,as_of
+Jane Roe,person,Brightpath Advisors,organization,100,2024-01-01
+Brightpath Advisors,organization,Harbor City RDA,organization,55,2024-02-01
+Acme Holdings,organization,Brightpath Advisors,organization,30,2024-01-15

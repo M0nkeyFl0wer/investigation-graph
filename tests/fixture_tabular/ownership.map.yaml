@@ -1,0 +1,14 @@
+# Maps the ownership.csv columns onto the investigative ontology.
+# A row is a typed OWNS edge between two entities — no LLM involved.
+entities:
+  - column: owner
+    type_column: owner_type   # type comes from the per-row owner_type column
+  - column: asset
+    type_column: asset_type
+edges:
+  - source: owner
+    type: OWNS                # OWNS: person/organization -> asset/organization
+    target: asset
+    properties:
+      share_pct: share_pct    # carry the ownership % (P2.7 uses it for the threshold)
+    date: as_of               # ISO date -> edge valid_from
