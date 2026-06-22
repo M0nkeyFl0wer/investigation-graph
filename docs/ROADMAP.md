@@ -334,7 +334,14 @@ These belong in the shared library, not just this consumer (per `BOUNDARY.md`):
 7. **Interop & analysis brief (P2.4→P2.8, in order):** P2.4 structured ingestion
    first (it feeds the amount-bearing edges P2.8 needs and is self-contained) →
    P2.5 FtM crosswalk (authority for P2.6) → P2.6 external linking → P2.7 edge
-   inference → P2.8 money-flow. Substrate hooks PUB.5/PUB.6/PUB.7 are implemented
+   inference → P2.8 money-flow.
+   **Status 2026-06-22 (branch `feat/interop-analysis-gaps`):** ✅ P2.4 (tabular
+   ingestion), ✅ P2.7 (ownership-control inference), ✅ P2.8 (money-flow) — each
+   done + graph-native + eval'd (`scripts/eval_tabular.py` / `eval_inference.py` /
+   `eval_flow.py`, all P=R=1.00). A critical silent-drop of typed edge props was
+   found + fixed (amount/currency/share_pct now first-class columns). ⏳ P2.5 (FtM)
+   + P2.6 (external linking) remain — they need the user's nod (PUB.6 Ontology-ABC
+   hook) and external-data licensing review (OpenSanctions). Substrate hooks PUB.5/PUB.6/PUB.7 are implemented
    **consumer-side first** behind a thin local interface, then proposed upstream in
    a **kg-common worktree** through the sanitizer/export gate — never on
    kg-common's public `main`, and not without the user's nod.
