@@ -94,5 +94,10 @@ Each is a place the plan adapts to ground truth. Update as implementation procee
 - (P2.6) **OpenSanctions licensing** — free for journalism, commercial use needs a
   license + attribution; **verify current terms** before this ships publicly.
   Wikidata = CC0. Pick/confirm the ownership-control threshold default (~25%).
+- (PUB.5 / P2.4) **Splink default model** — adopting Splink for structured dedup
+  trades today's zero-config resolver for a small bundled Fellegi-Sunter settings
+  file on the tabular path (advanced override available). Confirm shipping that
+  default. (Dedup-tool eval: `docs/proposals/dedup-tools.md`; Zingg rejected on
+  AGPL.)
 - (Any PUB.x) Get the user's explicit nod before merging any kg-common API change to
   its `main` or flipping kg-common public.

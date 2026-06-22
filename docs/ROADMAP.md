@@ -207,8 +207,10 @@ promotion decision).
   offline snapshot = local-first default) and optionally **Wikidata** (online =
   opt-in, non-sensitive). On match, attach an authority id + confidence; **on no
   match, leave unlinked** (never invent one). Extends the kg-common ER primitives
-  via the single resolution-tier seam (→ PUB.5); consumer shim first. Offline path
-  works with no network.
+  via the single resolution-tier seam (→ PUB.5), using **nomenklatura** (MIT,
+  FtM-native — composes with `interop/ftm.py`; its `same/not-same/undecided`
+  Judgement model is the P1.3 gate in FtM terms); consumer shim first. Offline path
+  works with no network. (Tool eval: `docs/proposals/dedup-tools.md`.)
 - **ASYMMETRIC RISK — harden before output (review):** a false-positive link to an
   OpenSanctions/PEP record is **publish-stopping defamation**, so "attach id +
   confidence, leave unmatched alone" is necessary but **not sufficient**. Require a
@@ -300,16 +302,26 @@ These belong in the shared library, not just this consumer (per `BOUNDARY.md`):
   (supports P0.2 across consumers).
 - **PUB.5 — ONE general "resolution-tier" extension point on
   `write.dedup.resolve_or_create_semantic`.** Internal dedup, structured/
-  probabilistic linkage (Splink on the DuckDB base), and external-authority linking
-  (OpenSanctions/Wikidata) are **all tiers in one cascade** — so add a *single*
-  general tier seam (an ordered list of tier callables, mirroring `adjudicate_fn`),
-  **not** two bespoke callbacks. The resolver cascade has no plugin point today; two
-  one-off params on a freezing public API is two things to regret. Get the seam
-  minimal and general before kg-common goes public. Serves P2.4 (structured tier,
-  optional `[dedup-structured]`) **and** P2.6 (external-authority tier) through the
-  same mechanism. Consumer-shim first; upstream once it generalizes to ≥2 consumers.
-  *(Supersedes the earlier split of this into two PUB entries — collapsed per
-  review: one seam, not two.)*
+  probabilistic linkage, and external-authority linking are **all tiers in one
+  cascade** — so add a *single* general tier seam (`tiers=` ordered list of tier
+  callables, mirroring `adjudicate_fn`), **not** two bespoke callbacks. The resolver
+  has no plugin point today; two one-off params on a freezing public API is two
+  things to regret. Consumer-shim first; upstream once it generalizes to ≥2
+  consumers. *(Collapsed from two PUB entries per review: one seam, not two.)*
+  **Tool decisions (eval in `docs/proposals/dedup-tools.md`, 2026-06-22):**
+  - **Internal-dedup tier → Splink** (MIT; UK MoJ). Runs natively on our DuckDB
+    base, unsupervised (Fellegi-Sunter EM, no labelling loop), explainable. Optional
+    `[dedup-structured]` extra, scoped to the **structured path (P2.4)** with a
+    bundled default F-S spec — NOT the free-text cascade (it needs column
+    comparisons + an EM pass, so it isn't zero-config like today's resolver).
+  - **External-authority tier → nomenklatura** (MIT; OpenSanctions, FtM-native).
+    Composes with the `interop/ftm.py` crosswalk; its `same/not-same/undecided`
+    Judgement model *is* the P1.3 gate in FtM terms. Folds into `[interop]`, for
+    **P2.6**.
+  - **Zingg — REJECTED** (AGPL v3.0 copyleft into a publicly-shipping ER library +
+    needs Spark, a substrate we avoid; Splink covers it at MIT).
+  - **dedupe / followthemoney-compare — deferred** (MIT but redundant / no native
+    label source / pins older FtM).
 - **PUB.6 — FtM crosswalk hook on the `Ontology` ABC** — add `to_ftm()` /
   `from_ftm()` (or a SKOS-mapping slot) as ABC methods with `NotImplementedError`
   defaults, so every investigative consumer shares the FollowTheMoney/BODS
