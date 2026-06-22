@@ -157,8 +157,18 @@ promotion decision).
   `build_graph`. **No LLM call on the structured path.** Structured ER routes
   through the existing `resolve_or_create_semantic`; evaluate **Splink** (MIT,
   Fellegi-Sunter) on the **DuckDB base we already have** as a probabilistic
-  linkage tier *behind the resolver interface* (→ PUB.5), an optional
-  `[dedup-structured]` extra — it does **not** replace the semantic tier.
+  linkage tier *behind the resolver interface* (→ PUB.5, the single resolver-tier
+  seam), an optional `[dedup-structured]` extra — it does **not** replace the
+  semantic tier.
+- **Amounts carry currency (review):** a money column must capture **currency** (and
+  ideally an FX-normalized value), not a bare number — otherwise P2.8 flow is
+  meaningless across currencies. The `add_edge` properties dict already exists, so
+  the mechanism is there; the YAML spec marks a column as `amount` **with a currency
+  column or literal**. Dates normalized to ISO-8601.
+- **Done when (measured):** a flight-log/ledger-style CSV produces typed edges with
+  zero LLM calls, provenance intact — **and** a before/after on the sme-eval grader
+  shows the deterministic path beats LLM-extraction on the same table (precision on
+  the typed edges), not just "tests pass."
 - **Tools:** stdlib `csv`; `pandas` (existing dep); `openpyxl` xlsx = **optional
   extra**. `splink` = optional extra.
 - **Skill:** `kg-ingestion`, `duckdb-rag`.
@@ -179,6 +189,10 @@ promotion decision).
   `from_ftm`. The no-equivalent rows (`claim`, `CONTRADICTS`/`SUPPORTS`/
   `ASSOCIATED_WITH`, `ATTENDED`) are documented as an explicit boundary — **do not
   force-fit** them.
+- **Preserve statement-level provenance (review):** `from_ftm` must keep FtM's
+  per-statement provenance (each property/edge carries its own source dataset +
+  collection), **not flatten an OpenSanctions import to one `source_url`** — the
+  granular provenance is exactly the auditability this tool sells.
 - **Tools:** `followthemoney` (OCCRP, MIT); `nomenklatura` for FtM-native statement
   dedup if useful. Both **optional extras**.
 - **Skill:** `taxonomy-validation`.
@@ -193,12 +207,25 @@ promotion decision).
   offline snapshot = local-first default) and optionally **Wikidata** (online =
   opt-in, non-sensitive). On match, attach an authority id + confidence; **on no
   match, leave unlinked** (never invent one). Extends the kg-common ER primitives
-  via an `external_match_fn` callback tier (→ PUB.7, mirroring the existing
-  `adjudicate_fn` pattern — the resolver cascade has no plugin point today);
-  consumer shim first. Offline path works with no network.
+  via the single resolution-tier seam (→ PUB.5); consumer shim first. Offline path
+  works with no network.
+- **ASYMMETRIC RISK — harden before output (review):** a false-positive link to an
+  OpenSanctions/PEP record is **publish-stopping defamation**, so "attach id +
+  confidence, leave unmatched alone" is necessary but **not sufficient**. Require a
+  **high match threshold AND human confirmation before any external match is
+  *asserted* in output** — route candidate matches through the **P1.3 merge-review
+  gate** (same human-in-the-loop the libel vector already uses), not just a stored
+  confidence. Unconfirmed matches stay candidate-only, never surfaced as fact.
+- **Licensing:** **OpenSanctions is free for journalism but commercial use needs a
+  license + attribution** — log the current terms (verify at implementation) since
+  this tool ships publicly. Wikidata = CC0.
+- **Done when (measured, not just green):** before/after **precision/recall** of the
+  linker on a labelled sample via the sme-eval grader — not "tests pass." A wrong
+  link here is a libel event, so the bar is measured precision, with the human gate
+  on assertion.
 - **Skill:** `kg-ingestion`.
 - **Where:** new `investigation_graph/interop/linking.py` (shim over the resolver),
-  tests. Depends on P2.5 for the OpenSanctions/FtM ingestion path.
+  tests + an eval harness. Depends on P2.5 for the OpenSanctions/FtM ingestion path.
 
 ### P2.7 — Edge inference / logical closure  (interop brief G4)
 - **Problem:** topology *detects missing* edges; nothing *derives implied* ones.
@@ -212,9 +239,24 @@ promotion decision).
   inferred edges as extracted**; exclude them from extracted-only views/queries.
   **PSL is out of scope** (heavy/JVM, against the deterministic grain) — opt-in
   future only.
+- **DON'T MANUFACTURE FALSE CONTROL (review — this is the dangerous gap):** naive
+  transitive closure over `OWNS` invents control — *A owns 5% of B, B owns 5% of C*
+  does **not** make A control C. Beneficial ownership is **multiplicative ownership
+  percentages with a threshold** (~25% in UK PSC / EU AMLD regimes — make it
+  **configurable**; BODS, which P2.5 brings in, already encodes interest levels, so
+  prefer real percentages over edge-existence). The inferencer MUST: (a) chain only
+  **type-compatible** edges (`OWNS∘OWNS`, never `OWNS∘EMPLOYED_BY`); (b) carry
+  **per-hop confidence decay**; (c) **cap depth**; (d) route an inferred *control*
+  edge through the **P1.3 merge-review gate**, not merely tag it — a tag keeps it
+  out of extracted views but does **not** stop a false control claim reaching a
+  draft.
+- **Done when (measured):** before/after precision/recall of inferred control edges
+  against a labelled ownership sample (sme-eval), plus a known-shell test where a
+  sub-threshold chain produces **no** control edge.
 - **Skill:** `kg-ingestion` (+ `networkx`).
 - **Where:** new `investigation_graph/infer.py` (or a `kg_common.measure` submodule
-  — PUB candidate if it generalizes), `queries.py` (an extracted-only filter), tests.
+  — PUB candidate if it generalizes), `queries.py` (an extracted-only filter), the
+  P1.3 review path, tests.
 
 ### P2.8 — Money-flow tracing  (interop brief G5)
 - **Problem:** we have betweenness/communities but no **amount-weighted flow** over
@@ -224,8 +266,14 @@ promotion decision).
   `FUNDED_BY` edges using **networkx** (existing dep). Expose a "trace funds from X"
   query in `queries.py` returning ordered chains with amounts + source edges.
   **Schema gap (logged in DEVIATIONS):** edges carry no `amount` field today —
-  carry the amount as an edge property fed by P2.4 tabular-ledger ingestion (and/or
-  via the `transaction` entity). Depends on P2.4 for amount-bearing edges.
+  carry the amount **with its currency** as an edge property fed by P2.4
+  tabular-ledger ingestion (and/or via the `transaction` entity). Flow over mixed
+  currencies is meaningless without **FX normalization** — normalize to a base
+  currency (or refuse to sum across currencies and report per-currency chains).
+  Depends on P2.4 for amount-bearing edges.
+- **Done when (measured):** the trace returns ordered fund chains with amounts +
+  source edges on a known multi-hop ledger fixture, and does **not** silently sum
+  across currencies.
 - **Skill:** `networkx`.
 - **Where:** `investigation_graph/topology.py` (a directed amount-weighted
   projection) or a `kg_common.measure` flow helper, `queries.py`, tests.
@@ -250,24 +298,24 @@ These belong in the shared library, not just this consumer (per `BOUNDARY.md`):
   default-refuse, unblocking P1.7 incremental writes across consumers.
 - **PUB.4 — edge `evidence` as a first-class, validated field** in the writer
   (supports P0.2 across consumers).
-- **PUB.5 — a structured / probabilistic-linkage tier on
-  `write.dedup.resolve_or_create_semantic`** — the resolver cascade
-  (exact→fuzzy→embedding→adjudicate) has **no plugin point** today; add an optional
-  callback tier (mirroring `adjudicate_fn`) so a Fellegi-Sunter linker (Splink, on
-  the DuckDB base) can serve as a structured-field tier without replacing the
-  semantic one. Optional `[dedup-structured]` extra. Lands for P2.4; upstream once
-  it generalizes to ≥2 consumers.
+- **PUB.5 — ONE general "resolution-tier" extension point on
+  `write.dedup.resolve_or_create_semantic`.** Internal dedup, structured/
+  probabilistic linkage (Splink on the DuckDB base), and external-authority linking
+  (OpenSanctions/Wikidata) are **all tiers in one cascade** — so add a *single*
+  general tier seam (an ordered list of tier callables, mirroring `adjudicate_fn`),
+  **not** two bespoke callbacks. The resolver cascade has no plugin point today; two
+  one-off params on a freezing public API is two things to regret. Get the seam
+  minimal and general before kg-common goes public. Serves P2.4 (structured tier,
+  optional `[dedup-structured]`) **and** P2.6 (external-authority tier) through the
+  same mechanism. Consumer-shim first; upstream once it generalizes to ≥2 consumers.
+  *(Supersedes the earlier split of this into two PUB entries — collapsed per
+  review: one seam, not two.)*
 - **PUB.6 — FtM crosswalk hook on the `Ontology` ABC** — add `to_ftm()` /
   `from_ftm()` (or a SKOS-mapping slot) as ABC methods with `NotImplementedError`
   defaults, so every investigative consumer shares the FollowTheMoney/BODS
   contract. The ABC is freezing pre-public, so land the **hook** even though this
   repo (P2.5) supplies the concrete mapping. (The ABC is currently unversioned —
   note the compat surface.)
-- **PUB.7 — external-authority match tier in `write.dedup`** — generalize P2.6's
-  external entity-linking (match-out to OpenSanctions/Wikidata, attach authority id
-  + confidence, never invent) as an ER primitive, since internal-dedup and
-  external-linking share the `ResolutionIndex`. Same callback-tier mechanism as
-  PUB.5.
 - Public-export note: any new `media` extras (docling, ocrmypdf, colpali-engine)
   must be **optional dependencies** so the dependency-light core stays light, and
   run through the sanitizer/export gate.
@@ -298,3 +346,12 @@ New deps from the interop brief (`openpyxl`, `followthemoney`, `nomenklatura`,
 Every new node/edge carries `source_url` + `extraction_source`; inferred edges are
 tagged `provenance="inferred"` and never shown as extracted; nothing bypasses
 grounding / grade-locality / ER. See `DEVIATIONS.md` for brief-vs-repo deltas.
+
+**Measurement is the definition of done, not "tests pass" (cross-cutting, per
+review).** "Round-trips / green tests" proves it *runs*, not that it *helps* — and
+this consumer's whole differentiator is the build-vs-grade split kg-common ships on.
+So every interop entry's DoD includes a **before/after on the `sme-eval` grader**
+(LadybugDB adapter consumes these graphs): precision/recall, not just pytest —
+**especially P2.6 (external linking) and P2.7 (control inference), where being wrong
+is a libel event, not a flaky test.** The human-review gate (P1.3) is on *assertion*
+for both.

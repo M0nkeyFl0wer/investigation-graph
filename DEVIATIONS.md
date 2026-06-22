@@ -55,11 +55,36 @@ Each is a place the plan adapts to ground truth. Update as implementation procee
   `feat/interop-analysis-gaps` branch (off `case/fedfiling-build`, which carries the
   unrelated good-dogs/fed-filing sample work), to keep the interop work separable.
 
+## Plan refinements from review (folded into ROADMAP)
+
+- **Measurement is the DoD, not green tests.** Every interop entry now requires a
+  before/after on the `sme-eval` grader (precision/recall) — especially P2.6/P2.7
+  where a wrong answer is a libel event. Added cross-cutting + per-entry.
+- **One resolver-tier seam, not two PUB entries.** Internal dedup, structured
+  linkage (Splink), and external-authority linking are tiers in one cascade — PUB.5
+  is now a single general "resolution tier" extension point; the separate
+  external-authority PUB entry was collapsed into it (minimal surface on a freezing
+  public API).
+- **P2.7 must not manufacture false control.** Inference uses multiplicative
+  ownership % with a **configurable threshold (~25%, UK PSC / EU AMLD; BODS encodes
+  interest levels)**, type-compatible edge chaining only, per-hop confidence decay,
+  depth cap, and routes inferred *control* edges through the **P1.3 merge-review
+  gate** (not just a `provenance="inferred"` tag).
+- **P2.6 sanctions matching is asymmetric-risk.** High threshold + **human
+  confirmation before a match is asserted in output** (P1.3 mirror); unconfirmed
+  stays candidate-only.
+- **Amounts carry currency + FX.** P2.4 captures currency on money columns; P2.8
+  refuses to sum across currencies without FX normalization.
+- **from_ftm preserves statement-level provenance** (no flattening to one source_url).
+
 ## Open questions to confirm before the relevant phase
 
 - (P2.4) Splink as the structured-linkage tier — confirm it earns its weight on the
   DuckDB base vs. the existing resolver before committing the optional extra.
 - (P2.5) Re-verify the FtM crosswalk against the *current* `followthemoney` schema at
   implementation time — FtM evolves.
+- (P2.6) **OpenSanctions licensing** — free for journalism, commercial use needs a
+  license + attribution; **verify current terms** before this ships publicly.
+  Wikidata = CC0. Pick/confirm the ownership-control threshold default (~25%).
 - (Any PUB.x) Get the user's explicit nod before merging any kg-common API change to
   its `main` or flipping kg-common public.
