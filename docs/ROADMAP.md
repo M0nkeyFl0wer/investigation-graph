@@ -139,6 +139,97 @@ promotion decision).
 - The scope→ingest→extract→ground→use harness as a guided CLI wizard (spec-kit
   pattern), then optional desktop wrapper.
 
+### P2.4 — Structured / tabular ingestion  ⭐ (interop brief G1, do first)
+- **Problem:** the highest-value OSINT data (flight logs, ledgers, registries,
+  sanctions lists) is tabular. Today everything is forced through
+  chunk→embed→LLM-extract — but a table row already *is* a typed edge and must
+  never touch an LLM (cost, hallucination, and it's deterministic).
+- **Fix:** a tabular processor in the **same shape as `kg_common.media`**
+  (`BaseProcessor.accepts/process → ProcessorResult{text,structured,metadata}`,
+  registered via `register_processor(..., first=True)`) for `.csv/.tsv/.xlsx`.
+  Column→ontology mapping is driven by a small **per-file YAML mapping spec**
+  (which columns are entities, which pair forms an edge, which are dates/amounts).
+  The processor emits deterministic **entities/edges via the artifact contract**
+  (`extraction_source="deterministic"`, real `source_url` = file + row anchor),
+  appended into the ingest stage so they flow through **ground → resolve →
+  grade-locality unchanged** — verified path: a new `processors/` module feeds the
+  same entity/edge lists `extract.py` builds, then `ground_and_resolve` +
+  `build_graph`. **No LLM call on the structured path.** Structured ER routes
+  through the existing `resolve_or_create_semantic`; evaluate **Splink** (MIT,
+  Fellegi-Sunter) on the **DuckDB base we already have** as a probabilistic
+  linkage tier *behind the resolver interface* (→ PUB.5), an optional
+  `[dedup-structured]` extra — it does **not** replace the semantic tier.
+- **Tools:** stdlib `csv`; `pandas` (existing dep); `openpyxl` xlsx = **optional
+  extra**. `splink` = optional extra.
+- **Skill:** `kg-ingestion`, `duckdb-rag`.
+- **Where:** new `investigation_graph/processors/tabular.py` + a YAML-spec loader,
+  `scripts/ingest_folder.py`, `investigation_graph/pipeline.py`.
+
+### P2.5 — FollowTheMoney / BODS interop crosswalk  (interop brief G2)
+- **Problem:** our ontology is ~90% a renamed FtM. With no crosswalk we can't
+  ingest **OpenSanctions** (FtM-native) or **Open Ownership** (BODS) as ready-made
+  corpora, nor export to the journalist ecosystem (Aleph) — the highest-leverage
+  interop piece, and the authority G3 needs.
+- **Fix:** a concrete `to_ftm` / `from_ftm` mapping in *this repo's* `Ontology`
+  subclass, behind a local adapter, against the **PUB.6** ABC hook (land the hook
+  even if we supply the concrete mapping — the ABC is freezing pre-public).
+  **Verify the crosswalk against the current `followthemoney` schema before
+  finalizing — FtM evolves.** Round-trip a bundled sample (this repo → FtM JSON →
+  back) with no loss on mappable types; import an OpenSanctions sample via
+  `from_ftm`. The no-equivalent rows (`claim`, `CONTRADICTS`/`SUPPORTS`/
+  `ASSOCIATED_WITH`, `ATTENDED`) are documented as an explicit boundary — **do not
+  force-fit** them.
+- **Tools:** `followthemoney` (OCCRP, MIT); `nomenklatura` for FtM-native statement
+  dedup if useful. Both **optional extras**.
+- **Skill:** `taxonomy-validation`.
+- **Where:** new `investigation_graph/interop/ftm.py`, `investigation_graph/ontology.py`
+  (subclass methods), a bundled sample corpus, tests. (Substrate hook = PUB.6.)
+
+### P2.6 — External entity linking (distinct from internal dedup)  (interop brief G3)
+- **Problem:** we resolve duplicates *within* a corpus but never link an entity
+  *out* to an authority — the disambiguation + enrichment step, and the real guard
+  for the "is this the same John Smith?" libel risk our own ethics section names.
+- **Fix:** match resolved entities to an authority — **OpenSanctions** (FtM,
+  offline snapshot = local-first default) and optionally **Wikidata** (online =
+  opt-in, non-sensitive). On match, attach an authority id + confidence; **on no
+  match, leave unlinked** (never invent one). Extends the kg-common ER primitives
+  via an `external_match_fn` callback tier (→ PUB.7, mirroring the existing
+  `adjudicate_fn` pattern — the resolver cascade has no plugin point today);
+  consumer shim first. Offline path works with no network.
+- **Skill:** `kg-ingestion`.
+- **Where:** new `investigation_graph/interop/linking.py` (shim over the resolver),
+  tests. Depends on P2.5 for the OpenSanctions/FtM ingestion path.
+
+### P2.7 — Edge inference / logical closure  (interop brief G4)
+- **Problem:** topology *detects missing* edges; nothing *derives implied* ones.
+  Deterministic transitive closure over `OWNS`/`FUNDED_BY` reconstructs
+  beneficial-ownership chains through shells; inverse closure is free.
+- **Fix:** deterministic transitive + inverse closure in **networkx** (existing
+  dep) over a **directed** projection (note: `topology.py:build_networkx_graph`
+  returns an *undirected* `nx.Graph`, and `kg_common.measure.to_networkx` returns
+  an `nx.MultiDiGraph` — use/derive a directed view). Tag every derived edge
+  `provenance="inferred"` with the source chain as `evidence`; **never present
+  inferred edges as extracted**; exclude them from extracted-only views/queries.
+  **PSL is out of scope** (heavy/JVM, against the deterministic grain) — opt-in
+  future only.
+- **Skill:** `kg-ingestion` (+ `networkx`).
+- **Where:** new `investigation_graph/infer.py` (or a `kg_common.measure` submodule
+  — PUB candidate if it generalizes), `queries.py` (an extracted-only filter), tests.
+
+### P2.8 — Money-flow tracing  (interop brief G5)
+- **Problem:** we have betweenness/communities but no **amount-weighted flow** over
+  transaction edges (funds in → shell chain → out). The ontology is built for it
+  (`PAID_TO` = "follow the money").
+- **Fix:** amount-weighted path / max-flow over `transaction` + `PAID_TO` /
+  `FUNDED_BY` edges using **networkx** (existing dep). Expose a "trace funds from X"
+  query in `queries.py` returning ordered chains with amounts + source edges.
+  **Schema gap (logged in DEVIATIONS):** edges carry no `amount` field today —
+  carry the amount as an edge property fed by P2.4 tabular-ledger ingestion (and/or
+  via the `transaction` entity). Depends on P2.4 for amount-bearing edges.
+- **Skill:** `networkx`.
+- **Where:** `investigation_graph/topology.py` (a directed amount-weighted
+  projection) or a `kg_common.measure` flow helper, `queries.py`, tests.
+
 ---
 
 ## PUB — kg-common (public substrate) updates to suggest/upstream
@@ -159,6 +250,24 @@ These belong in the shared library, not just this consumer (per `BOUNDARY.md`):
   default-refuse, unblocking P1.7 incremental writes across consumers.
 - **PUB.4 — edge `evidence` as a first-class, validated field** in the writer
   (supports P0.2 across consumers).
+- **PUB.5 — a structured / probabilistic-linkage tier on
+  `write.dedup.resolve_or_create_semantic`** — the resolver cascade
+  (exact→fuzzy→embedding→adjudicate) has **no plugin point** today; add an optional
+  callback tier (mirroring `adjudicate_fn`) so a Fellegi-Sunter linker (Splink, on
+  the DuckDB base) can serve as a structured-field tier without replacing the
+  semantic one. Optional `[dedup-structured]` extra. Lands for P2.4; upstream once
+  it generalizes to ≥2 consumers.
+- **PUB.6 — FtM crosswalk hook on the `Ontology` ABC** — add `to_ftm()` /
+  `from_ftm()` (or a SKOS-mapping slot) as ABC methods with `NotImplementedError`
+  defaults, so every investigative consumer shares the FollowTheMoney/BODS
+  contract. The ABC is freezing pre-public, so land the **hook** even though this
+  repo (P2.5) supplies the concrete mapping. (The ABC is currently unversioned —
+  note the compat surface.)
+- **PUB.7 — external-authority match tier in `write.dedup`** — generalize P2.6's
+  external entity-linking (match-out to OpenSanctions/Wikidata, attach authority id
+  + confidence, never invent) as an ER primitive, since internal-dedup and
+  external-linking share the `ResolutionIndex`. Same callback-tier mechanism as
+  PUB.5.
 - Public-export note: any new `media` extras (docling, ocrmypdf, colpali-engine)
   must be **optional dependencies** so the dependency-light core stays light, and
   run through the sanitizer/export gate.
@@ -174,5 +283,18 @@ These belong in the shared library, not just this consumer (per `BOUNDARY.md`):
 4. **P1.4–P1.6** (LadybugDB hardening: find_path, WAL, pin).
 5. **P2.1** visual subsystem (its own design doc + likely a kg-common epic).
 6. **P1.7 / P1.8 / P2.2 / P2.3** as capacity allows.
+7. **Interop & analysis brief (P2.4→P2.8, in order):** P2.4 structured ingestion
+   first (it feeds the amount-bearing edges P2.8 needs and is self-contained) →
+   P2.5 FtM crosswalk (authority for P2.6) → P2.6 external linking → P2.7 edge
+   inference → P2.8 money-flow. Substrate hooks PUB.5/PUB.6/PUB.7 are implemented
+   **consumer-side first** behind a thin local interface, then proposed upstream in
+   a **kg-common worktree** through the sanitizer/export gate — never on
+   kg-common's public `main`, and not without the user's nod.
 
 Commit in small chunks; comment all code; consult the named skill before each.
+
+New deps from the interop brief (`openpyxl`, `followthemoney`, `nomenklatura`,
+`splink`) are **optional extras only** — the required core stays dependency-light.
+Every new node/edge carries `source_url` + `extraction_source`; inferred edges are
+tagged `provenance="inferred"` and never shown as extracted; nothing bypasses
+grounding / grade-locality / ER. See `DEVIATIONS.md` for brief-vs-repo deltas.
