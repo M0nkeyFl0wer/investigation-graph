@@ -24,7 +24,9 @@ deterministic grain).
 """
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass, field
+from pathlib import Path
 
 import networkx as nx
 
@@ -131,3 +133,17 @@ def infer_control_edges(
                     hops=best_hops, chain=best_chain, confidence=min(effective, 1.0),
                 ))
     return inferred, skipped
+
+
+def write_review_queue(inferred: list[InferredEdge], path: str | Path) -> int:
+    """Write inferred control edges to a human-review queue (one JSON record per
+    line), mirroring the P1.3 ``merges.jsonl`` gate. Inferred control is a libel
+    vector, so it lands HERE for confirmation — it is not asserted into the graph as
+    fact by the inference step. Returns the number of edges queued.
+    """
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8") as fh:
+        for e in inferred:
+            fh.write(json.dumps(e.as_record()) + "\n")
+    return len(inferred)

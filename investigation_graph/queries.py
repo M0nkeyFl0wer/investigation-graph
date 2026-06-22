@@ -47,6 +47,25 @@ QUERIES = {
                r.weight AS weight, r.confidence AS confidence
     """,
 
+    # Extracted-only view (P2.7): edges actually found in sources, EXCLUDING
+    # inferred/derived edges. This is the default view for anything that must not
+    # treat a derived control edge as an observed fact.
+    "extracted_edges": """
+        MATCH (a:Entity)-[r:RELATES_TO]->(b:Entity)
+        WHERE r.provenance IS NULL OR r.provenance <> 'inferred'
+        RETURN a.label AS src, r.edge_type AS type, b.label AS tgt,
+               r.provenance AS provenance, r.confidence AS confidence
+    """,
+
+    # The complement: only inferred/derived edges (for the review surface). The
+    # effective % rides in the evidence string (it's not a top-level edge column).
+    "inferred_edges": """
+        MATCH (a:Entity)-[r:RELATES_TO]->(b:Entity)
+        WHERE r.provenance = 'inferred'
+        RETURN a.label AS src, r.edge_type AS type, b.label AS tgt,
+               r.confidence AS confidence, r.evidence AS evidence
+    """,
+
     # Contradiction detection
     "contradictions": """
         MATCH (a:Entity)-[r:RELATES_TO {edge_type: 'CONTRADICTS'}]->(b:Entity)
