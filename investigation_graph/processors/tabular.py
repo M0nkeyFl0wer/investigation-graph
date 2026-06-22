@@ -249,6 +249,34 @@ def ingest_table(path: str | Path, spec: MappingSpec, *,
             "chunks": chunks, "skipped": skipped}
 
 
+def maybe_ingest_tabular(filepath: str | Path, doc_id: str, source_url: str, *,
+                         ontology: Ontology | None = None) -> dict | None:
+    """If ``filepath`` is a tabular source with a sibling ``<stem>.map.yaml``,
+    ingest it into **store-ready** records and return
+    ``{"chunks","entities","edges","skipped"}`` with ``doc_id`` stamped on every
+    record (chunk rows shaped like the chunk store expects). Returns ``None`` when
+    the file isn't tabular or has no mapping spec — the caller then takes the normal
+    prose path. This is the single entry point ``ingest_folder`` calls.
+    """
+    path = Path(filepath)
+    if path.suffix.lower() not in _TABULAR_SUFFIXES:
+        return None
+    spec_path = path.parent / (path.stem + ".map.yaml")
+    if not spec_path.exists():
+        return None
+    out = ingest_table(path, MappingSpec.from_yaml(spec_path, ontology),
+                       ontology=ontology)
+    chunk_rows = [{"id": c["id"], "doc_id": doc_id, "source_uri": source_url,
+                   "title": path.stem, "body": c["text"], "chunk_index": c["row"],
+                   "embedding": None} for c in out["chunks"]]
+    for e in out["entities"]:
+        e["doc_id"] = doc_id
+    for ed in out["edges"]:
+        ed["doc_id"] = doc_id
+    return {"chunks": chunk_rows, "entities": out["entities"],
+            "edges": out["edges"], "skipped": out["skipped"]}
+
+
 def _row_evidence(i: int, row: dict, ed: _EdgeMap) -> str:
     """A compact, human-readable citation of the source row for this edge."""
     bits = [f"{ed.source}={row.get(ed.source, '')}",

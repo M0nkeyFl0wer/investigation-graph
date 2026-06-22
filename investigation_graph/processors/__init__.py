@@ -11,6 +11,13 @@ from investigation_graph.processors.tabular import (
     SpecError,
     TabularProcessor,
     ingest_table,
+    maybe_ingest_tabular,
 )
 
-__all__ = ["MappingSpec", "SpecError", "TabularProcessor", "ingest_table"]
+__all__ = [
+    "MappingSpec",
+    "SpecError",
+    "TabularProcessor",
+    "ingest_table",
+    "maybe_ingest_tabular",
+]
