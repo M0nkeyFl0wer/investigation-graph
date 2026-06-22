@@ -13,6 +13,7 @@ from investigation_graph.processors.tabular import (
     SpecError,
     TabularProcessor,
     ingest_table,
+    maybe_ingest_tabular,
 )
 
 FIX = Path(__file__).parent / "fixture_tabular"
@@ -123,6 +124,24 @@ def test_amount_without_currency_is_rejected():
             MappingSpec.from_yaml(bad, ONT)
     finally:
         bad.unlink()
+
+
+def test_routing_picks_tabular_only_for_csv_with_a_spec(tmp_path):
+    # ingest_folder calls maybe_ingest_tabular: non-None routes to the structured
+    # path, None falls through to prose. A CSV with a spec routes; others don't.
+    staged = maybe_ingest_tabular(FIX / "ownership.csv", "doc", str(FIX / "ownership.csv"),
+                                  ontology=ONT)
+    assert staged is not None
+    assert len(staged["entities"]) == 4 and len(staged["edges"]) == 3
+    assert all(c["doc_id"] == "doc" for c in staged["chunks"])
+    # A .txt is not tabular → None (prose path).
+    txt = tmp_path / "note.txt"
+    txt.write_text("just prose")
+    assert maybe_ingest_tabular(txt, "d", str(txt), ontology=ONT) is None
+    # A .csv with NO sibling .map.yaml → None (can't type it deterministically).
+    lonely = tmp_path / "lonely.csv"
+    lonely.write_text("a,b\n1,2\n")
+    assert maybe_ingest_tabular(lonely, "d", str(lonely), ontology=ONT) is None
 
 
 def test_media_shaped_processor_returns_structured_records():

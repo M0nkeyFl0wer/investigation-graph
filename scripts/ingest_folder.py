@@ -35,11 +35,13 @@ from investigation_graph.ontology import Ontology
 from investigation_graph.pipeline import ground_and_resolve
 
 from investigation_graph.media_setup import configure_media
+from investigation_graph.processors import maybe_ingest_tabular
 from kg_common.media import SUPPORTED_SUFFIXES, process_media
 
-# Formats any registered media processor can read (text/HTML/PDF+OCR/image-OCR
-# today; visual processors register here later — see media/ + P2.1).
-SUPPORTED = SUPPORTED_SUFFIXES
+# Formats the prose path reads (text/HTML/PDF+OCR/image-OCR today; visual
+# processors register here later — see media/ + P2.1), PLUS the structured tabular
+# formats (P2.4), which take the deterministic, no-LLM path below.
+SUPPORTED = tuple(SUPPORTED_SUFFIXES) + (".csv", ".tsv")
 
 
 # Matches a leading YAML frontmatter block: '---' on the first line through the
@@ -115,17 +117,41 @@ def main():
         # ── INGEST + EXTRACT (per document → DuckDB source of truth) ───────
         for i, filepath in enumerate(supported, 1):
             print(f"[{i}/{len(supported)}] {filepath.name}")
-            text = read_document(filepath)
-            if not text.strip():
-                print("  Empty or unreadable, skipping.")
-                continue
-
             source_url = str(filepath)
             doc_id = hashlib.sha256(source_url.encode()).hexdigest()[:16]
 
             # Idempotent re-ingest: clear this document's prior records first.
             store.delete_doc_records(doc_id)
             store.write_documents([{"id": doc_id, "path": source_url, "title": filepath.stem}])
+
+            # ── STRUCTURED PATH (P2.4) ────────────────────────────────────
+            # A tabular source (.csv/.tsv with a sibling <stem>.map.yaml) is
+            # deterministic — a row IS a typed edge — so it skips chunk/embed/
+            # LLM-extract entirely. The row-chunks it emits still go to DuckDB so
+            # the entities/edges ground normally. Returns None for the prose path.
+            staged = maybe_ingest_tabular(filepath, doc_id, source_url, ontology=ontology)
+            if staged is not None:
+                if staged["chunks"]:
+                    # Embed the row-chunks for retrieval (graceful: Nones if the
+                    # embedder is unavailable — grounding/build don't need vectors).
+                    embs = embed_batch([c["body"] for c in staged["chunks"]])
+                    for idx, c in enumerate(staged["chunks"]):
+                        c["embedding"] = embs[idx] if idx < len(embs) else None
+                    store.write_chunks(staged["chunks"])
+                store.write_entities(staged["entities"])
+                store.write_edges(staged["edges"])
+                print(f"  tabular: {len(staged['chunks'])} rows, "
+                      f"{len(staged['entities'])} entities, {len(staged['edges'])} "
+                      f"edges (deterministic, no LLM)")
+                if staged["skipped"]:
+                    print(f"    ↳ {len(staged['skipped'])} row(s) skipped (type/grade)")
+                continue
+
+            # ── PROSE PATH (chunk → embed → 3-phase extract) ──────────────
+            text = read_document(filepath)
+            if not text.strip():
+                print("  Empty or unreadable, skipping.")
+                continue
 
             # Chunk + embed → DuckDB.
             chunks = chunk_text(text)
