@@ -135,6 +135,36 @@ def infer_control_edges(
     return inferred, skipped
 
 
+def infer_control_from_graph(
+    graph_dir: str | Path, *,
+    threshold: float = DEFAULT_THRESHOLD,
+    max_depth: int = DEFAULT_MAX_DEPTH,
+) -> tuple[list[InferredEdge], list[dict]]:
+    """Read observed `OWNS` edges (with `share_pct`) off the LIVE graph and infer
+    control. This is the operational path: it depends on share_pct surviving the
+    write as a typed column (the regression we fixed). Returns ``(inferred, skipped)``
+    exactly like ``infer_control_edges``.
+    """
+    from investigation_graph.queries import QUERIES
+    try:
+        import ladybug as lb
+    except ImportError:
+        import real_ladybug as lb
+
+    conn = lb.Connection(lb.Database(str(graph_dir), read_only=True))
+    res = conn.execute(QUERIES["ownership_edges"])
+    edges: list[dict] = []
+    while res.has_next():
+        src, tgt, share = res.get_next()
+        # share_pct is a typed DOUBLE off the graph; 0.0 is the unset sentinel, so
+        # we only treat a positive share as a real ownership stake.
+        ed = {"source_id": src, "target_id": tgt, "edge_type": "OWNS"}
+        if share and float(share) > 0:
+            ed["share_pct"] = float(share)
+        edges.append(ed)
+    return infer_control_edges(edges, threshold=threshold, max_depth=max_depth)
+
+
 def write_review_queue(inferred: list[InferredEdge], path: str | Path) -> int:
     """Write inferred control edges to a human-review queue (one JSON record per
     line), mirroring the P1.3 ``merges.jsonl`` gate. Inferred control is a libel

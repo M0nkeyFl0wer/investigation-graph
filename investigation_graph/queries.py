@@ -66,6 +66,15 @@ QUERIES = {
                r.confidence AS confidence, r.evidence AS evidence
     """,
 
+    # Observed OWNS edges with their share % — the input to ownership-control
+    # inference (P2.7), read off the live graph. Excludes already-inferred edges so
+    # the closure runs over observed ownership only.
+    "ownership_edges": """
+        MATCH (a:Entity)-[r:RELATES_TO {edge_type: 'OWNS'}]->(b:Entity)
+        WHERE r.provenance IS NULL OR r.provenance <> 'inferred'
+        RETURN a.id AS src, b.id AS tgt, r.share_pct AS share_pct
+    """,
+
     # Contradiction detection
     "contradictions": """
         MATCH (a:Entity)-[r:RELATES_TO {edge_type: 'CONTRADICTS'}]->(b:Entity)

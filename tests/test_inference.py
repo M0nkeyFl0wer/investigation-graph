@@ -4,7 +4,19 @@ These pin the SAFETY properties the review demanded: multiplicative threshold (n
 false control from a sub-threshold chain), type-compatible chaining, no assumed
 share, depth cap, and the inferred≠extracted tagging.
 """
-from investigation_graph.infer import InferredEdge, infer_control_edges
+from pathlib import Path
+
+from investigation_graph.graph import build_graph
+from investigation_graph.infer import (
+    InferredEdge,
+    infer_control_edges,
+    infer_control_from_graph,
+)
+from investigation_graph.ontology import Ontology
+from investigation_graph.processors import ingest_table
+from investigation_graph.processors.tabular import MappingSpec
+
+FIX = Path(__file__).parent / "fixture_tabular"
 
 
 def _owns(s, t, pct):
@@ -88,3 +100,24 @@ def test_inferrededge_record_shape():
                      chain=["x", "z", "y"], confidence=0.6)
     rec = e.as_record()
     assert rec["edge_type"] == "OWNS" and rec["effective_pct"] == 0.6
+
+
+def test_operational_path_reads_share_pct_off_the_live_graph(tmp_path):
+    # The end-to-end path the typed-column fix unblocked: ingest the ownership
+    # fixture -> build graph -> infer control reading share_pct BACK OFF THE GRAPH.
+    ont = Ontology()
+    out = ingest_table(FIX / "ownership.csv",
+                       MappingSpec.from_yaml(FIX / "ownership.map.yaml", ont),
+                       ontology=ont)
+    graph_dir = tmp_path / "g.lbug"
+    build_graph({"documents": [], "entities": out["entities"],
+                 "edges": out["edges"], "mentions": []},
+                graph_dir=graph_dir, ontology=ont)
+    label = {e["id"]: e["label"] for e in out["entities"]}
+
+    inferred, _ = infer_control_from_graph(graph_dir, threshold=0.25)
+    pairs = {(label[e.source_id], label[e.target_id]) for e in inferred}
+    # Jane controls Harbor (55%), Acme does NOT (16.5%) — computed from share_pct
+    # values that survived the graph round-trip.
+    assert ("Jane Roe", "Harbor City RDA") in pairs
+    assert ("Acme Holdings", "Harbor City RDA") not in pairs
