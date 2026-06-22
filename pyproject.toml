@@ -49,6 +49,10 @@ ocr = ["pytesseract>=0.3", "pillow>=10"]
 # browser binary once: `python -m playwright install chromium`. ffmpeg (video
 # keyframes) and the manifest core are stdlib/system-binary, so they need no extra.
 capture = ["playwright>=1.40", "websocket-client>=1.6"]
+# FollowTheMoney / BODS interop crosswalk (P2.5). Optional — the dep-light core
+# does not require it; only `investigation_graph.interop.ftm` does. Crosswalk
+# verified against followthemoney 4.9.2 (see DEVIATIONS.md).
+interop = ["followthemoney>=4.9,<5"]
 dev = ["pytest>=8.0", "pytest-mock", "pytest-timeout", "ruff"]
 
 [project.scripts]

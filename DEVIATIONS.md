@@ -81,8 +81,16 @@ Each is a place the plan adapts to ground truth. Update as implementation procee
 
 - (P2.4) Splink as the structured-linkage tier — confirm it earns its weight on the
   DuckDB base vs. the existing resolver before committing the optional extra.
-- (P2.5) Re-verify the FtM crosswalk against the *current* `followthemoney` schema at
-  implementation time — FtM evolves.
+- (P2.5) ~~Re-verify the FtM crosswalk against the current `followthemoney` schema~~
+  **DONE — verified against `followthemoney` 4.9.2** (the `interop` optional extra).
+  Schema drift found vs the brief's from-memory table: **`Mention` is a *thing*, not
+  an entity↔document edge** in 4.9.2 → `MENTIONED_IN` is dropped (structural), not
+  force-fit. Verified edge schemata + their entity-ref props: `Ownership(owner→asset,
+  percentage)`, `Payment(payer→beneficiary, amount, currency)`,
+  `Employment(employee→employer)`, `Directorship(director→organization)`,
+  `Membership(member→organization)`, `Family(person→relative)`,
+  `UnknownLink(subject→object, role)`. The crosswalk is built against this dump, not
+  the brief. Re-pin if the dep bumps (`FTM_VERSION_VERIFIED` in `interop/ftm.py`).
 - (P2.6) **OpenSanctions licensing** — free for journalism, commercial use needs a
   license + attribution; **verify current terms** before this ships publicly.
   Wikidata = CC0. Pick/confirm the ownership-control threshold default (~25%).
