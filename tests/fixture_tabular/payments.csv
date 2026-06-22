@@ -1,0 +1,5 @@
+payer,payer_type,payee,payee_type,amount,currency,date
+Apex Corp,organization,Shell One Ltd,organization,100000,USD,2024-01-10
+Shell One Ltd,organization,Shell Two Ltd,organization,90000,USD,2024-02-10
+Shell Two Ltd,organization,Final Beneficiary,organization,80000,USD,2024-03-10
+Apex Corp,organization,Direct Vendor,organization,5000,EUR,2024-01-15

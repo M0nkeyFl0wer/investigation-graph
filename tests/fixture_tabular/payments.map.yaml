@@ -1,0 +1,11 @@
+# A payment ledger -> FUNDED_BY money edges (payer funds payee), amount + currency.
+entities:
+  - {column: payer, type_column: payer_type}
+  - {column: payee, type_column: payee_type}
+edges:
+  - source: payer
+    type: FUNDED_BY          # FUNDED_BY: organization -> organization/person
+    target: payee
+    amount: amount           # -> typed amount column (P2.8 traces it)
+    currency: currency
+    date: date

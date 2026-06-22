@@ -75,6 +75,15 @@ QUERIES = {
         RETURN a.id AS src, b.id AS tgt, r.share_pct AS share_pct
     """,
 
+    # Money edges (FUNDED_BY / PAID_TO) with amount + currency — the input to
+    # money-flow tracing (P2.8), read off the live graph.
+    "money_edges": """
+        MATCH (a:Entity)-[r:RELATES_TO]->(b:Entity)
+        WHERE r.edge_type IN ['FUNDED_BY', 'PAID_TO'] AND r.amount > 0
+        RETURN a.id AS src, b.id AS tgt, r.edge_type AS type,
+               r.amount AS amount, r.currency AS currency
+    """,
+
     # Contradiction detection
     "contradictions": """
         MATCH (a:Entity)-[r:RELATES_TO {edge_type: 'CONTRADICTS'}]->(b:Entity)
