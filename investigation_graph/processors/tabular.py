@@ -165,22 +165,31 @@ def ingest_table(path: str | Path, spec: MappingSpec, *,
                  ontology: Ontology | None = None) -> dict:
     """Read a CSV/TSV through its mapping spec → artifact-contract entities/edges.
 
-    Returns ``{"entities": [...], "edges": [...], "skipped": [...]}``. Entities use
-    the FILE as ``source_url`` (so the same label across rows is one node, deduped
-    by id); edges cite the specific row in ``evidence``. Row-level type/grade
-    violations (only possible when a type comes from a column) are collected in
-    ``skipped`` rather than crashing the whole file — a data error, not a spec error.
+    Returns ``{"entities": [...], "edges": [...], "chunks": [...],
+    "skipped": [...]}``. Entities use the FILE as ``source_url`` (so the same label
+    across rows is one node, deduped by id); edges cite the specific row in
+    ``evidence``. One **row-chunk** is emitted per data-bearing row (the row
+    serialized as text) so the deterministic entities/edges still pass the grounding
+    gate — their labels appear in a cited chunk, and an edge's endpoints co-occur in
+    the same row-chunk. NOTHING bypasses grounding. Row-level type/grade violations
+    (only possible when a type comes from a column) are collected in ``skipped``
+    rather than crashing the whole file — a data error, not a spec error.
     """
     path = Path(path)
     ont = ontology or Ontology()
     source_url = str(path)
     entities: dict[str, dict] = {}   # id -> entity (dedup within the file)
     edges: list[dict] = []
+    chunks: list[dict] = []          # one row-chunk per data-bearing row (grounding)
     skipped: list[dict] = []
 
     with path.open(encoding="utf-8", newline="") as fh:
         reader = csv.DictReader(fh, delimiter=_delimiter(path))
         for i, row in enumerate(reader, start=1):
+            # The row-chunk text contains every cell value, so each entity's label
+            # and each edge's endpoint pair are findable by the grounding gate.
+            row_text = ", ".join(f"{k}={v}" for k, v in row.items()
+                                 if (v or "").strip())
             # Resolve each entity column to (label, type), validating column-typed
             # values per row. A blank cell means "no entity here for this row".
             row_entities: dict[str, dict] = {}
@@ -202,6 +211,12 @@ def ingest_table(path: str | Path, spec: MappingSpec, *,
                 }
                 entities.setdefault(eid, ent)
                 row_entities[em.column] = ent
+
+            # Emit the row-chunk (only if the row produced entities) so grounding
+            # has a chunk to anchor those entities/edges to.
+            if row_entities:
+                chunks.append({"id": f"{source_url}#row={i}", "text": row_text,
+                               "source_uri": source_url, "row": i})
 
             # Edges: only the explicit triples the spec names, grade-checked per row.
             for ed in spec.edges:
@@ -230,7 +245,8 @@ def ingest_table(path: str | Path, spec: MappingSpec, *,
                     edge["valid_from"] = row[ed.date]
                 edges.append(edge)
 
-    return {"entities": list(entities.values()), "edges": edges, "skipped": skipped}
+    return {"entities": list(entities.values()), "edges": edges,
+            "chunks": chunks, "skipped": skipped}
 
 
 def _row_evidence(i: int, row: dict, ed: _EdgeMap) -> str:
@@ -282,7 +298,8 @@ class TabularProcessor(BaseProcessor):  # type: ignore[misc]
         out = ingest_table(path, spec, ontology=self._ontology)
         return ProcessorResult(
             text="",
-            structured={"entities": out["entities"], "edges": out["edges"]},
+            structured={"entities": out["entities"], "edges": out["edges"],
+                        "chunks": out["chunks"]},
             metadata={"kind": "tabular", "mapped": True,
                       "spec": str(spec_path), "skipped": out["skipped"]},
         )

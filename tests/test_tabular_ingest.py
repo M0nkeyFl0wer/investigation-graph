@@ -62,6 +62,18 @@ def test_edge_properties_and_temporal_carry_through():
     assert len(by_pair) == 3  # three distinct ownership relationships
 
 
+def test_emits_one_row_chunk_per_row_containing_the_labels():
+    # Grounding needs a chunk that contains each entity's label; the row-chunk is it.
+    out = _load()
+    assert len(out["chunks"]) == 3
+    joined = " ".join(c["text"] for c in out["chunks"])
+    for label in ("Jane Roe", "Brightpath Advisors", "Harbor City RDA", "Acme Holdings"):
+        assert label in joined
+    # Each edge's endpoints co-occur in their row-chunk (so the edge grounds).
+    chunk_by_row = {c["row"]: c["text"] for c in out["chunks"]}
+    assert "Jane Roe" in chunk_by_row[1] and "Brightpath Advisors" in chunk_by_row[1]
+
+
 def test_grade_locality_violation_in_spec_fails_loud():
     # OWNS cannot connect organization -> person; a literal-typed spec must reject
     # this AT LOAD, not silently at write.
