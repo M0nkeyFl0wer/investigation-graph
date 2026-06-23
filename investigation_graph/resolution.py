@@ -36,11 +36,14 @@ from kg_common.write.dedup import ResolutionIndex, resolve_or_create_semantic
 
 class ResolutionTier(Protocol):
     """A pluggable resolution tier. Return a canonical entity id to merge into, or
-    ``None`` to fall through to the next tier / create. ``index`` is the in-batch
-    entity universe; an external-authority tier may ignore it and consult its own
-    (e.g. an OpenSanctions snapshot closed over at construction)."""
+    ``None`` to fall through to the next tier / create. ``candidate_id`` identifies
+    the record being resolved (a batch deduper like Splink needs it to find the
+    record's precomputed cluster); ``index`` is the in-batch entity universe; an
+    external-authority tier may ignore both and consult its own source (e.g. an
+    OpenSanctions snapshot closed over at construction)."""
 
-    def __call__(self, name: str, entity_type: str, index: ResolutionIndex,
+    def __call__(self, candidate_id: str, name: str, entity_type: str,
+                 index: ResolutionIndex,
                  embedding: Optional[list[float]] = None) -> Optional[str]:
         ...
 
@@ -68,7 +71,7 @@ def resolve_with_tiers(
 
     def tiered_create() -> str:
         for tier in tiers:
-            match = tier(name, entity_type, index, embedding)
+            match = tier(candidate_id, name, entity_type, index, embedding)
             if match is not None:
                 return match  # a tier matched → re-point onto the existing id
         return real_create()

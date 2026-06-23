@@ -18,7 +18,7 @@ def _strip(s: str) -> str:
     return _SUFFIX.sub("", s).replace(",", " ").strip().lower()
 
 
-def suffix_tier(name, entity_type, index, embedding=None):
+def suffix_tier(candidate_id, name, entity_type, index, embedding=None):
     """Stand-in for a structured-dedup tier (Splink): match on the legal-suffix-
     stripped name. Real Splink would do Fellegi-Sunter on the DuckDB base."""
     target = _strip(name)

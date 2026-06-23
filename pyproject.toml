@@ -53,6 +53,10 @@ capture = ["playwright>=1.40", "websocket-client>=1.6"]
 # does not require it; only `investigation_graph.interop.ftm` does. Crosswalk
 # verified against followthemoney 4.9.2 (see DEVIATIONS.md).
 interop = ["followthemoney>=4.9,<5"]
+# Probabilistic structured dedup (P2.4/PUB.5). Optional — the adopted common-case
+# tier is the dep-free deterministic normalized-name tier; Splink is reserved for
+# multi-field messy records (eval showed it undertrained on single-field variants).
+dedup-structured = ["splink>=4.0,<5"]
 dev = ["pytest>=8.0", "pytest-mock", "pytest-timeout", "ruff"]
 
 [project.scripts]

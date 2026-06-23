@@ -309,11 +309,18 @@ These belong in the shared library, not just this consumer (per `BOUNDARY.md`):
   things to regret. Consumer-shim first; upstream once it generalizes to ≥2
   consumers. *(Collapsed from two PUB entries per review: one seam, not two.)*
   **Tool decisions (eval in `docs/proposals/dedup-tools.md`, 2026-06-22):**
-  - **Internal-dedup tier → Splink** (MIT; UK MoJ). Runs natively on our DuckDB
-    base, unsupervised (Fellegi-Sunter EM, no labelling loop), explainable. Optional
-    `[dedup-structured]` extra, scoped to the **structured path (P2.4)** with a
-    bundled default F-S spec — NOT the free-text cascade (it needs column
-    comparisons + an EM pass, so it isn't zero-config like today's resolver).
+  - **Internal-dedup tier → deterministic normalized-name tier (ADOPTED), Splink
+    reserved.** The eval-delta (`scripts/eval_structured_dedup.py`, 2026-06-23,
+    B-Cubed vs the base resolver on the same data) decided this empirically: on
+    single-field clean variants the **deterministic norm-name tier raised recall
+    0.733→0.962 (ΔR +0.229) at precision 1.0**, while **Splink was undertrained**
+    (no exact dups to learn from → F-S probabilities ~0.48; any lift would come from
+    its blocking, not the model). So the dep-free deterministic tier ships as the
+    common-case `make_cluster_tier(norm_dedupe(...))`; **Splink stays optional**
+    (`[dedup-structured]`) and is **reserved for multi-field messy records**
+    (name+DOB+address, typos, missing fields) — adopt only behind a multi-field eval
+    that shows F-S beating deterministic+fuzzy, never "looks great on synthetic".
+    Both route merges through the P1.3 gate.
   - **External-authority tier → nomenklatura** (MIT; OpenSanctions, FtM-native).
     Composes with the `interop/ftm.py` crosswalk; its `same/not-same/undecided`
     Judgement model *is* the P1.3 gate in FtM terms. Folds into `[interop]`, for
