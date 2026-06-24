@@ -856,7 +856,15 @@ Issues and PRs welcome. Keep it simple — this is a tool for investigators and 
 
 ## License
 
-MIT
+**Code** — MIT (see `LICENSE`). The ingestion pipeline, resolution cascade, and
+the FollowTheMoney crosswalk are MIT and free to reuse.
+
+**Data** — MIT does *not* cover external datasets you pull through the tool. In
+particular, **OpenSanctions data is CC BY-NC 4.0** (with a journalism exemption).
+This project ships *code only* and bundles no sanctions data; if you enable
+external-entity linking you supply your own OpenSanctions snapshot under its own
+license. Don't infer that the root MIT file makes any data you pull through the
+tool permissive — it doesn't.
 
 ## Contact
 
