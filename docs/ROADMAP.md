@@ -220,7 +220,11 @@ promotion decision).
   confidence. Unconfirmed matches stay candidate-only, never surfaced as fact.
 - **Licensing:** **OpenSanctions is free for journalism but commercial use needs a
   license + attribution** — log the current terms (verify at implementation) since
-  this tool ships publicly. Wikidata = CC0.
+  this tool ships publicly. Wikidata = CC0. **Acceptance condition (do not skip):**
+  when this feature actually ships, tighten the README `## License` data-licensing
+  note from the conditional "if you enable external-entity linking" to describe what
+  the code now genuinely pulls — the reminder lives here, in the entry the builder
+  reads, not in a stale commit message.
 - **Done when (measured, not just green):** before/after **precision/recall** of the
   linker on a labelled sample via the sme-eval grader — not "tests pass." A wrong
   link here is a libel event, so the bar is measured precision, with the human gate
