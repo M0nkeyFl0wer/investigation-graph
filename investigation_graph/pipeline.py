@@ -33,6 +33,8 @@ from kg_common.write.dedup import ResolutionIndex, resolve_or_create_semantic
 from kg_common.write.grounding import ground
 
 from . import config
+from .lossless_merge import plan_lossless_merge
+from .semantic_gate import is_stance_bearing_type
 
 logger = logging.getLogger(__name__)
 
@@ -143,10 +145,22 @@ def ground_and_resolve(
     canonical: dict[str, dict] = {}
     merge_records: list[dict] = []
     for e in grounded_entities:
+        # Stance-bearing types (a claim / policy_position) are EXCLUDED from the
+        # cosine tier: opposing stances embed as near-identical ("Support …" vs
+        # "Oppose …" ~0.97), so an embedding merge would invert a position — a
+        # libel-grade error for an investigative tool. We withhold the embedding
+        # for those types so only the precise exact/fuzzy tiers can merge them.
+        # (Excludes the cosine tier ONLY; exact/fuzzy resolution is unaffected.)
+        # See investigation_graph/semantic_gate.py for the why + the measured case.
+        candidate_embedding = (
+            None
+            if is_stance_bearing_type(e.get("entity_type", ""))
+            else embeddings.get(e["id"])
+        )
         canon = resolve_or_create_semantic(
             e["id"], e.get("label", ""), e.get("entity_type", ""),
             index,
-            embedding=embeddings.get(e["id"]),   # engages the cosine tier (P1.1)
+            embedding=candidate_embedding,   # engages the cosine tier (P1.1)
             threshold=threshold,
             fuzzy_threshold=fuzzy_threshold,
         )
@@ -167,14 +181,20 @@ def ground_and_resolve(
             })
 
     # Re-point edges to canonical ids; drop self-loops created by a merge.
-    resolved_edges = []
-    for ed in grounded_edges:
-        src = id_map.get(ed["source_id"], ed["source_id"])
-        tgt = id_map.get(ed["target_id"], ed["target_id"])
-        if src == tgt:
-            continue
-        ed = {**ed, "source_id": src, "target_id": tgt}
-        resolved_edges.append(ed)
+    #
+    # A naive re-point + keep-first dedup SILENTLY DROPS data: after two duplicate
+    # endpoints fold to one canonical id, two formerly-distinct edges can land on
+    # the same (source_id, target_id, edge_type) triple. If those edges carry
+    # DIFFERENT data-bearing props — e.g. per-name-spelling campaign-finance
+    # aggregates {amount_total, contribution_count, dates} — keeping the first and
+    # discarding the rest loses real money (a sibling project lost a donor $6,650
+    # this way). plan_lossless_merge re-points + de-dups losslessly: it sums
+    # additive aggregates, unions date lists, and routes genuinely-conflicting
+    # collisions (currency mismatch, contradictory share_pct) to human review
+    # instead of dropping them. See investigation_graph/lossless_merge.py.
+    edge_plan = plan_lossless_merge(grounded_edges, id_map)
+    resolved_edges = edge_plan.write_edges()
+    lossy_edge_clusters = list(edge_plan.review_clusters)
 
     # ── 2b. Alias-driven merge (use the extractor's ALIAS_OF judgments) ────
     # Similarity-only resolution leaves recurring entities fragmented across
@@ -232,16 +252,15 @@ def ground_and_resolve(
                     })
 
         # Keep only group keepers; re-point every edge through the alias map and
-        # drop self-loops (incl. the ALIAS_OF edges we just merged along).
+        # drop self-loops (incl. the ALIAS_OF edges we just merged along). The
+        # alias merge can create the SAME edge collision as the resolution merge
+        # above (two alias members each carrying a distinct aggregate edge to the
+        # same target), so it gets the same lossless guard — re-aggregate additive
+        # collisions, route real conflicts to review, never silently drop.
         canonical = {cid: e for cid, e in canonical.items() if alias_map.get(cid) == cid}
-        aliased_edges = []
-        for ed in resolved_edges:
-            s = alias_map.get(ed["source_id"], ed["source_id"])
-            t = alias_map.get(ed["target_id"], ed["target_id"])
-            if s == t:
-                continue
-            aliased_edges.append({**ed, "source_id": s, "target_id": t})
-        resolved_edges = aliased_edges
+        alias_plan = plan_lossless_merge(resolved_edges, alias_map)
+        resolved_edges = alias_plan.write_edges()
+        lossy_edge_clusters.extend(alias_plan.review_clusters)
 
     report_dict = {
         "entities_in": len(entities),
@@ -255,6 +274,14 @@ def ground_and_resolve(
         "edges_out": len(resolved_edges),
         "quarantine_rate": report.quarantine_rate(),
         "merges": merge_records,   # (kept, merged) pairs for review (P1.3)
+        # Edge collisions a merge created that could NOT be losslessly collapsed
+        # (e.g. mismatched currency, contradictory share_pct). These are NEVER
+        # dropped — they are surfaced here for the same human review the entity
+        # merges get, so conflicting aggregates are a decision, not a silent loss.
+        "lossy_edge_clusters": [
+            {"key": list(c.key), "reason": c.reason, "edges": c.edges}
+            for c in lossy_edge_clusters
+        ],
     }
     logger.info("ground+resolve: %s", report_dict)
 
