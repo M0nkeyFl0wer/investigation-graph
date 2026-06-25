@@ -160,20 +160,20 @@ get the deterministic + spaCy entities and a keyword-searchable corpus.)
 ### Search the Graph
 
 ```bash
-# Keyword search — finds exact matches
+# Content search over document chunks (default mode = hybrid: fts + semantic)
 python scripts/search_cli.py -q "Acme Corp"
 
-# Semantic search — finds related content even without keyword match
-python scripts/search_cli.py -q "payments to contractors" --mode semantic
+# Keyword-only (BM25) over document text
+python scripts/search_cli.py -q "payments to contractors" --mode fts
 
-# Hybrid search — combines keyword and semantic, best of both
-python scripts/search_cli.py -q "financial fraud" --mode hybrid
+# Semantic (by meaning) over document text
+python scripts/search_cli.py -q "financial fraud" --mode semantic
 
-# Find connections between two entities
+# Graph: typed relationship chain between two entities
 python scripts/search_cli.py --path "Jane Smith" "Harbor Development LLC"
 
-# Filter by entity type
-python scripts/search_cli.py -q "Chen" --type person
+# Graph: find an entity node by name
+python scripts/search_cli.py --entity "Chen"
 ```
 
 **Path search** shows the chain of relationships:
@@ -333,13 +333,21 @@ This tells you when your ontology needs expanding — the data is telling you wh
 
 ### 5. Search and Path — Following the connections
 
-Three search modes:
+Two search surfaces. **Content search** (`-q`) runs over the document chunks in
+DuckDB — find passages by keyword or meaning; **graph lookups** (`--entity` /
+`--path`) run over the entity/edge graph. The `--mode` flag applies to content
+search only:
 
-| Mode | How it works | Best for |
+| Content mode (`--mode`) | How it works | Best for |
 |------|-------------|----------|
-| `keyword` | Cypher `CONTAINS` match on entity labels | Finding specific entities by name |
-| `semantic` | Cosine similarity between query embedding and entity embeddings | Finding related entities without knowing their name |
-| `hybrid` | Reciprocal Rank Fusion (RRF) — ranks by position across both lists, no weight tuning needed | Best general-purpose search |
+| `fts` | BM25 full-text over chunk text | Passages containing specific words |
+| `semantic` | Cosine similarity between the query embedding and **chunk** embeddings | Passages by meaning, without the exact words |
+| `hybrid` (default) | Reciprocal Rank Fusion of `fts` + `semantic` — no weight tuning | Best general-purpose passage search |
+
+Graph lookups are separate flags, not modes: `--entity NAME` finds entity nodes
+whose label contains NAME (Cypher `CONTAINS`); `--path FROM TO` finds typed
+relationship chains. (Entities carry no embeddings — semantic search is over
+chunks, not nodes.)
 
 **Path search** finds typed chains between entities. Not just "these are related" but:
 
