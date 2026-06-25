@@ -1,4 +1,4 @@
-.PHONY: test eval lint check all pre-push
+.PHONY: test eval lint check all pre-push audit
 
 PY := .venv/bin/python
 
@@ -26,3 +26,11 @@ all: check lint test
 # Full gate before a push or a public release: fast gate + the real-execution eval
 pre-push: all eval
 	@echo "All checks + full-pipeline eval passed. Safe to push."
+
+# Recurrence net: re-checks failures we've ALREADY found (disproven corruption
+# claim re-asserting, grounding ceasing to quarantine, empty-graph green, the
+# honest interop ledgers rotting). Floors against vacuous green; reports DEGRADED
+# (exit 2, not 0) if the real model can't be reached. NOT a substitute for an
+# adversarial human/agent pass — that finds NEW failure shapes (see ROADMAP).
+audit:
+	$(PY) scripts/audit.py

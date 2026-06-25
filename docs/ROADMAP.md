@@ -29,6 +29,21 @@ fix is **option A: flip `kg-common` public + fix `setup.sh` to match
 state by drift (the install gap is otherwise the next known-issue-that-survives-
 because-the-fix-was-one-step-less-convenient). When A lands, drop the banner.
 
+**STANDING PRACTICE — adversarial audit (next: 2026-08-05, then every ~6 weeks).**
+`make audit` is a *recurrence net*: it re-checks failures we've already found
+(disproven corruption claim, empty-graph green, grounding ceasing to quarantine,
+the interop ledgers rotting), floors against vacuous green, and reports DEGRADED
+(not green) without a real model. It does **not** find new failure shapes — only a
+fresh, adversarial pass does (the 2026-06-24 four-agent audit that ran the real
+flow and read every claim against code with intent to embarrass the docs found the
+corruption framing, the 0-edge green, and the co-occurrence overclaim — none of
+which a regression net would have caught the first time). So on the cadence above,
+point a human or a fresh agent at the repo with the brief *"find where the docs
+claim more than the code delivers, and where a real run silently produces nothing."*
+**The thing most likely to erode is the belief that `make audit` replaced this.**
+It didn't: the automation catches recurrence, the adversarial pass catches novelty,
+and you need both.
+
 ---
 
 ## P0 — correctness (silently misleading today)
