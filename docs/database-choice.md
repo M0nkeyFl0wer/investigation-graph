@@ -31,8 +31,9 @@ what the two parts are and why — useful if you're curious or extending the too
 - **DuckDB is the source of truth.** Every chunk, embedding, and extracted
   record lives here. It's one file — back it up with a plain copy.
 - **The graph is a rebuilt projection.** Each ingest rebuilds `graph.lbug` from
-  the DuckDB records. You never edit the graph directly; it's derived. (This also
-  sidesteps a LadybugDB edge-write corruption mode — see `../SPEC.md` §2.1.)
+  the DuckDB records. You never edit the graph directly; it's derived. (This makes
+  every re-ingest a clean, idempotent rebuild — the same records always produce the
+  same graph — see `../SPEC.md` §2.1.)
 
 ## Why this pairing
 
@@ -64,5 +65,5 @@ switch models, change the model + dimension together and re-ingest.
 
 The store lives in `investigation_graph/chunk_store.py` (DuckDB) and
 `investigation_graph/graph.py` (the LadybugDB projection). Both build on the shared
-`kg-common` library, which supplies the corruption-guarded graph writer, the
-ontology contract, entity resolution, and the grounding gate.
+`kg-common` library, which supplies the graph writer, the ontology contract,
+entity resolution, and the grounding gate.

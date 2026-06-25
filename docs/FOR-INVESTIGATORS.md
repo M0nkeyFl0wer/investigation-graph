@@ -163,14 +163,22 @@ Before anything goes in a story or a report:
 
 ## Honest limitations (so you use it right)
 
+- **Grounding checks co-occurrence, not the relationship.** The ground gate drops
+  entities not in your text and edges between entities that never appear together —
+  but if two real entities *are* named in the same passage, an edge the model
+  invented between them (a wrong `PAID_TO`, a fabricated `OWNS`) will pass. The gate
+  proves they were mentioned together; it does **not** prove the link. This is the
+  one place to be most careful: read the stored source sentence for every edge
+  before you rely on it.
 - **Long documents:** relationship extraction sees the first ~4,000 chars per doc
   today. Split big PDFs into sections before ingesting if relationships matter.
 - **Scanned PDFs / images:** not read. `pdftotext` extracts digital text only —
   scanned filings, photos of documents, and screenshots won't enter the graph
   until you OCR them first.
-- **Edge evidence:** an edge currently tells you *that* two entities are related
-  and with what confidence, but doesn't yet store the exact sentence that
-  justified it — so re-check the source before quoting a connection.
+- **Edge evidence:** every edge stores the exact source sentence that justified it
+  (a verbatim span, plus the document and confidence), so you can read the model's
+  evidence directly. It can still be wrong — the model can misread a sentence — so
+  re-check the full source before quoting a connection.
 - **Extraction model:** the default is a small (3B) local model. It misses and
   mislabels on dense legal/financial prose. Bigger local models (set in
   `config.py`) help; verification is still on you.

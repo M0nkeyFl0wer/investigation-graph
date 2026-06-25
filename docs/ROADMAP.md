@@ -19,6 +19,16 @@ circuit breaker; **a real re-ingest crash fixed** (single-file graph); the §4
 (ColQwen visual retrieval + VLM — needs GPU/controlled compute + the kg-common
 promotion decision).
 
+**DATED DECISION — make it installable (decide by 2026-07-08):** a fresh clone
+cannot install today — `kg-common` is private (a `git+https` 404), and `setup.sh`
+installs neither `kg-common` nor `duckdb`, having drifted from `requirements.txt`.
+The hard part is done: the kg-common public export is leak-clean and gated. The
+README currently carries the honest "read, don't run" banner (option B). The real
+fix is **option A: flip `kg-common` public + fix `setup.sh` to match
+`requirements.txt`.** Pick A or B *by the date* — do not let B become the resting
+state by drift (the install gap is otherwise the next known-issue-that-survives-
+because-the-fix-was-one-step-less-convenient). When A lands, drop the banner.
+
 ---
 
 ## P0 — correctness (silently misleading today)

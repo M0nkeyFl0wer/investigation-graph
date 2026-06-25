@@ -4,6 +4,11 @@ A privacy-first knowledge graph toolkit for **investigative journalists, OSINT i
 
 **No cloud required. No accounts. No data leaves your machine.**
 
+> **⚠️ Status — not yet installable from a fresh clone.** The `kg-common` substrate
+> this depends on goes public alongside this repo; until then `pip install` from a
+> clean checkout won't resolve it. For now, read this as the *approach* and the
+> worked example (`examples/good-dogs/`), not a runnable install.
+
 <a href="https://ladybugdb.com"><img src="https://ladybugdb.com/img/logo.svg" alt="LadybugDB" height="50"></a>&nbsp;&nbsp;&nbsp;
 <a href="https://networkx.org"><img src="https://networkx.org/documentation/stable/_static/networkx_logo.svg" alt="NetworkX" height="50"></a>&nbsp;&nbsp;&nbsp;
 <a href="https://ollama.com"><img src="https://ollama.com/public/ollama.png" alt="Ollama" height="50"></a>
@@ -33,9 +38,13 @@ connectors, and spot the gap that points to the next records request.
 
 It's deliberately a **lead-generator and structure-finder, not a source of
 findings** — every connection is yours to verify against the original document
-before you publish. The safety machinery (it *quarantines* claims the source text
-doesn't support, and merges duplicate names) exists because an automated graph
-that invents a connection is a libel risk.
+before you publish. The safety machinery exists because an automated graph that
+invents a connection is a libel risk: it *quarantines* any entity whose name
+isn't in your documents and any edge between two entities that never appear
+together, so a hallucinated name — or a link between people never mentioned in
+the same place — is dropped, not published. What it does **not** do is verify
+that a relationship between two entities that *do* co-occur is real, so every edge
+stores its source sentence and confirming it against the document is your job.
 
 > **📖 Read [`docs/FOR-INVESTIGATORS.md`](docs/FOR-INVESTIGATORS.md) — the field
 > guide.** Why a graph beats a folder of PDFs, how to work each stage, how to
@@ -529,7 +538,7 @@ All open source. All installable with pip (except Ollama).
 |------|---------|---------|-------------|
 | [DuckDB](https://duckdb.org) | 1.0+ | Chunks + embeddings + FTS (the base) | Single-file columnar DB. BM25 full-text + HNSW vector search fused with RRF. Source of truth for chunk text, embeddings, and the record set. |
 | [LadybugDB](https://ladybugdb.com) | 0.15.3 | Graph database (the projection) | Embedded graph DB, Cypher queries, typed edges. Rebuilt from the DuckDB records each ingest. No server. Continuation of KuzuDB. |
-| [kg-common](https://github.com/M0nkeyFl0wer/kg-common) | pinned | Shared KG substrate | GraphWriter (edge-corruption guard), the Ontology contract (grade-locality), entity resolution, and the grounding gate — imported, not reinvented. |
+| [kg-common](https://github.com/M0nkeyFl0wer/kg-common) | pinned | Shared KG substrate | GraphWriter (safe bulk-write path), the Ontology contract (grade-locality), entity resolution, and the grounding gate — imported, not reinvented. |
 | [PyArrow](https://arrow.apache.org) | 15.0+ | Bulk data loading | `COPY FROM` Parquet is far faster than row-by-row inserts; PyArrow writes the Parquet files for both DuckDB and LadybugDB. |
 | [Pandas](https://pandas.pydata.org) | 3.0+ | Data manipulation | DataFrame operations for bulk entity preparation before Parquet export. |
 | [spaCy](https://spacy.io) | 3.8+ | NLP extraction (Phase 2) | Named entity recognition. `en_core_web_sm` model — small, fast, good enough for people/orgs/locations. |
@@ -544,7 +553,7 @@ You don't pick a database — it's always this hybrid, so there's nothing to mis
 
 - **DuckDB does retrieval**: BM25 full-text + HNSW vector search out of the box, fused with Reciprocal Rank Fusion. One file, no server, easy to back up.
 - **LadybugDB does structure**: a real graph DB (Cypher, typed edges) for the investigative payoff — paths, gaps, bridges, communities.
-- **The graph is a rebuilt projection** of the DuckDB records, not an incrementally-mutated store. This sidesteps a LadybugDB edge-write corruption mode and keeps re-ingestion safe (see `SPEC.md` §2.1).
+- **The graph is a rebuilt projection** of the DuckDB records, not an incrementally-mutated store. Every ingest rebuilds it in one clean pass, so re-ingestion is idempotent — the same records always produce the same graph, with no in-place edge mutation to drift or get out of sync (see `SPEC.md` §2.1).
 - **Embedded**: both are files/dirs under `data/` — copy, back up, or encrypt the whole investigation as a unit.
 
 ### Why not a cloud graph database?
@@ -631,8 +640,9 @@ CHUNK_OF (Edge: Chunk → Document)
 
 Entities carry no embedding column — semantic search runs over the DuckDB
 chunks, not over graph nodes (one embedding model, one place). Edge writes go
-through kg-common's corruption-guarded `GraphWriter`; the graph is rebuilt in a
-single reconstruct-and-swap pass per ingest.
+through kg-common's `GraphWriter`; the graph is rebuilt in a single
+reconstruct-and-swap pass per ingest, so re-ingestion is idempotent and never
+mutates edges in place.
 
 ### Integration with AI assistants (MCP / Claude Code)
 
