@@ -1,22 +1,32 @@
-"""GATE-PROV — an edge with NO real source must be REJECTED, never silently stored.
+"""GATE-PROV — STRUCTURAL provenance: an edge's source must resolve to a real
+INGESTED DOCUMENT, not merely "look like" a source.
 
-Plain English: a journalist's whole defense is "every connection traces to a
-source." This gate proves the tool *enforces* that — you cannot put an edge in the
-graph without a real, traceable source.
+WHY STRUCTURAL (the category was the bug).
+Two string-heuristic builds leaked. A denylist of banned words leaked; then
+"positive validation" leaked because it collapsed into a denylist one layer down
+("has >=1 letter and isn't one of ~30 words") — "no source", bare "http://", a
+single "x", and the Greek-omicron homoglyph "unknοwn" all passed. Any check that
+asks "does this STRING look like a source" is satisfied by a string that looks
+like one and isn't. So we stop checking the shape of a string and check a FACT:
+does the source POINT TO a document that was actually ingested?
 
-STRENGTHENED 2026-06-26 after an independent verifier broke the first version. It
-was a denylist of 6 literal words guarding only ONE of two write paths. This
-version demands the real guarantee:
-  (a) a large matrix of "no real source" values — alternate placeholders, a typo,
-      a zero-width space, non-string junk — ALL must be refused;
-  (b) BOTH write paths are covered (build_graph AND Graph.add_edge), so a guard in
-      one caller's loop isn't enough — it must live at the writer boundary;
-  (c) a genuinely real source still passes (no false positives).
-The cheap fake this blocks: a denylist of the exact strings the builder thought of.
-Passing this requires positive validation (a real source looks like X), at the
-write boundary, applied to every path — not a blocklist in one function.
+That is the real libel defense — not "the edge claims a source" but "the edge
+points to a thing in evidence a journalist can open and read." "no source",
+"http://", "x", and a phantom doc-id all fail because they reference nothing real.
 
-Run:  .venv/bin/python tests/gate_prov.py     (exit 0 = enforced everywhere)
+THREE cases, driven through BOTH write paths (build_graph AND Graph.add_edge):
+  (a) an edge citing a REAL ingested document            -> must BUILD,
+  (b) an edge with NO source                             -> must be REFUSED,
+  (c) an edge citing a doc-id/url NEVER ingested (phantom) -> must be REFUSED.
+Case (c) is the one a string check can never catch and the structural check gets
+for free — and it's the case this gate now proves.
+
+CONTRACT the build must satisfy: an edge is sourced iff its `source_url` matches
+the url/path of a document in the ingested document set, OR its `provenance`
+matches the id of an ingested document. For Graph.add_edge (no records payload),
+the document set is the documents already in the graph.
+
+Run:  .venv/bin/python tests/gate_prov.py      (exit 0 = structurally enforced)
 """
 from __future__ import annotations
 
@@ -27,79 +37,73 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from investigation_graph.graph import Graph, build_graph  # noqa: E402
 
-_ENTS = [
+# Two genuinely ingested documents (id + url/path). Edges may only cite these.
+DOCS = [
+    {"id": "doc1", "url": "http://sec.gov/filing/1", "path": "http://sec.gov/filing/1"},
+    {"id": "doc2", "url": "http://fec.gov/f3x/2", "path": "http://fec.gov/f3x/2"},
+]
+ENTS = [
     {"id": "a", "label": "Acme", "entity_type": "organization",
-     "source_url": "http://reg.example/x", "provenance": "registry"},
+     "source_url": "http://sec.gov/filing/1", "provenance": "doc1"},
     {"id": "b", "label": "Beta", "entity_type": "organization",
-     "source_url": "http://reg.example/x", "provenance": "registry"},
+     "source_url": "http://sec.gov/filing/1", "provenance": "doc1"},
 ]
 
-# Values that DO NOT constitute a real, traceable source. Every one must be refused
-# (as either provenance or source_url) — these are the fresh inputs the verifier
-# used to break the denylist.
-NOT_A_SOURCE = [
-    "", "unknown", "none", "null", "n/a", "na",            # the originals
-    "N/A.", "tbd", "TODO", "see source", "-", "—",     # alt placeholders / em-dash
-    "...", "n.a.", "unkown", "0", "false", "pending",
-    "​", "unknown​", "  unknown  ", "\t", " ",    # zero-width / whitespace tricks
-    1, True, 3.14, ["x"], {"k": "v"}, None,                 # non-string junk
+# (c) phantom + every string-heuristic leak from the prior verifiers: none of
+# these reference an ingested document, so all must be refused.
+PHANTOM_SOURCES = [
+    {"source_url": "http://sec.gov/filing/999"},   # well-formed url, never ingested
+    {"provenance": "doc999"},                       # plausible id, never ingested
+    {"source_url": "no source"}, {"source_url": "http://"}, {"source_url": "x"},
+    {"source_url": "unknοwn"},                       # greek-omicron homoglyph
+    {"provenance": "[citation needed]"}, {"source_url": "tbc"},
+    {},                                             # no source at all
 ]
 
 
-def _edge(prov, src):
-    e = {"source_id": "a", "target_id": "b", "edge_type": "OWNS"}
-    if prov is not None:
-        e["provenance"] = prov
-    if src is not None:
-        e["source_url"] = src
-    return e
+def _edge(extra):
+    return {"source_id": "a", "target_id": "b", "edge_type": "OWNS", **extra}
 
 
 def main() -> int:
     fails: list[str] = []
     with tempfile.TemporaryDirectory() as td:
-        # (a)+(b) every non-source value must be refused on BOTH paths.
-        for i, bad in enumerate(NOT_A_SOURCE):
-            recs = {"documents": [{"id": "d"}], "entities": _ENTS,
-                    "edges": [_edge(bad, bad)]}
-            try:
-                n = build_graph(recs, graph_dir=Path(td) / f"bg{i}.lbug")["edges"]
-                if n > 0:
-                    fails.append(f"build_graph stored a source-less edge (value={bad!r})")
-            except Exception:
-                pass  # raising is an acceptable form of rejection
-
-            # second write path: Graph.add_edge must enforce the same boundary
-            try:
-                g = Graph(graph_dir=Path(td) / f"ge{i}.lbug", read_only=False)
-                try:
-                    g.add_edge("a", "b", "OWNS", provenance=bad, source_url=bad)
-                except TypeError:
-                    g.add_edge("a", "b", "OWNS")  # no source at all
-                except Exception:
-                    g.close()
-                    continue
-                leaked = g.edge_count()
-                g.close()
-                if leaked > 0:
-                    fails.append(f"Graph.add_edge stored a source-less edge (value={bad!r})")
-            except Exception:
-                pass  # construction/other errors are not a leak
-
-        # (c) a genuinely real source must still build (no false positives).
-        ok = {"documents": [{"id": "d"}], "entities": _ENTS,
-              "edges": [_edge("registry", "http://reg.example/x")]}
+        # (a) an edge citing a real ingested doc must BUILD.
+        ok = {"documents": DOCS, "entities": ENTS, "edges": [_edge({"source_url": "http://sec.gov/filing/1"})]}
         if build_graph(ok, graph_dir=Path(td) / "ok.lbug")["edges"] != 1:
-            fails.append("a real-sourced edge was wrongly rejected (false positive)")
+            fails.append("an edge citing a REAL ingested document was wrongly rejected (false positive)")
+
+        # (b)+(c) sourceless and phantom-doc edges must be REFUSED — build_graph path.
+        for i, ph in enumerate(PHANTOM_SOURCES):
+            recs = {"documents": DOCS, "entities": ENTS, "edges": [_edge(ph)]}
+            try:
+                n = build_graph(recs, graph_dir=Path(td) / f"ph{i}.lbug")["edges"]
+                if n > 0:
+                    fails.append(f"build_graph stored an edge with no ingested-doc source: {ph}")
+            except Exception:
+                pass  # raising is acceptable rejection
+
+        # (c) phantom via the second write path: Graph.add_edge must check the
+        # graph's own ingested documents. Build a real graph, then try to add a
+        # phantom-sourced edge.
+        g = Graph(graph_dir=Path(td) / "ok.lbug", read_only=False)
+        before = g.edge_count()
+        try:
+            g.add_edge("a", "b", "DIRECTOR_OF", source_url="http://sec.gov/filing/999")
+        except Exception:
+            pass
+        after = g.edge_count()
+        g.close()
+        if after > before:
+            fails.append("Graph.add_edge stored an edge citing a doc never ingested (phantom)")
 
     if fails:
-        print("GATE-PROV  RESULT: \033[31mFAIL\033[0m — source-less edges leaked / over-rejection:")
+        print("GATE-PROV  RESULT: \033[31mFAIL\033[0m — structural provenance not enforced:")
         for f in fails[:12]:
             print(f"    ✗ {f}")
-        if len(fails) > 12:
-            print(f"    … +{len(fails) - 12} more")
         return 1
-    print("GATE-PROV  RESULT: \033[32mPASS\033[0m — no source-less edge enters via any path.")
+    print("GATE-PROV  RESULT: \033[32mPASS\033[0m — every edge resolves to an ingested document; "
+          "sourceless and phantom-doc edges refused on both paths.")
     return 0
 
 

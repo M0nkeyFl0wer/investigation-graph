@@ -196,7 +196,10 @@ def main() -> int:
 
     # 8. round-trip: it actually builds a persistent graph
     with tempfile.TemporaryDirectory() as td:
-        counts = build_graph({"documents": [{"id": "src"}], **build_records},
+        # Register the structured source as a real ingested document, so the
+        # (forthcoming) structural-provenance enforcement resolves these edges to
+        # a real artifact rather than rejecting them (every edge cites SRC).
+        counts = build_graph({"documents": [{"id": "src", "url": SRC, "path": SRC}], **build_records},
                              graph_dir=Path(td) / "g.lbug")
         if counts.get("edges", 0) < EXPECTED_MIN_EDGES:
             fails.append(f"built graph edges={counts.get('edges')} < {EXPECTED_MIN_EDGES} (did not persist)")
