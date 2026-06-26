@@ -110,7 +110,10 @@ def test_operational_path_reads_share_pct_off_the_live_graph(tmp_path):
                        MappingSpec.from_yaml(FIX / "ownership.map.yaml", ont),
                        ontology=ont)
     graph_dir = tmp_path / "g.lbug"
-    build_graph({"documents": [], "entities": out["entities"],
+    # Register the CSV the edges were extracted from as a real ingested document
+    # so structural provenance resolves them (each edge's source_url == this path).
+    docs = [{"id": s, "path": s} for s in {e["source_url"] for e in out["edges"]}]
+    build_graph({"documents": docs, "entities": out["entities"],
                  "edges": out["edges"], "mentions": []},
                 graph_dir=graph_dir, ontology=ont)
     label = {e["id"]: e["label"] for e in out["entities"]}

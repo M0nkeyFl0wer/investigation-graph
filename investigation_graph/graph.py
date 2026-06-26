@@ -34,6 +34,95 @@ from .ontology import Ontology
 
 logger = logging.getLogger(__name__)
 
+# ============================================================================
+# PROVENANCE ENFORCEMENT — STRUCTURAL, not a string heuristic.
+#
+# History (why this is structural now): two prior builds enforced provenance by
+# inspecting the SHAPE of the source string — first a denylist of banned words,
+# then "positive validation" that collapsed into a denylist one layer down
+# ("has >=1 letter and isn't one of ~30 placeholder words"). Both leaked, because
+# any check that asks "does this STRING look like a source" is satisfiable by a
+# string that looks like one and points to nothing: "no source", a bare
+# "http://", a single "x", the Greek-omicron homoglyph "unknοwn", and — the
+# killer — a perfectly well-formed but never-ingested URL ("http://sec.gov/
+# filing/999") or a plausible phantom doc-id ("doc999"). A string check can NEVER
+# catch the phantom case, because the phantom IS well-formed.
+#
+# So we stop checking the shape of a string and check a FACT: does this edge's
+# source POINT TO a document that was actually INGESTED? That is the real libel
+# defense — not "the edge claims a source" but "the edge points to a thing in
+# evidence a journalist can open and read."
+#
+# THE CONTRACT (structural):
+#   An edge is sourced iff
+#     edge.source_url  ∈ { url / path of an ingested document },  OR
+#     edge.provenance  ∈ { id of an ingested document }.
+#   Everything else is refused. There is no notion of "looks like a source" here.
+#   A phantom url and a phantom doc-id both fail for the SAME reason a literal
+#   "x" fails: none of them is a member of the ingested-document set. No
+#   denylist, no scheme check, no length/letter heuristic — pure set membership.
+#
+# Two write paths, two ways to obtain the ingested-document set:
+#   * build_graph    — the set is built from the ``records["documents"]`` payload
+#                      it is handed (the docs being ingested in this rebuild).
+#   * Graph.add_edge — there is no records payload, so the set is the documents
+#                      ALREADY IN THE GRAPH, queried back out of the store.
+# ============================================================================
+
+
+def _valid_sources_from_documents(documents) -> tuple[set, set]:
+    """Build the structural valid-source sets from a list of document records.
+
+    Returns ``(doc_locators, doc_ids)`` where:
+      * ``doc_locators`` = every ``url`` and every ``path`` across the documents
+        (the things an edge's ``source_url`` may match — a document's locator),
+      * ``doc_ids``      = every document ``id`` (the things an edge's
+        ``provenance`` may match — a document's identity).
+
+    These are the ONLY values an edge may cite. Membership in these sets is the
+    whole check; nothing about the *shape* of any string is consulted. We add
+    both ``url`` and ``path`` because a document record may carry either or both
+    as its locator (the artifact contract uses ``path``; some sources also carry
+    a ``url``), and an edge's ``source_url`` legitimately matches whichever the
+    document was ingested with. Empty/None locators are NOT added, so an edge can
+    never resolve to a document by matching a blank locator against a blank field.
+    """
+    doc_locators: set = set()
+    doc_ids: set = set()
+    for doc in documents or ():
+        # A document's identity — what an edge's ``provenance`` resolves against.
+        did = doc.get("id")
+        if did is not None and did != "":
+            doc_ids.add(did)
+        # A document's locator(s) — what an edge's ``source_url`` resolves against.
+        for key in ("url", "path"):
+            loc = doc.get(key)
+            if loc is not None and loc != "":
+                doc_locators.add(loc)
+    return doc_locators, doc_ids
+
+
+def _edge_resolves(edge: dict, doc_locators: set, doc_ids: set) -> bool:
+    """True iff this edge's source resolves to an ingested document (set membership).
+
+    Structural test, no string shape: the edge is sourced iff its ``source_url``
+    is the locator of an ingested document OR its ``provenance`` is the id of one.
+    A missing field is simply not a member of the (locator/id) set, so a sourceless
+    edge fails for the same reason a phantom one does — it is not IN the evidence.
+
+    We require the cited value to be non-empty before testing membership, so that
+    an edge with ``source_url=""`` cannot accidentally resolve should a malformed
+    document ever leak an empty locator into the set (belt-and-suspenders with the
+    empty-filtering in ``_valid_sources_from_documents``).
+    """
+    source_url = edge.get("source_url")
+    if source_url is not None and source_url != "" and source_url in doc_locators:
+        return True
+    provenance = edge.get("provenance")
+    if provenance is not None and provenance != "" and provenance in doc_ids:
+        return True
+    return False
+
 
 def _import_ladybug():
     """Dual-import: source builds expose ``ladybug``; PyPI ships ``real_ladybug``."""
@@ -97,9 +186,59 @@ class Graph:
         """Add an entity. GraphWriter validates the type + runs the dedup gate."""
         return self._require_writer().add_entity(entity_id, entity_type, label, **extras)
 
+    def _graph_valid_sources(self) -> tuple[set, set]:
+        """Read the structural valid-source set back out of the GRAPH itself.
+
+        This is the second write path's analogue of the ``records["documents"]``
+        payload that ``build_graph`` is handed: here there is no payload, so the
+        ingested-document set is *the documents that are already nodes in this
+        graph*. We query them and project the same two sets the structural check
+        needs — document locators (``path``) and document ids.
+
+        NOTE on the locator column: the Document node schema (see
+        ``Ontology.document_field_schema``) stores ``id`` and ``path`` — there is
+        no ``url`` column, so a document's stored locator is its ``path``. An edge
+        added here therefore resolves by ``source_url == d.path`` or
+        ``provenance == d.id``. (A ``url`` passed to ``add_document`` is not in
+        the schema and is not persisted, so it cannot be a stored locator.) This
+        is exactly the structural contract on the live store, not a string check.
+        """
+        rows = self.query("MATCH (d:Document) RETURN d.id AS id, d.path AS path")
+        # Reuse the same set-builder as build_graph so both paths agree on what
+        # "a valid source" means; rows expose ``path`` as the document locator.
+        return _valid_sources_from_documents(rows)
+
     def add_edge(self, source_id: str, target_id: str, edge_type: str, **extras) -> bool:
         """Add a typed edge. GraphWriter validates type + grade-locality and
-        enforces the corruption guard (only safe during a fresh bulk build)."""
+        enforces the corruption guard (only safe during a fresh bulk build).
+
+        PROVENANCE ENFORCEMENT (STRUCTURAL, enforced HERE — the SECOND write path
+        into the graph; the first is ``build_graph``). The guarantee must hold for
+        BOTH paths, so the same fact is checked here: does this edge's source
+        resolve to a document that is ACTUALLY IN THIS GRAPH? There is no records
+        payload on this path, so the ingested-document set is read back out of the
+        store (``_graph_valid_sources``). The edge passes iff its ``source_url`` is
+        the locator (``path``) of a document node OR its ``provenance`` is the id
+        of one. A phantom url ("http://sec.gov/filing/999"), a phantom doc-id, a
+        missing source, and every string-junk value all fail for the SAME reason —
+        none is a member of the graph's document set. No shape check, no denylist.
+
+        Refused edges never reach the writer, so kg-common can never silently
+        relabel a sourceless edge as provenance="unknown"/source_url="" and store
+        it. ``extras`` carries the provenance/source_url keyword arguments the
+        caller supplied.
+        """
+        doc_locators, doc_ids = self._graph_valid_sources()
+        if not _edge_resolves(extras, doc_locators, doc_ids):
+            logger.warning(
+                "PROVENANCE GATE: refused edge %s (%s → %s) via Graph.add_edge — "
+                "its source does not resolve to any document in the graph (got "
+                "provenance=%r, source_url=%r). An edge may enter only if it "
+                "points to an actually-ingested document a journalist can open.",
+                edge_type, source_id, target_id,
+                extras.get("provenance"), extras.get("source_url"),
+            )
+            return False
         return self._require_writer().add_edge(source_id, target_id, edge_type, **extras)
 
     def add_mention(self, entity_id: str, doc_id: str, mention_count: int = 1) -> bool:
@@ -270,6 +409,13 @@ def build_graph(records: dict, graph_dir: Path | None = None,
     edges = records.get("edges", [])
     mentions = records.get("mentions", [])
 
+    # STRUCTURAL provenance set, built from the documents being ingested in THIS
+    # rebuild. An edge may enter only if it resolves into these sets (source_url
+    # ∈ document locators, OR provenance ∈ document ids). Built ONCE up front so
+    # the edge loop is a cheap set-membership test per edge — no string shape is
+    # ever inspected (see the module header for why string heuristics leaked).
+    doc_locators, doc_ids = _valid_sources_from_documents(documents)
+
     # allow_inplace_edge_writes=True is SAFE here only: fresh empty table, single
     # bulk pass, one checkpoint at close (see module + SPEC §2.1).
     writer = GraphWriter(graph_dir, ontology, allow_inplace_edge_writes=True)
@@ -293,6 +439,29 @@ def build_graph(records: dict, graph_dir: Path | None = None,
         for ed in edges:
             ed = dict(ed)
             src, tgt, etype = ed.pop("source_id"), ed.pop("target_id"), ed.pop("edge_type")
+
+            # PROVENANCE GATE (STRUCTURAL, enforced HERE at the real write path,
+            # not in a bypassable helper): every edge entering the graph must
+            # resolve to a document that was actually ingested in THIS rebuild —
+            # source_url ∈ doc_locators OR provenance ∈ doc_ids. kg-common's schema
+            # would otherwise silently relabel a sourceless edge as
+            # provenance="unknown"/source_url="" and store it; we refuse it. A
+            # phantom url/doc-id and a sourceless edge all fail identically: they
+            # are not MEMBERS of the ingested-document set. This is checked against
+            # the leftover ``ed`` extras (still holds provenance/source_url after
+            # the three pops above). No string shape is consulted.
+            if not _edge_resolves(ed, doc_locators, doc_ids):
+                counts.setdefault("edges_rejected", 0)
+                counts["edges_rejected"] += 1
+                logger.warning(
+                    "PROVENANCE GATE: refused edge %s (%s → %s) — its source does "
+                    "not resolve to any ingested document (got provenance=%r, "
+                    "source_url=%r). An edge may enter only if it points to an "
+                    "actually-ingested document a journalist can open.",
+                    etype, src, tgt, ed.get("provenance"), ed.get("source_url"),
+                )
+                continue
+
             if writer.add_edge(src, tgt, etype, **ed):
                 counts["edges"] += 1
 

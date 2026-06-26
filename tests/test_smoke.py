@@ -83,9 +83,13 @@ def test_build_graph_projection_rejects_grade_violation(tmp_path):
             {"id": "e_acme", "entity_type": "organization", "label": "Acme Corp"},
         ],
         "edges": [
-            {"source_id": "e_jane", "target_id": "e_acme", "edge_type": "EMPLOYED_BY"},
+            # Real provenance required now — the provenance gate refuses any edge
+            # with no traceable source (was silently stored as "unknown" before).
+            {"source_id": "e_jane", "target_id": "e_acme", "edge_type": "EMPLOYED_BY",
+             "provenance": "doc1", "source_url": "doc1.txt"},
             # grade violation: org --EMPLOYED_BY--> person must be rejected at write
-            {"source_id": "e_acme", "target_id": "e_jane", "edge_type": "EMPLOYED_BY"},
+            {"source_id": "e_acme", "target_id": "e_jane", "edge_type": "EMPLOYED_BY",
+             "provenance": "doc1", "source_url": "doc1.txt"},
         ],
     }
     counts = build_graph(records, graph_dir=gdir, ontology=onto)
@@ -114,7 +118,9 @@ def test_rebuild_is_idempotent(tmp_path):
         "documents": [{"id": "d1", "title": "t", "path": "p"}],
         "entities": [{"id": "a", "entity_type": "person", "label": "Ann"},
                      {"id": "b", "entity_type": "organization", "label": "Acme"}],
-        "edges": [{"source_id": "a", "target_id": "b", "edge_type": "EMPLOYED_BY"}],
+        # Real provenance required now — the provenance gate refuses unsourced edges.
+        "edges": [{"source_id": "a", "target_id": "b", "edge_type": "EMPLOYED_BY",
+                   "provenance": "d1", "source_url": "p"}],
         "mentions": [],
     }
     c1 = build_graph(records, graph_dir=gdir, ontology=onto)

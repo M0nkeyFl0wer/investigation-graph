@@ -48,7 +48,12 @@ def _run(conn, cypher):
 
 def test_extracted_view_excludes_inferred_edges(tmp_path):
     graph_dir = tmp_path / "graph.lbug"
-    build_graph({"documents": [], "entities": ENTITIES, "edges": EDGES, "mentions": []},
+    # Register the documents these edges cite as their source so structural
+    # provenance resolves them: the 3 extracted edges carry provenance="tabular"
+    # and the inferred one carries provenance="inferred" — each must resolve to an
+    # ingested document of that id (derivation has its own documented source).
+    docs = [{"id": p} for p in {e["provenance"] for e in EDGES}]
+    build_graph({"documents": docs, "entities": ENTITIES, "edges": EDGES, "mentions": []},
                 graph_dir=graph_dir, ontology=ONT)
     conn = _open(graph_dir)
 

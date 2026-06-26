@@ -90,7 +90,12 @@ def test_max_flow_single_currency_and_rejects_mixed():
 def test_graph_native_trace_reads_amount_off_the_live_graph(tmp_path):
     out, label, src = _ledger()
     graph_dir = tmp_path / "g.lbug"
-    build_graph({"documents": [], "entities": out["entities"],
+    # Register the CSV the edges were extracted from as a real ingested document,
+    # so structural provenance resolves them (each edge's source_url == this path).
+    # Derived from the edges' own source_url, so it tracks whatever path the
+    # tabular ingest recorded — not a hand-typed string.
+    docs = [{"id": s, "path": s} for s in {e["source_url"] for e in out["edges"]}]
+    build_graph({"documents": docs, "entities": out["entities"],
                  "edges": out["edges"], "mentions": []},
                 graph_dir=graph_dir, ontology=ONT)
     chains = trace_funds_from_graph(graph_dir, src)
