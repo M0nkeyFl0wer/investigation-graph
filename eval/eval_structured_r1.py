@@ -39,6 +39,24 @@ N_GROUPS = 30            # company duplicate groups
 N_PEOPLE = 8             # distinct people that must NOT over-merge
 SRC = "https://registry.example.gov/filing"   # a provenance source on every record
 
+# The edge floor, DERIVED from the corpus (not a magic number). A correct pipeline
+# keeps every legitimate edge and drops only the planted poison:
+#   (N_GROUPS-1) ownership-chain edges + N_PEOPLE director edges + 1 FUNDED_BY edge
+#   (the two name-variant donor FUNDED_BY edges re-aggregate to one on merge).
+# The poison OWNS edge MUST be dropped (floor #6), so 39 is the absolute ceiling
+# and 38 the correct count. Demanding >= this many proves no real edge was lost.
+EXPECTED_MIN_EDGES = (N_GROUPS - 1) + N_PEOPLE + 1   # = 38
+
+
+# Legal-suffix forms a real registry corpus mixes — NOT just "LLC". A correct
+# structured-dedup must merge a bare name with ANY of these, generally (the first
+# build overfit to a short suffix list and fragmented "Corporation"/"Company"/"GmbH").
+SUFFIXES = ["LLC", "Inc", "Corporation", "Company", "GmbH", "Ltd"]
+
+
+def _suffix(i: int) -> str:
+    return SUFFIXES[i % len(SUFFIXES)]
+
 
 def gen_gold():
     """Build (chunks, entities, edges, gold) — deterministic, no randomness."""
@@ -46,35 +64,41 @@ def gen_gold():
     # canonical id per group = the bare-name variant's id; both variants share a group
     dup_groups: list[set[str]] = []
 
+    # Authoritative-structured records carry a STABLE marker (extraction_source),
+    # the way the real structured-ingest path tags them — NOT a magic provenance
+    # string. provenance/source_url are the human-facing source and VARY per record.
+    # (The first build keyed its grounding-rescue on the literal provenance
+    # "structured_import"; relabel the same data and its edges silently dropped.
+    # Keying on the stable marker is the general fix this now forces.)
     def ent(eid, label, etype):
         entities.append({"id": eid, "label": label, "entity_type": etype,
-                         "source_url": SRC, "provenance": "structured_import"})
+                         "source_url": SRC, "provenance": f"{SRC}#{eid}",
+                         "extraction_source": "structured"})
 
     def chunk(cid, text):
         chunks.append({"id": cid, "text": text})
 
     def edge(sid, tid, etype, **extra):
         edges.append({"source_id": sid, "target_id": tid, "edge_type": etype,
-                      "source_url": SRC, "provenance": "structured_import", **extra})
+                      "source_url": SRC, "provenance": f"{SRC}#{sid}-{tid}",
+                      "extraction_source": "structured", **extra})
 
-    # 30 company groups: bare + legal-suffix variant (same real entity)
+    # company groups: bare + a VARIED legal-suffix variant (same real entity)
     canon_ids = []
     for i in range(N_GROUPS):
-        bare_id, llc_id = f"co{i}", f"co{i}_llc"
+        bare_id, var_id = f"co{i}", f"co{i}_v"
         ent(bare_id, f"Acme {i}", "organization")
-        ent(llc_id, f"Acme {i} LLC", "organization")
-        dup_groups.append({bare_id, llc_id})
+        ent(var_id, f"Acme {i} {_suffix(i)}", "organization")
+        dup_groups.append({bare_id, var_id})
         canon_ids.append(bare_id)
 
     # ownership CHAIN across the companies — a correct ER+re-point => one big
-    # connected component. Reference DIFFERENT variants on each side so the edge
-    # only connects the chain if ER actually merges the variants.
+    # connected component. Reference the SUFFIX VARIANT on the target side so the
+    # edge only connects the chain if ER actually merges the variant.
     for i in range(N_GROUPS - 1):
-        # co{i} (bare) OWNS co{i+1}_llc (suffix variant). Only connected if the
-        # suffix variant resolves to co{i+1}.
-        s, t = f"co{i}", f"co{i+1}_llc"
+        s, t = f"co{i}", f"co{i+1}_v"
         edge(s, t, "OWNS")
-        chunk(f"c_own_{i}", f"Acme {i} owns Acme {i+1} LLC, per the filing.")
+        chunk(f"c_own_{i}", f"Acme {i} owns Acme {i+1} {_suffix(i+1)}, per the filing.")
 
     # 8 distinct people with SIMILAR names — must NOT over-merge (precision).
     for i in range(N_PEOPLE):
@@ -83,20 +107,20 @@ def gen_gold():
         edge(pid, f"co{i}", "DIRECTOR_OF")
         chunk(f"c_dir_{i}", f"Jordan Lee {i} is a director of Acme {i}.")
 
-    # name-variant donor pair, each funding Acme 0 with a distinct amount. After
-    # ER merges the variants, the two FUNDED_BY edges collide on the canonical
-    # donor and must re-aggregate to 6650 (no money silently dropped). Direction
-    # follows the ontology: recipient FUNDED_BY funder (organization → organization).
+    # name-variant donor pair (a NON-"LLC" suffix) each funding Acme 0 with a
+    # distinct amount. After ER merges the variants, the two FUNDED_BY edges
+    # collide on the canonical donor and must re-aggregate to 6650 (no money lost).
     ent("donorA", "Northwind Trust", "organization")
-    ent("donorA_llc", "Northwind Trust LLC", "organization")
-    dup_groups.append({"donorA", "donorA_llc"})
+    ent("donorA_v", "Northwind Trust GmbH", "organization")
+    dup_groups.append({"donorA", "donorA_v"})
     edge("co0", "donorA", "FUNDED_BY", amount_total=2700, currency="USD")
-    edge("co0", "donorA_llc", "FUNDED_BY", amount_total=3950, currency="USD")
+    edge("co0", "donorA_v", "FUNDED_BY", amount_total=3950, currency="USD")
     chunk("c_fundA", "Acme 0 was funded by Northwind Trust.")
-    chunk("c_fundB", "Acme 0 was funded by Northwind Trust LLC.")
+    chunk("c_fundB", "Acme 0 was funded by Northwind Trust GmbH.")
 
     # planted POISON: an edge to a ghost entity that is in NO chunk -> grounding
-    # must quarantine the ghost and drop the edge.
+    # must quarantine the ghost and drop the edge (even though it carries the same
+    # authoritative-structured marker — origin alone must not rescue an unsupported row).
     ent("ghost", "Zzz Phantom Holdings", "organization")
     edge("co1", "ghost", "OWNS")   # no chunk mentions "Zzz Phantom Holdings"
 
@@ -120,9 +144,9 @@ def main() -> int:
 
     fails: list[str] = []
 
-    # 1. edge floor
-    if len(out_edges) < 45:
-        fails.append(f"edges={len(out_edges)} < 45 (edges dropped / not built)")
+    # 1. edge floor — every legit structured edge must survive (no mass-drop)
+    if len(out_edges) < EXPECTED_MIN_EDGES:
+        fails.append(f"edges={len(out_edges)} < {EXPECTED_MIN_EDGES} (structured edges dropped)")
 
     # 2. connectedness floor. This fixture is CONSTRUCTED so that, with correct
     #    ER, every legit entity (the ownership chain + the people + the donor)
@@ -174,8 +198,8 @@ def main() -> int:
     with tempfile.TemporaryDirectory() as td:
         counts = build_graph({"documents": [{"id": "src"}], **build_records},
                              graph_dir=Path(td) / "g.lbug")
-        if counts.get("edges", 0) < 45:
-            fails.append(f"built graph edges={counts.get('edges')} < 45 (did not persist)")
+        if counts.get("edges", 0) < EXPECTED_MIN_EDGES:
+            fails.append(f"built graph edges={counts.get('edges')} < {EXPECTED_MIN_EDGES} (did not persist)")
 
     print("\nGATE-R1 — structured-first acceptance")
     print(f"  entities_out={len(surviving)} edges_out={len(out_edges)} "
