@@ -271,6 +271,214 @@ Text to analyze:
         logger.info("Remote extraction not yet configured, falling back to local")
         return self._phase3_llm_local(text, source_url, existing_entities, now)
 
+    # ------------------------------------------------------------------
+    # Pairwise + constrained-decoding extraction (the "smarter local" path)
+    # ------------------------------------------------------------------
+    #
+    # WHY a different method instead of the whole-chunk free-generation above:
+    # asking a small/mid local model to free-generate a JSON list of *all* the
+    # relationships in a chunk is the hard version of the task — it has to
+    # simultaneously decide which entities exist, which pairs relate, the type
+    # of each, and emit valid JSON, all in one shot. Small models fabricate
+    # edges on co-occurrence ("A and B both appear" -> invent a link) and miss
+    # negations ("did NOT pay" -> still emit PAID), which wrecks precision on
+    # exactly the no-relation / negation traps an investigative graph must not
+    # hallucinate.
+    #
+    # extract_pairwise reframes it as PER-PAIR CLASSIFICATION, which small models
+    # do far better:
+    #   (a) find the entities in the text (spaCy NER + deterministic money/date),
+    #   (b) for each candidate entity PAIR inside a sliding character window,
+    #   (c) ask one focused question — "is there a relationship between A and B
+    #       *stated in this text*, which ontology type, and quote the exact span"
+    #   (d) force the answer through CONSTRAINED DECODING: the model's output is
+    #       grammar-constrained to a JSON schema whose `type` field is an enum of
+    #       only the allowed edge types plus the sentinel NO_RELATION. The model
+    #       literally cannot emit an invalid type or malformed JSON, and it is
+    #       given an explicit "no relation" escape hatch so negation/co-occurrence
+    #       traps have a correct token to choose instead of being forced to invent.
+
+    def extract_pairwise(self, text: str, source_url: str = "", doc_id: str = "",
+                         allowed_edge_types: list[str] | None = None,
+                         window_chars: int = 240,
+                         model: str | None = None) -> dict:
+        """Entity-pair + constrained-decoding relationship extractor.
+
+        Returns the SAME shape as ``extract_from_text``:
+        ``{"entities": [...], "edges": [...]}``.
+
+        Args:
+            text: the prose to extract from (a sentence or a chunk).
+            source_url / doc_id: provenance, carried onto entities/edges.
+            allowed_edge_types: the closed vocabulary the model may choose from.
+                Defaults to this Extractor's ontology edge types. The eval passes
+                its OWN target vocabulary here so the constrained-decoding enum and
+                the scoring vocabulary line up (exact-triple scoring is unforgiving
+                about edge-type spelling). NO_RELATION is always appended as the
+                sentinel "these two are not related here" answer.
+            window_chars: only pairs whose mentions fall within this many chars of
+                each other are queried — distant entities in a long chunk are
+                almost never directly related and querying them wastes calls and
+                invites false positives.
+            model: Ollama model id; defaults to config.LOCAL_EXTRACTION_MODEL.
+
+        Raises:
+            on a hard model failure (unreachable / timeout / contention) the
+            underlying ollama exception propagates so the CALLER can decide to
+            report DEGRADED rather than silently scoring a half-run. We do NOT
+            swallow it into an empty result here — an empty result would look like
+            a real (terrible) score, which is worse than an honest "couldn't run".
+        """
+        import ollama
+
+        now = int(time.time())
+        model = model or config.LOCAL_EXTRACTION_MODEL
+
+        # The closed edge vocabulary the model may pick from. Default to the
+        # ontology; the eval overrides with its scoring vocabulary.
+        if allowed_edge_types is None:
+            allowed_edge_types = list(self.ontology.edge_type_names)
+        # Normalize, de-dupe, and always offer the explicit "no relation" escape.
+        vocab = []
+        for t in allowed_edge_types:
+            tu = (t or "").upper().strip()
+            if tu and tu not in vocab:
+                vocab.append(tu)
+        SENTINEL = "NO_RELATION"
+        enum_types = vocab + [SENTINEL]
+
+        # ---- (a) find entities in this text -----------------------------------
+        # Reuse the deterministic + spaCy phases so pairwise sees the same
+        # entities the rest of the pipeline does. We record each entity's
+        # character offset(s) in the text so we can apply the proximity window.
+        ents = self._phase1_deterministic(text, source_url, now) \
+            + self._phase2_spacy(text, source_url, now)
+
+        # De-dupe by id but keep first occurrence, and find each label's position.
+        by_id: dict[str, dict] = {}
+        for e in ents:
+            by_id.setdefault(e["id"], e)
+        entities = list(by_id.values())
+
+        def _first_pos(label: str) -> int:
+            # Character offset of the entity mention (lowercased search), or a
+            # large sentinel if not literally present (e.g. normalized spaCy text).
+            idx = text.lower().find(label.lower())
+            return idx if idx >= 0 else 10**9
+
+        for e in entities:
+            e["_pos"] = _first_pos(e["label"])
+
+        # ---- constrained-decoding JSON schema ---------------------------------
+        # This is the grammar the model is forced to satisfy. `related` is a bool,
+        # `type` is constrained to the closed enum (valid ontology types OR the
+        # NO_RELATION sentinel), `evidence` is the verbatim span. A grammar-locked
+        # output cannot be malformed JSON and cannot name a type outside the enum.
+        schema = {
+            "type": "object",
+            "properties": {
+                "related": {"type": "boolean"},
+                "type": {"type": "string", "enum": enum_types},
+                "evidence": {"type": "string"},
+            },
+            "required": ["related", "type", "evidence"],
+        }
+
+        # Human-readable type menu for the prompt (the schema enforces it; the
+        # prompt explains what each type means so the model picks the right one).
+        type_menu_lines = []
+        for name in vocab:
+            # Pull a description from the ontology when available; otherwise the
+            # bare name (the eval's vocabulary may differ from ontology spelling).
+            et = self.ontology.edge_types.get(name)
+            desc = et.description if et else ""
+            type_menu_lines.append(f"  - {name}: {desc}".rstrip())
+        type_menu = "\n".join(type_menu_lines)
+
+        client = ollama.Client(host=config.EXTRACT_ENDPOINT or None,
+                               timeout=config.EXTRACT_TIMEOUT)
+
+        edges = []
+        seen_pairs = set()
+        # ---- (b) iterate candidate entity pairs within the window -------------
+        for i in range(len(entities)):
+            for j in range(len(entities)):
+                if i == j:
+                    continue
+                a, b = entities[i], entities[j]
+                # Skip identical labels and out-of-window pairs.
+                if a["label"].lower().strip() == b["label"].lower().strip():
+                    continue
+                if abs(a["_pos"] - b["_pos"]) > window_chars:
+                    continue
+                # Directed pair; don't ask the same ordered pair twice.
+                key = (a["id"], b["id"])
+                if key in seen_pairs:
+                    continue
+                seen_pairs.add(key)
+
+                # ---- (c) the focused per-pair question -----------------------
+                prompt = (
+                    "You are checking ONE possible relationship in a piece of text.\n"
+                    f'Text: "{text.strip()}"\n\n'
+                    f'Question: Does the text STATE a direct relationship FROM '
+                    f'"{a["label"]}" TO "{b["label"]}"?\n\n'
+                    "Rules:\n"
+                    "- Only answer yes if the relationship is explicitly stated in "
+                    "THIS text, in this direction (subject -> object).\n"
+                    "- Negations ('did NOT pay', 'no payment was made') mean NOT "
+                    "related.\n"
+                    "- Mere co-occurrence ('both attended', 'and') is NOT a "
+                    "relationship.\n"
+                    "- If unrelated, set related=false and type=\"NO_RELATION\".\n\n"
+                    "Choose the type from EXACTLY this list (or NO_RELATION):\n"
+                    f"{type_menu}\n"
+                    f"  - {SENTINEL}: the text states no such relationship.\n\n"
+                    "Quote the exact span of text that states the relationship in "
+                    "'evidence' (empty string if NO_RELATION)."
+                )
+
+                # ---- (d) constrained-decoding call ---------------------------
+                # format=<schema> grammar-constrains the decode. Any hard failure
+                # (timeout/connection) raises out of this method to the caller.
+                response = client.chat(
+                    model=model,
+                    messages=[{"role": "user", "content": prompt}],
+                    format=schema,
+                    options={"temperature": 0},  # deterministic classification
+                )
+                try:
+                    ans = json.loads(response["message"]["content"])
+                except (json.JSONDecodeError, KeyError, TypeError):
+                    # The grammar should prevent this; if a model still emits junk,
+                    # treat THIS pair as "no relation" rather than crashing the run.
+                    continue
+
+                rel = bool(ans.get("related"))
+                etype = (ans.get("type") or "").upper().strip()
+                if not rel or etype == SENTINEL or etype not in vocab:
+                    continue  # honest skip — the model said "not related here"
+
+                edges.append({
+                    "source_id": a["id"],
+                    "target_id": b["id"],
+                    "edge_type": etype,
+                    "weight": 1.0,
+                    "confidence": 0.65,
+                    # Verbatim justification span (capped), same audit contract as
+                    # the whole-chunk path.
+                    "evidence": (ans.get("evidence", "") or "").strip()[:500],
+                    "source_url": source_url,
+                    "provenance": f"pairwise_{model}",
+                    "created_at": now,
+                })
+
+        # Strip the internal _pos helper before returning the public shape.
+        for e in entities:
+            e.pop("_pos", None)
+
+        return {"entities": entities, "edges": edges}
+
     def _make_entity(self, label: str, entity_type: str, description: str,
                      confidence: float, source_url: str, provenance: str,
                      now: int) -> dict:
