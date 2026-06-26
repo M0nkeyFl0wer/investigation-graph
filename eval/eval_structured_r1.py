@@ -83,14 +83,17 @@ def gen_gold():
         edge(pid, f"co{i}", "DIRECTOR_OF")
         chunk(f"c_dir_{i}", f"Jordan Lee {i} is a director of Acme {i}.")
 
-    # name-variant donor pair with distinct FUNDS amounts -> must merge to 6650.
+    # name-variant donor pair, each funding Acme 0 with a distinct amount. After
+    # ER merges the variants, the two FUNDED_BY edges collide on the canonical
+    # donor and must re-aggregate to 6650 (no money silently dropped). Direction
+    # follows the ontology: recipient FUNDED_BY funder (organization → organization).
     ent("donorA", "Northwind Trust", "organization")
     ent("donorA_llc", "Northwind Trust LLC", "organization")
     dup_groups.append({"donorA", "donorA_llc"})
-    edge("donorA", "co0", "FUNDS", amount_total=2700, currency="USD")
-    edge("donorA_llc", "co0", "FUNDS", amount_total=3950, currency="USD")
-    chunk("c_fundA", "Northwind Trust funded Acme 0.")
-    chunk("c_fundB", "Northwind Trust LLC funded Acme 0.")
+    edge("co0", "donorA", "FUNDED_BY", amount_total=2700, currency="USD")
+    edge("co0", "donorA_llc", "FUNDED_BY", amount_total=3950, currency="USD")
+    chunk("c_fundA", "Acme 0 was funded by Northwind Trust.")
+    chunk("c_fundB", "Acme 0 was funded by Northwind Trust LLC.")
 
     # planted POISON: an edge to a ghost entity that is in NO chunk -> grounding
     # must quarantine the ghost and drop the edge.
@@ -121,15 +124,23 @@ def main() -> int:
     if len(out_edges) < 45:
         fails.append(f"edges={len(out_edges)} < 45 (edges dropped / not built)")
 
-    # 2. connectedness floor (counters the '512 isolated nodes' toy)
+    # 2. connectedness floor. This fixture is CONSTRUCTED so that, with correct
+    #    ER, every legit entity (the ownership chain + the people + the donor)
+    #    sits in ONE component — a correct build scores ~1.0. The floor is an
+    #    ADEQUACY bar, not "better than the toy": below ~0.90 means real ownership
+    #    links are still broken (ER under-merged), i.e. "looks connected, isn't".
+    #    (This metric is the ER-fragmentation canary on data designed to connect;
+    #    it does NOT claim a universal "graph is 90% complete" on arbitrary data —
+    #    the real ER-adequacy floors are #3 dup-recall and #4 people-precision.)
     G = nx.Graph()
     G.add_nodes_from(surviving)
     for e in out_edges:
         G.add_edge(e["source_id"], e["target_id"])
     largest = max((len(c) for c in nx.connected_components(G)), default=0)
     frac = largest / max(len(surviving), 1)
-    if frac < 0.6:
-        fails.append(f"largest_component/entities={frac:.2f} < 0.60 (graph fragmented — ER under-merged)")
+    if frac < 0.90:
+        fails.append(f"largest_component/entities={frac:.2f} < 0.90 (graph fragmented — ER under-merged; "
+                     "a correct build connects ~all of this designed-connected corpus)")
 
     # 3. ER recall on suffix-variant duplicate groups (forces a structured tier)
     merged = sum(1 for grp in gold["dup_groups"] if len(grp & surviving) <= 1)
@@ -154,7 +165,7 @@ def main() -> int:
         fails.append("poison edge survived")
 
     # 7. money preserved through the name-variant donor merge
-    funds = [e for e in out_edges if e.get("edge_type") == "FUNDS"]
+    funds = [e for e in out_edges if e.get("edge_type") == "FUNDED_BY"]
     total = sum(e.get("amount_total", 0) for e in funds)
     if total != gold["money_total"]:
         fails.append(f"FUNDS total={total} != {gold['money_total']} (money lost on merge)")
