@@ -53,6 +53,43 @@ stores its source sentence and confirming it against the document is your job.
 
 ---
 
+## How this fits real investigative practice
+
+Edges get into the graph two ways, with very different reliability — being clear
+about which is which is the whole point.
+
+**1. Structured sources — the reliable path (local, no model).** Corporate
+registries, court filings, CSVs, and [FollowTheMoney](https://followthemoney.tech)
+/ [OpenSanctions](https://opensanctions.org) / [ICIJ Offshore Leaks](https://offshoreleaks.icij.org)
+data carry their relationships *in the data* (`OWNS`, `DIRECTOR_OF`, `FUNDS`). The
+tool loads those as typed, sourced edges and resolves duplicate entities across
+datasets. This is how the large investigations (Panama/Pandora Papers) are
+actually built — **structured data + entity resolution + a navigable graph**, not
+a model reading prose. It runs entirely locally and is the most trustworthy mode.
+For heavy-duty entity resolution it composes with dedicated tools (Splink,
+nomenklatura, Senzing) rather than reinventing them.
+
+**2. Unstructured text — the assistive path (model-dependent).** For emails, PDFs,
+and news, entities come from spaCy locally, but high-quality *relationship*
+extraction needs a capable model — a laptop-sized model yields sparse, noisy
+edges. So this path is **assistive and human-reviewed, never auto-asserted**, and
+you pick the model by your data's sensitivity:
+- **Public / already-published data → a cloud model is fine** (no source to protect — most OSINT).
+- **Source-sensitive data → a model you host** (your GPU, a private VPS, or a zero-retention enterprise API), accepting that a laptop-only model gives weaker edges.
+
+Everything else — entities, embeddings/semantic search, and the topology that
+surfaces the gaps — runs locally either way. **The privacy guarantee is precise:
+the default local pipeline makes no network calls; relationship extraction over
+prose is the one stage where you trade model strength against where your data
+goes, and you choose.**
+
+> ⚠️ **Status:** the structured path's pieces (tabular/CSV ingest, the
+> FollowTheMoney crosswalk, the entity-resolution tiers) exist but are not yet the
+> default `ingest_folder` flow — wiring that is the current priority (see
+> `docs/ROADMAP.md`). Today the wired-in default is the prose/LLM path.
+
+---
+
 ## Quick Start
 
 ### Prerequisites
@@ -390,7 +427,12 @@ Readable in Obsidian, any text editor, or the terminal. Optionally auto-copies t
 
 ### Local Mode (default)
 
-Everything runs on your machine. No network connections. No API keys. No accounts.
+The default pipeline runs on your machine and makes **no network calls** — no API
+keys, no accounts. The one exception you opt into deliberately: relationship
+extraction over prose can be routed to a hosted model (see *How this fits real
+investigative practice* above for when that's appropriate), and the optional
+`capture/` tool fetches URLs you explicitly give it. Left at defaults, nothing
+leaves your machine.
 
 | Component | Where it runs |
 |-----------|--------------|

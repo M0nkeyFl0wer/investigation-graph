@@ -46,6 +46,68 @@ and you need both.
 
 ---
 
+## Repositioning — structured-first, prose-assistive (decided 2026-06-26)
+
+How the work is actually done (Panama/Pandora Papers, ICIJ/OCCRP/Aleph, Paco
+Nathan's entity-resolved-KG line on Kuzu+Senzing) is **structured data + entity
+resolution + graph**, not a model reading prose. The structured pieces already
+exist here (P2.4 tabular ingest, P2.5 FtM crosswalk, the PUB.5 ER tiers) but live
+behind tests/evals, while the wired-in default is the weak prose/LLM path. The
+README now states this honestly; these two items make it *true*, not just stated:
+
+- **[ ] R1 — Wire structured ingest as a first-class `ingest_folder` path (by 2026-07-15).**
+  Make CSV/registry/FtM/OpenSanctions ingestion the prominent entry, not a behind-
+  the-scenes helper: structured rows → typed sourced edges → ER → graph, fully
+  local, no LLM. Compose with dedicated ER (Splink/nomenklatura; Senzing as an
+  optional engine — free PoC/eval, paid to productionize). DoD: a real
+  structured-corpus run from the CLI produces a connected graph with edges, end to
+  end, with no model. Skill: `kg-ingestion`. **This is the credibility move for the
+  structured-first claim — until it lands, the README's "Status" caveat stays.**
+- **[ ] R2 — Edge-extraction eval: local vs frontier (by 2026-07-15).** The
+  measurement that resolves "can a local model do edges." Labeled fixture;
+  precision/recall of relationship extraction for: 3B local, a 12–14B local model
+  with **pairwise candidate-pair classification + grammar-constrained decoding**
+  (not open-ended JSON), and a frontier model (Haiku-tier). Sets the honest claim
+  for the prose path by a number, not a prior. Until it runs, the README says
+  "laptop-sized models yield sparse, noisy edges" (the current empirical prior).
+
+## Production readiness — what "production" actually requires
+
+Honest scope: this is a strong, well-architected **prototype**, not a product. To
+be something a newsroom relies on, in rough priority/critical-path order:
+
+**Phase 0 — runnable at all (table stakes).** Flip `kg-common` public + fix
+`setup.sh` so a clean clone installs (the dated install decision above); add CI
+(none today — the gates we built are real but unenforced); package/version.
+
+**Phase 1 — make the edges real (the core value).** R1 (structured-first) + R2
+(edge eval) above; production ER (Splink/nomenklatura/Senzing — the current
+in-memory exact+fuzzy is a toy at scale); the prose-assistive tier built out
+(cloud-for-public + self-host + the human review queue, behind the sensitivity
+choice; finish the half-built hybrid mode or cut it).
+
+**Phase 2 — make it trustworthy (measurement + safety).** Real evals for the
+unmeasured core (extraction/grounding/search/topology — not just the interop
+tiers); **enforce provenance at write time** (today `provenance` defaults to
+`unknown` if a caller omits it — "auditable" is convention, not a guarantee);
+measure the relationship-truth grounding gap, don't just disclaim it.
+
+**Phase 3 — make it scale.** Incremental ingest (today every add rebuilds the whole
+graph — O(corpus) per document); a persistent ER index (no full re-resolve +
+re-embed each run); large-corpus performance + the date/$ entity-spam cleanup.
+
+**Phase 4 — make it usable by a non-developer.** Honest degradation surfaces (a
+"your run was degraded — LLM disabled, edges incomplete" banner, not a silent
+spaCy-only graph); the entity↔passage search bridge; salience-ranked leads (not
+the combinatorial gap wall); the guided wizard (P2.3); onboarding docs.
+
+**Cross-cutting.** Encryption-at-rest for sensitive corpora + key handling for the
+cloud tiers; disclose the `capture/` network behavior in the privacy section;
+keep the adversarial-audit cadence (above). None of Phases 1–4 is optional for
+"production"; Phase 0 is the gate to anyone even trying it.
+
+---
+
 ## P0 — correctness (silently misleading today)
 
 ### P0.1 — Relationship extraction reads only the first 4,000 chars  ⭐ biggest
