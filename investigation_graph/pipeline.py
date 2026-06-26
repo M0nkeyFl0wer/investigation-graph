@@ -33,10 +33,57 @@ from kg_common.write.dedup import ResolutionIndex, resolve_or_create_semantic
 from kg_common.write.grounding import ground
 
 from . import config
+from .dedup import make_cluster_tier, norm_dedupe, norm_name
 from .lossless_merge import plan_lossless_merge
+from .resolution import resolve_with_tiers
 from .semantic_gate import is_stance_bearing_type
 
 logger = logging.getLogger(__name__)
+
+# A record is AUTHORITATIVE STRUCTURED data — a row in a registry filing /
+# structured import, NOT an LLM guess over prose — when the structured-ingest path
+# tags it with the STABLE marker ``extraction_source == "structured"``. For these
+# the assertion IS the row: the entity and edge exist because a structured source
+# declared them, so they must not be discarded merely because their surface form
+# does not happen to co-occur in narrative prose (the prose co-occurrence heuristic
+# is the right gate for hallucination-prone LLM output, the wrong gate for an
+# authoritative tabular/registry fact).
+#
+# IMPORTANT — key on the STABLE marker, never on the human-facing ``provenance``:
+# ``provenance``/``source_url`` are descriptive (often a per-record URL like
+# ``https://registry.example.gov/filing#co7``) and VARY from feed to feed and even
+# from row to row. Keying the rescue on a literal provenance value (the prior build
+# hardcoded ``"structured_import"``) silently dropped every real registry feed whose
+# provenance string differed. ``extraction_source`` is the contract the ingest path
+# sets independently of what the provenance text happens to be, so ANY registry feed
+# — whatever its provenance — is covered.
+_STRUCTURED_EXTRACTION_SOURCE = "structured"
+
+
+def _is_authoritative_structured(record: dict) -> bool:
+    """True if a record came from an authoritative structured import.
+
+    Detected via the stable ``extraction_source == "structured"`` marker the
+    structured-ingest path sets, NOT via any provenance string (which varies per
+    feed / per row). Such records are trustworthy by origin (a registry declared
+    them); the prose co-occurrence grounding heuristic — built to catch an LLM
+    inventing names that appear in no document — should not silently drop them. We
+    still corroborate them against the corpus's normalized-name clusters below, so a
+    genuinely unsupported structured ghost (in no chunk AND with no grounded
+    cluster-mate) is still quarantined."""
+    return record.get("extraction_source") == _STRUCTURED_EXTRACTION_SOURCE
+
+
+def _cluster_key(entity: dict) -> tuple[str, str]:
+    """Type-aware normalized-name cluster key for an entity.
+
+    Two entities share a key iff they are the same type AND share a legal-suffix-
+    stripped, de-punctuated, lowercased name ("Acme 7" / "Acme 7 LLC" -> same;
+    "Acme 7" / "Acme 70" -> different; "Jordan Lee 0" / "Jordan Lee 7" ->
+    different). This is the SAME normalization the adopted structured-dedup tier
+    uses (investigation_graph.dedup.norm_name), so grounding-rescue and resolution
+    agree on what a duplicate group is."""
+    return (entity.get("entity_type", ""), norm_name(entity.get("label", "")))
 
 
 def _norm(s: str) -> str:
@@ -129,12 +176,61 @@ def ground_and_resolve(
     report = ground(recs, min_edge_overlap=min_edge_overlap)
 
     grounded_entity_ids = {r["id"] for r in report.grounded if r.get("kind") == "entity"}
+
+    # ── 1b. Authoritative-structured grounding rescue ─────────────────────────
+    # A structured row IS an authoritative edge/entity — it exists because a
+    # registry filing declared it, not because an LLM guessed it from prose. The
+    # prose co-occurrence gate is the right defense against hallucinated LLM names
+    # but the WRONG gate for an authoritative structured fact, which legitimately
+    # may never appear verbatim in narrative text (e.g. the bare name "Acme 0" is
+    # in the filing prose but its legal-suffix variant "Acme 0 LLC" is only ever
+    # the *target* of an ownership row, so it co-occurs in no chunk).
+    #
+    # We rescue such an entity from quarantine ONLY when its normalized-name
+    # cluster (same type + legal-suffix-stripped name) has at least one member
+    # that DID ground in prose. That keeps the rescue corroborated by the corpus:
+    # a suffix variant of a name the filing actually mentions is trustworthy, but
+    # a planted poison entity that is in no chunk AND in a cluster with no grounded
+    # member (a lone ghost) is still quarantined and its edge still dropped. This
+    # is the general structured-import rule, not a per-name exception.
+    structured_clusters_with_support: set[tuple[str, str]] = set()
+    for e in entities:
+        if e["id"] in grounded_entity_ids:
+            structured_clusters_with_support.add(_cluster_key(e))
+
+    rescued_ids: set[str] = set()
+    for e in entities:
+        if e["id"] in grounded_entity_ids:
+            continue  # already grounded in prose
+        if not _is_authoritative_structured(e):
+            continue  # only authoritative structured records are rescuable
+        if _cluster_key(e) in structured_clusters_with_support:
+            rescued_ids.add(e["id"])
+    grounded_entity_ids |= rescued_ids
     # Preserve INPUT order (not set-iteration order) so entity resolution is
     # deterministic: the first-seen surface form becomes the canonical node every
     # run. Iterating the id set directly would let PYTHONHASHSEED decide which
     # duplicate wins — unacceptable for a tool whose output must be reproducible.
     grounded_entities = [e for e in entities if e["id"] in grounded_entity_ids]
     grounded_edges = [r["_orig"] for r in report.grounded if r.get("kind") == "edge"]
+
+    # Rescue authoritative-structured edges the prose co-occurrence gate dropped.
+    # For an authoritative structured edge the ROW is the assertion of the
+    # relationship, so we do not also demand its two endpoints co-occur in narrative
+    # prose (a registry "A OWNS B" row is authoritative even if no sentence names A
+    # and B together). The only requirement we keep is the structural one: BOTH
+    # endpoints must be grounded/rescued entities — so the planted poison edge to a
+    # ghost endpoint (in no chunk, no grounded cluster-mate) still gets dropped,
+    # because its target never becomes a grounded entity. We de-dup against edges
+    # already in grounded_edges by object identity so nothing is double-counted.
+    already = {id(e) for e in grounded_edges}
+    for ed in edges:
+        if id(ed) in already:
+            continue
+        if not _is_authoritative_structured(ed):
+            continue  # LLM-guessed edges still owe prose co-occurrence
+        if ed["source_id"] in grounded_entity_ids and ed["target_id"] in grounded_entity_ids:
+            grounded_edges.append(ed)
 
     # ── 2. Entity resolution ──────────────────────────────────────────────
     # Collapse duplicate surface forms to one canonical node. resolve_or_create
@@ -144,6 +240,39 @@ def ground_and_resolve(
     id_map: dict[str, str] = {}
     canonical: dict[str, dict] = {}
     merge_records: list[dict] = []
+
+    # ── 2a. Structured-dedup tier (PUB.5) for authoritative-structured batches ──
+    # The exact+fuzzy cascade has two failures on authoritative structured input:
+    #   (1) it MISSES legal-suffix variants — "Acme 7" / "Acme 7 LLC" are not
+    #       fuzzy-close enough (token_sort_ratio < 0.92), so they survive as two
+    #       nodes and fragment the graph; and
+    #   (2) on densely numbered names it OVER-merges — rapidfuzz scores "Acme 10"
+    #       ≈ "Acme 0" above 0.92 (one inserted char), wrongly fusing distinct
+    #       companies, which both fragments the ownership chain AND collapses real
+    #       edges into self-loops.
+    # The deterministic normalized-name tier (legal-suffix stripping + de-punct,
+    # type-aware — investigation_graph.dedup) fixes BOTH: it merges the suffix
+    # variants (same normalized name) while keeping "Acme 0" ≠ "Acme 10" and the 8
+    # distinct "Jordan Lee N" people separate (different normalized names). Because
+    # that deterministic clustering is the authority for structured data, we ALSO
+    # disable the noisy fuzzy tier on this path (it would re-introduce failure (2));
+    # the exact and embedding tiers stay engaged. Non-structured (LLM/prose) batches
+    # are untouched — they keep the original exact+fuzzy(+embedding) cascade, so the
+    # tabular-baseline and prose tests are unaffected.
+    structured_entities = [e for e in grounded_entities if _is_authoritative_structured(e)]
+    use_structured_tier = bool(structured_entities)
+    structured_tier = None
+    if use_structured_tier:
+        # Cluster ALL grounded entities by (type, normalized-name). The tier merges
+        # each candidate onto an already-registered cluster-mate; entities not in a
+        # multi-member cluster simply create themselves (no-op merge).
+        cluster_map = norm_dedupe([
+            {"unique_id": e["id"], "name": e.get("label", ""),
+             "entity_type": e.get("entity_type", "")}
+            for e in grounded_entities
+        ])
+        structured_tier = make_cluster_tier(cluster_map)
+
     for e in grounded_entities:
         # Stance-bearing types (a claim / policy_position) are EXCLUDED from the
         # cosine tier: opposing stances embed as near-identical ("Support …" vs
@@ -157,13 +286,27 @@ def ground_and_resolve(
             if is_stance_bearing_type(e.get("entity_type", ""))
             else embeddings.get(e["id"])
         )
-        canon = resolve_or_create_semantic(
-            e["id"], e.get("label", ""), e.get("entity_type", ""),
-            index,
-            embedding=candidate_embedding,   # engages the cosine tier (P1.1)
-            threshold=threshold,
-            fuzzy_threshold=fuzzy_threshold,
-        )
+        if use_structured_tier:
+            # Structured path: exact + (deterministic normalized-name) tier +
+            # embedding, fuzzy disabled (fuzzy_threshold > 1 can never fire). The
+            # normalized-name tier runs only on a full miss of exact/embedding, so
+            # the cheap deterministic tiers still come first.
+            canon = resolve_with_tiers(
+                e["id"], e.get("label", ""), e.get("entity_type", ""),
+                index,
+                tiers=(structured_tier,),
+                embedding=candidate_embedding,
+                threshold=threshold,
+                fuzzy_threshold=1.01,        # disable the over-merging fuzzy tier
+            )
+        else:
+            canon = resolve_or_create_semantic(
+                e["id"], e.get("label", ""), e.get("entity_type", ""),
+                index,
+                embedding=candidate_embedding,   # engages the cosine tier (P1.1)
+                threshold=threshold,
+                fuzzy_threshold=fuzzy_threshold,
+            )
         id_map[e["id"]] = canon
         if canon == e["id"]:
             canonical[canon] = e          # first sighting — keep it
