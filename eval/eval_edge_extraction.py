@@ -18,15 +18,17 @@ usable number yet. That absence IS the finding.
 """
 from __future__ import annotations
 
+import os
 import sys
 import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from eval.fixture_realistic import REALISTIC_FIXTURE  # noqa: E402
 
 # Labeled fixture: (sentence, gold triples). Includes NO-RELATION distractors and
 # a NEGATION case so "always extract an edge" is punished by precision.
-FIXTURE: list[tuple[str, set[tuple[str, str, str]]]] = [
+FIXTURE_CLEAN: list[tuple[str, set[tuple[str, str, str]]]] = [
     ("Acme Corp paid John Smith $5,000 in March.", {("Acme Corp", "PAID", "John Smith")}),
     ("Globex Ltd owns Initech Systems outright.", {("Globex Ltd", "OWNS", "Initech Systems")}),
     ("Jane Doe is a director of Northwind Trust.", {("Jane Doe", "DIRECTOR_OF", "Northwind Trust")}),
@@ -58,6 +60,14 @@ FIXTURE: list[tuple[str, set[tuple[str, str, str]]]] = [
     # Hypothetical / future-conditional: nothing actually happened yet.
     ("Acme Corp may pay Vertex Holdings if the deal closes.", set()),     # conditional -> no edge
 ]
+
+# Select the active fixture. Default = clean (the machinery baseline); set
+# R2_FIXTURE=realistic to measure on indirect, real-document-style prose — the
+# number that actually licenses a "prose path works" claim. 0.94 on the clean
+# fixture is "best model on the easiest realistic input"; the realistic fixture is
+# what tells you whether the prose path survives a real leaked document.
+_FIXTURE_MODE = os.environ.get("R2_FIXTURE", "clean").lower()
+FIXTURE = REALISTIC_FIXTURE if _FIXTURE_MODE == "realistic" else FIXTURE_CLEAN
 
 
 def _prf(pred: set, gold: set) -> tuple[float, float, float]:
@@ -329,7 +339,10 @@ def _run_frontier(_client=None):
 
 
 def main() -> int:
-    print("\nGATE-R2 — edge-extraction measurement (3 tiers, exact-triple, with distractors)\n")
+    print("\nGATE-R2 — edge-extraction measurement (3 tiers, exact-triple, with distractors)")
+    print(f"  fixture: {_FIXTURE_MODE.upper()} ({len(FIXTURE)} sentences)"
+          + ("  [clean textbook prose — a baseline, NOT a real-document claim]" if _FIXTURE_MODE != "realistic"
+             else "  [indirect real-document-style prose]") + "\n")
     scored = 0
     # Tier order is laptop -> laptop+ -> key, so the table reads left-to-right as
     # "what a journalist gets with progressively more capability."
