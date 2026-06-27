@@ -1,0 +1,39 @@
+name: CI
+
+# The recurrence net runs HERE — in the repo people actually clone. The disproven
+# LadybugDB corruption claim lived in THIS repo's README/requirements/pyproject, so
+# the gate that stops it returning has to run on every push/PR to this repo, not
+# only in kg-common's CI.
+#
+# Note on scope: the FULL test suite needs the kg-common dependency, which is not yet
+# public (see docs/ROADMAP.md — the install decision). Until it is, this workflow runs
+# the checks that need NO project dependencies: ruff lint + the doc-claims recurrence
+# gate (investigation_graph/doc_claims.py imports only stdlib). When kg-common goes
+# public, add a job that installs the package and runs the full pytest suite + the
+# structured/provenance gates.
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  guards:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install lint + test runner (no project deps needed for these checks)
+        run: python -m pip install --quiet ruff pytest
+
+      - name: Lint (ruff)
+        run: ruff check investigation_graph scripts tests eval
+
+      - name: Doc-claims recurrence gate (no kg-common needed)
+        # Fails the build if any user-facing doc re-asserts the disproven LadybugDB
+        # edge-write-corruption claim (substance match, embedding-fact whitelisted),
+        # and the meta-test fails if the gate itself goes vacuous.
+        run: pytest tests/test_doc_claims.py -q
