@@ -44,6 +44,17 @@ claim more than the code delivers, and where a real run silently produces nothin
 It didn't: the automation catches recurrence, the adversarial pass catches novelty,
 and you need both.
 
+**INFRA — shared-Ollama contention is structural, not incidental (flagged 2026-06-27,
+revisit when evals matter).** Multiple agents share one unmanaged Ollama with no
+queueing or per-agent limits, so any heavy sibling starves extraction/embedding and
+silently degrades evals (hit twice in one session: a runner hung 3.7 days pinning a
+core, and an active sibling 8B model blocked the 3B from loading — which is why the
+pairwise-local R2 number is still unmeasured). This is the silent-degradation class at
+the infra layer: a resource failing quietly until something needs a slot. Fix options
+(not today): a dedicated extraction endpoint (e.g. seshat) the evals target, OR
+keep-alive/queue limits, OR a pre-eval "is the box quiet" probe that refuses to run
+degraded. Affects the sibling agents too, not just this repo.
+
 ---
 
 ## Repositioning — structured-first, prose-assistive (decided 2026-06-26)

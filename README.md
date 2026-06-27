@@ -1,6 +1,6 @@
 # investigation-graph
 
-A privacy-first knowledge graph toolkit for **investigative journalists, OSINT investigators, and researchers**. Ingest documents, extract entities and relationships, build a searchable graph, and find structural gaps that suggest leads. Runs entirely on your laptop.
+A privacy-first knowledge graph toolkit for **investigative journalists, OSINT investigators, and researchers**. Load structured records and documents, resolve who's who across datasets, and surface the structural gaps that point to leads — a source-traced graph you can navigate. Relationship extraction from prose is a **human-verified assist** (we measured it — see below), not the spine. Runs on your laptop.
 
 **No cloud required. No accounts. No data leaves your machine.**
 
@@ -71,9 +71,14 @@ nomenklatura, Senzing) rather than reinventing them.
 
 **2. Unstructured text — the assistive path (model-dependent).** For emails, PDFs,
 and news, entities come from spaCy locally, but high-quality *relationship*
-extraction needs a capable model — a laptop-sized model yields sparse, noisy
-edges. So this path is **assistive and human-reviewed, never auto-asserted**, and
-you pick the model by your data's sensitivity:
+extraction needs a capable model — and **we measured how good it actually is** on
+indirect, real-document-style prose (exact-triple F1, verified gold): **≈ 0.38 on a
+laptop model, ≈ 0.62 even with a frontier model.** So prose extraction misses or
+mis-types a large share of real relationships at *every* tier — it is a
+**human-verified lead generator, not a source of findings**, never auto-asserted.
+**Verify every prose-derived edge against the source document before you rely on it
+— this is a primary operating instruction, not a disclaimer.** You pick the model
+by your data's sensitivity:
 - **Public / already-published data → a cloud model is fine** (no source to protect — most OSINT).
 - **Source-sensitive data → a model you host** (your GPU, a private VPS, or a zero-retention enterprise API), accepting that a laptop-only model gives weaker edges.
 
