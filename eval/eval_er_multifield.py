@@ -76,15 +76,40 @@ def gen_corpus():
     ent("galaxy", "Galaxy Mining Corp", "US-4242", "1 Ore Road, Reno", "US")
     ent("tulip", "Tulip Bakery Ltd", "US-4242", "4 Flour Lane, Portland", "US")
 
+    # 7. reg-id COLLISION with COINCIDENTALLY similar addresses in DIFFERENT cities.
+    #    A fuzzy address-similarity veto (difflib > 0.85) bypasses this; the only safe
+    #    handling is exact-normalized comparison (different city = different address)
+    #    -> route to review -> stay apart. (The verifier's veto-bypass break.)
+    ent("spring1", "Springfield Mills", "US-9999", "100 Main Street, Springfield", "US")
+    ent("spring2", "Springvale Foods", "US-9999", "100 Main Street, Springvale", "US")
+
+    # 8. BLANK reg-id via a unicode zero-width space, and via a punctuation-only
+    #    sentinel — both must NORMALIZE to 'no reg-id' and never act as a merge key.
+    #    Distinct names + different addresses, so they must stay apart.
+    ent("zwsp1", "Helix Bio", "​", "5 Genome Way, Cambridge", "US")
+    ent("zwsp2", "Vortex Labs", "​", "9 Fusion Rd, Berkeley", "US")
+    ent("punct1", "Delta Corp", "---", "12 First St, Denver", "US")
+    ent("punct2", "Sigma Inc", "---", "34 Second Ave, Phoenix", "US")
+
+    # 9. reg-id COLLISION with MISSING address + contradicting names — nothing
+    #    corroborates the shared reg-id, so it must route to review, not auto-merge.
+    ent("noaddr1", "Apex Mining Corp", "US-8888", "", "US")
+    ent("noaddr2", "Zenith Foods Ltd", "US-8888", "", "US")
+
     gold = {
         "merge_groups": [{"jpm1", "jpm2", "jpm3"}, {"gx1", "gx2"}],   # each -> 1 survivor
         "must_not_merge": [
             {"acme_us", "acme_gb"},        # same name, different reg-id + jurisdiction
-            {"summit1", "summit2"},        # same name, BLANK reg-id, different address (libel hole)
+            {"summit1", "summit2"},        # same name, BLANK reg-id, different address
             {"galaxy", "tulip"},           # reg-id collision, contradicting name + address
+            {"spring1", "spring2"},        # reg-id collision, coincidentally-similar diff-city address
+            {"zwsp1", "zwsp2"},            # same zero-width-space reg-id sentinel — must not match
+            {"punct1", "punct2"},          # same punctuation-only reg-id sentinel — must not match
+            {"noaddr1", "noaddr2"},        # reg-id collision, missing address, contradicting names
         ],
-        # 1 jpmorgan + 2 acme + 1 globex + 1 initech + 2 summit + 2 galaxy/tulip
-        "expected_unique": 9,
+        # 1 jpmorgan + 1 globex + 1 initech + (2 acme + 2 summit + 2 galaxy + 2 spring
+        # + 2 zwsp + 2 punct + 2 noaddr distinct)
+        "expected_unique": 17,
     }
     return chunks, entities, gold
 
