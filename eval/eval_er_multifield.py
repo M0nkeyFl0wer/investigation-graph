@@ -63,10 +63,28 @@ def gen_corpus():
     # 4. A clearly distinct singleton.
     ent("initech", "Initech Systems", "US-7777", "88 Congress Ave, Austin", "US")
 
+    # 5. BLANK reg_id, same name, DIFFERENT address — the libel over-merge a verifier
+    #    found: '' must NOT match '' (a reg_id-less feed is common). Two "Summit
+    #    Capital" at different addresses are distinct until something says otherwise;
+    #    merging them on name alone (because reg_id is blank) is the libel failure.
+    ent("summit1", "Summit Capital", "", "11 Wall Street, New York", "US")
+    ent("summit2", "Summit Capital", "", "9000 Sunset Blvd, Los Angeles", "US")
+
+    # 6. reg_id COLLISION with contradicting name AND address — a shared reg-id string
+    #    (data-entry error / coincidence) must NOT be treated as conclusive when the
+    #    name and address both strongly disagree. Reg-id alone is not identity.
+    ent("galaxy", "Galaxy Mining Corp", "US-4242", "1 Ore Road, Reno", "US")
+    ent("tulip", "Tulip Bakery Ltd", "US-4242", "4 Flour Lane, Portland", "US")
+
     gold = {
         "merge_groups": [{"jpm1", "jpm2", "jpm3"}, {"gx1", "gx2"}],   # each -> 1 survivor
-        "must_not_merge": [{"acme_us", "acme_gb"}],                    # -> 2 survivors
-        "expected_unique": 5,   # 1 jpmorgan + 2 acme + 1 globex + 1 initech
+        "must_not_merge": [
+            {"acme_us", "acme_gb"},        # same name, different reg-id + jurisdiction
+            {"summit1", "summit2"},        # same name, BLANK reg-id, different address (libel hole)
+            {"galaxy", "tulip"},           # reg-id collision, contradicting name + address
+        ],
+        # 1 jpmorgan + 2 acme + 1 globex + 1 initech + 2 summit + 2 galaxy/tulip
+        "expected_unique": 9,
     }
     return chunks, entities, gold
 
