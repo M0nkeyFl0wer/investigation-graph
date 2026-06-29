@@ -93,6 +93,20 @@ goes, and you choose.**
 > default `ingest_folder` flow — wiring that is the current priority (see
 > `docs/ROADMAP.md`). Today the wired-in default is the prose/LLM path.
 
+### Scaling up — and the threat-model cost
+
+The default stack — DuckDB + LadybugDB + **[Splink](https://github.com/moj-analytical-services/splink)** for entity resolution, all local, all free/OSS — is built for one investigator and a corpus that fits on a laptop. Two upgrade paths exist for when you outgrow it, and **both trade the privacy guarantee for capacity, so reach for them deliberately, not by default:**
+
+- **[Neo4j](https://neo4j.com) (graph), when the graph outgrows an embedded file.** Millions of nodes, or a whole newsroom querying concurrently, is past what a single-file embedded graph serves well. *Cost/complexity:* a server to run and harden (or paid Aura cloud); Enterprise features are licensed. *Where it's needed:* multi-analyst teams, millions of edges, concurrent access — **not** a lone journalist with a folder of PDFs.
+- **[Senzing](https://senzing.com) (entity resolution), when Splink's accuracy plateaus.** Best-in-class ER (it's what ICIJ/OCCRP use on the big leaks) — transliteration, aliases, and address matching beyond what Splink configures easily. *Cost/complexity:* free proof-of-concept, but production use is licensed and the core is a **proprietary binary you can't audit.** *Where it's needed:* Panama-Papers-scale, cross-border, messy multilingual records.
+
+**The security consideration is the real catch, and it's specific to who this tool is for.** The default stack makes no network calls and keeps source-sensitive data on your machine. Moving to a server-based graph or a hosted ER service **changes your threat model:**
+- A Neo4j **server** (even self-hosted) adds a network surface, auth, and backups — new places a case can leak. A **cloud** graph (Aura) puts source-sensitive data on someone else's infrastructure, which for source protection may be disqualifying.
+- **Senzing**'s proprietary core processes your entity data; self-hosted keeps it on your box (acceptable), but a hosted/cloud ER service sends it out (not acceptable for protected sources).
+- Multi-analyst access makes **access control + audit logging** load-bearing — a single compromised account can exfiltrate an entire case.
+
+Rule of thumb: **self-host everything for source-sensitive work, and treat any cloud hop as a decision about your sources' safety, not a convenience.** The local OSS stack is the default precisely because it makes that decision unnecessary.
+
 ---
 
 ## Quick Start
