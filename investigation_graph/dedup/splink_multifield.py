@@ -61,15 +61,25 @@ value that is empty or punctuation-only (e.g. "---"). A rejected reg_id becomes
 as a merge key and never mass-fuse a reg_id-less feed. This closes the blank-sentinel
 over-merge a verifier found.
 
-THE RECALL TRADE (documented, accepted)
----------------------------------------
-Because the address comparison is EXACT-normalized (no fuzzy ratio anywhere), a real
-single entity whose two records spell the address only slightly differently
-("270 Park Ave" vs "270 Park Avenue") will route to REVIEW rather than auto-merge.
-That is a SAFE under-merge — a human confirms the merge — and is strictly preferable
-to a libel over-merge. Recovering that recall via address normalization (USPS-style
-abbreviation expansion, suite/unit canonicalization) is a FUTURE ENHANCEMENT, not
-this build: it must not reintroduce a fuzzy ratio into the merge decision.
+THE RECALL TRADE (now IMPLEMENTED via deterministic address canonicalization)
+-----------------------------------------------------------------------------
+The address comparison remains EXACT-normalized (no fuzzy ratio anywhere), but the
+normalization is now stronger: `_norm_address` deterministically canonicalizes common
+US street-address abbreviations (ave->avenue, st->street, n->north, ste->suite, ...)
+BEFORE the exact-equality test. So a real single entity whose two records spell the
+address only by an accepted abbreviation ("270 Park Ave" vs "270 Park Avenue") now
+canonicalizes to the SAME string and AUTO-MERGES — the recall this section used to
+trade away is recovered, with NO similarity score: it is pure token substitution
+followed by the same exact-equality test (see `_norm_address`).
+
+The boundary still routes to REVIEW (the safe under-merge, preferred over a libel
+over-merge): anything that is NOT a known abbreviation-only variant. A genuinely
+different address ("270 Park Ave" vs "5th Avenue"), a misspelling ("Avenue" vs
+"Avanue"), a transposed street number ("270" vs "207"), or the "#5" vs "Suite 5"
+unit-marker ambiguity all leave the canonicalized strings DIFFERENT, so the pair
+stays in REVIEW for a human. The decision table is unchanged; only the address
+spelling fed into it is canonicalized. This explicitly does NOT reintroduce a fuzzy
+ratio into the merge decision.
 
 WHY Splink, and HOW it is configured given the tiny-fixture estimation problem
 -------------------------------------------------------------------------------
@@ -138,6 +148,124 @@ def _norm(v) -> str:
     "no signal"). No fuzzy comparison is ever applied to this value — equality is
     the only test."""
     return " ".join(_strip_unicode(v).lower().split())
+
+
+# ── Deterministic US street-address canonicalization (the recovered RECALL TRADE) ──
+# Maps the common abbreviation forms of address TOKENS to a single canonical spelling
+# so that two records whose addresses differ ONLY by an accepted abbreviation
+# ("270 Park Ave" vs "270 Park Avenue") normalize to the SAME string and therefore
+# pass the module's EXISTING exact-equality test. NO fuzzy ratio is involved: each
+# entry is an exact token-for-token substitution, applied after lower-casing and
+# trailing-punctuation stripping. Both the abbreviated and the already-expanded form
+# map to the canonical word, so the relation is idempotent and direction-free.
+_ADDRESS_TOKEN_CANON = {
+    # Street-type suffixes -> full canonical word. We expand BOTH the abbreviation and
+    # the full word to the same key so "ave", "ave.", and "avenue" all canonicalize to
+    # "avenue". (The full word maps to itself, harmlessly, for documentation clarity.)
+    "ave": "avenue", "av": "avenue", "avenue": "avenue",
+    "st": "street", "street": "street",
+    "rd": "road", "road": "road",
+    "blvd": "boulevard", "boulevard": "boulevard",
+    "dr": "drive", "drive": "drive",
+    "ln": "lane", "lane": "lane",
+    "ct": "court", "court": "court",
+    "pl": "place", "place": "place",
+    "sq": "square", "square": "square",
+    "ter": "terrace", "terr": "terrace", "terrace": "terrace",
+    "pkwy": "parkway", "pkway": "parkway", "parkway": "parkway",
+    "hwy": "highway", "highway": "highway",
+    "cir": "circle", "circle": "circle",
+    "pt": "point", "point": "point",
+    "plz": "plaza", "plaza": "plaza",
+    "expy": "expressway", "expressway": "expressway",
+    # Directionals -> full word (covers prefix "N Park" and suffix "Park Ave NW").
+    "n": "north", "north": "north",
+    "s": "south", "south": "south",
+    "e": "east", "east": "east",
+    "w": "west", "west": "west",
+    "ne": "northeast", "northeast": "northeast",
+    "nw": "northwest", "northwest": "northwest",
+    "se": "southeast", "southeast": "southeast",
+    "sw": "southwest", "southwest": "southwest",
+    # Unit / secondary-address markers -> full word.
+    "ste": "suite", "suite": "suite",
+    "apt": "apartment", "apartment": "apartment",
+    "fl": "floor", "floor": "floor",
+    "rm": "room", "room": "room",
+    "bldg": "building", "building": "building",
+    "dept": "department", "department": "department",
+    "unit": "unit",
+}
+
+
+def _norm_address(v) -> str:
+    """Canonicalize a US street address for robust EXACT equality — deterministic
+    token substitution, NOT fuzzy matching.
+
+    This recovers the recall the module header's "THE RECALL TRADE" section described:
+    a single real entity whose two records spell the address only by an accepted
+    abbreviation ("270 Park Ave" vs "270 Park Avenue") used to normalize to DIFFERENT
+    strings and route to REVIEW. After this canonicalization they normalize to the SAME
+    string ("270 park avenue ...") and so pass the EXISTING exact-equality test in
+    `_decide` / the blocking SQL — auto-merging without any similarity score.
+
+    HOW (and why it is canonicalization, not a ratio):
+      1. Lower-case the value and split on whitespace into tokens. (We split FIRST,
+         before any unicode-whitespace stripping, because `_strip_unicode` removes ALL
+         separators incl. ordinary spaces — running it first would glue every word
+         together. Per-token we then `_strip_unicode` to drop any interior zero-width /
+         format characters, matching the rest of the module's unicode-aware emptiness.)
+      2. Each token has trailing punctuation stripped (so "ave." == "ave" and
+         "blvd," == "blvd") and a leading "#" stripped, while INTERIOR characters and
+         digits are left intact (so "270", "5th", "270-272" are untouched).
+      3. If the cleaned token is an exact key in the ASCII canonicalization dictionary
+         `_ADDRESS_TOKEN_CANON`, it is REPLACED by its single canonical full word;
+         otherwise it is kept verbatim. This is a pure lookup — there is no edit
+         distance, no similarity threshold, no partial match. A token either IS a known
+         abbreviation (and is rewritten) or it is not (and is left alone). Two addresses
+         merge only if, after this exact rewrite, they are CHARACTER-FOR-CHARACTER equal.
+      4. Re-join the canonical tokens with single spaces.
+
+    WHAT IT COVERS (the deterministic dictionary, see `_ADDRESS_TOKEN_CANON`):
+      * street-type suffixes (ave/st/rd/blvd/dr/ln/ct/pl/sq/ter/pkwy/hwy/cir/pt/plz/expy
+        and their full words) -> the full canonical word;
+      * directionals (n/s/e/w/ne/nw/se/sw and full words) -> the full word;
+      * unit markers (ste/apt/fl/rm/bldg/dept/unit and full words) -> the full word.
+
+    WHAT IT DELIBERATELY DOES NOT COVER (the documented boundary — left to REVIEW):
+      * The "#5" vs "suite 5" equivalence. We strip a LEADING "#" so "#5" becomes "5",
+        but we do NOT insert a "suite"/"apartment" marker, because the marker is genuinely
+        ambiguous (suite? apartment? unit?) and guessing it would be a fabrication, not a
+        canonicalization. "270 Park Ave #5" and "270 Park Ave Suite 5" therefore stay in
+        REVIEW for a human — the safe under-merge.
+      * Misspellings, transpositions, or any NON-abbreviation difference ("Avenue" vs
+        "Avanue", "270" vs "207"). Those are not in the dictionary, so the tokens differ,
+        the strings differ, and the pair stays in REVIEW. This is the point: a genuinely
+        different address ("270 Park Ave" vs "5th Avenue") never merges here — only
+        accepted abbreviation-only variants of the SAME address do.
+      * No USPS database, no city/state/ZIP parsing, no street-number range logic. The
+        dictionary is a small, fixed, ASCII table intentionally kept auditable.
+
+    Empty / missing addresses normalize to "" (which the decision table treats as
+    "no signal"), exactly as before. No fuzzy comparison is ever applied to the result —
+    exact equality remains the only test downstream."""
+    canon_tokens = []
+    # Split on whitespace FIRST (see step 1 in the docstring) — never via `_norm`, which
+    # would collapse every word together by stripping ordinary spaces.
+    for raw in str(v or "").lower().split():
+        # Drop any interior zero-width / format chars (unicode-aware, like the rest of
+        # the module); a normal token is unchanged.
+        tok = _strip_unicode(raw)
+        # Strip a leading '#' (so "#5" -> "5") and strip trailing punctuation
+        # (so "ave." -> "ave", "blvd," -> "blvd"). We only strip from the ENDS; interior
+        # characters and all digits are preserved ("270-272", "5th" survive intact).
+        tok = tok.lstrip("#").rstrip(".,;:#")
+        if not tok:
+            continue  # token was punctuation/whitespace only — carries no address signal
+        # Exact dictionary lookup — abbreviation OR full word maps to the canonical word;
+        # an unknown token is kept verbatim. Pure substitution, never a similarity score.
+        canon_tokens.append(_ADDRESS_TOKEN_CANON.get(tok, tok))
+    return " ".join(canon_tokens)
 
 
 def _norm_reg_id(v) -> str | None:
@@ -261,7 +389,12 @@ def splink_dedupe_multifield(
             # Empty string in the dataframe iff reg_id is meaningless — so the SQL
             # `<> ''` guard never fires on a sentinel. `_decide` re-derives None.
             "reg_id": reg or "",
-            "address": _norm(r.get("address", "")),
+            # Canonicalized address (deterministic abbreviation expansion, NOT fuzzy).
+            # This is the SINGLE point of address normalization: the value written here
+            # is what the SQL blocking rule (`l.address = r.address`) compares AND what
+            # `_decide` reads back via `by_id` (built from this same dataframe), so the
+            # candidate-pair blocking and the adjudication always agree on the address.
+            "address": _norm_address(r.get("address", "")),
             "jurisdiction": _norm(r.get("jurisdiction", "")),
             "name": str(r.get("name", "")),
             # Normalized name, used ONLY as a blocking key for the no-reg_id fallback.
