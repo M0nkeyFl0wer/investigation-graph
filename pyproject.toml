@@ -76,6 +76,11 @@ ig-validate = "scripts.validate_ontology:main"
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 timeout = 30
+# Put the repo root on sys.path so `investigation_graph` imports from the source
+# tree without an editable install. `python -m pytest` already adds cwd, but the
+# bare `pytest` console script does NOT — and the global pre-push hook prefers the
+# bare binary, so without this it false-negatives with collection import errors.
+pythonpath = ["."]
 
 [tool.ruff]
 target-version = "py310"
