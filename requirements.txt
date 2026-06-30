@@ -21,3 +21,9 @@ duckdb>=1.0.0
 #   pip install -e "../kg-common[media,ladybug,ollama,dedup,measure]"
 kg-common[media] @ git+https://github.com/M0nkeyFl0wer/kg-common.git
 PyYAML>=6.0  # frontmatter parsing for the gold-annotation graph builder
+
+# OPTIONAL extras (NOT installed by this requirements file — the core must stay
+# import-light without them). Install only when the matching path is needed:
+#   pip install "splink>=4.0,<5"   # [er-multifield] / [dedup-structured] extras —
+#       multi-field entity resolution (reg_id/address/jurisdiction) on the DuckDB
+#       backend. See investigation_graph/dedup/splink_multifield.py.

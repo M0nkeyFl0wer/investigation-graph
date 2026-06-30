@@ -34,6 +34,7 @@ from kg_common.write.grounding import ground
 
 from . import config
 from .dedup import make_cluster_tier, norm_dedupe, norm_name
+from .dedup.splink_multifield import has_multifield_props as _has_multifield
 from .lossless_merge import plan_lossless_merge
 from .resolution import resolve_with_tiers
 from .semantic_gate import is_stance_bearing_type
@@ -273,6 +274,53 @@ def ground_and_resolve(
         ])
         structured_tier = make_cluster_tier(cluster_map)
 
+    # ── 2a-multifield. Splink MULTI-FIELD tier (PUB.5 / [er-multifield]) ─────────
+    # The normalized-name tier above is a NAME-ONLY rule, and a registry feed defeats
+    # any name-only rule in BOTH directions:
+    #   * UNDER-MERGE — cross-source spellings of one company ("J.P. Morgan" /
+    #     "JP Morgan" / "JPMorgan Chase") have DIFFERENT normalized names, so no name
+    #     rule merges them, even though they share a registration id + address.
+    #   * OVER-MERGE (libel) — two DIFFERENT companies sharing a name ("Acme Holdings"
+    #     in Delaware vs in London) have the SAME normalized name, so a name rule
+    #     WRONGLY fuses them, even though their reg_id + jurisdiction differ.
+    # The fix is multi-field matching: a Splink-backed tier (deterministic linking on
+    # the DuckDB backend) clusters by IDENTITY-BEARING fields — same reg_id (+ address)
+    # within a type ⇒ merge across spellings; different reg_id / contradictory
+    # jurisdiction ⇒ stay apart. See investigation_graph/dedup/splink_multifield.py
+    # for why deterministic linking (not the degenerate-on-tiny-fixtures EM training)
+    # and how the jurisdiction veto guards the libel floor.
+    #
+    # HOW IT THREADS THROUGH THE SEAM (no fixture special-casing): the multi-field
+    # records get the same general treatment as the name-only structured tier — a
+    # cluster map drives merges through resolve_with_tiers. But because the base
+    # resolver's FIRST tier is an exact-NAME match (which would fuse the two distinct
+    # same-name Acmes BEFORE any on-miss tier could run), multi-field records are
+    # resolved under a RESOLUTION NAME equal to their multi-field cluster id rather
+    # than their raw label. Same cluster ⇒ same resolution name ⇒ the base exact tier
+    # merges them (fixes under-merge); different cluster ⇒ different resolution name ⇒
+    # the base keeps them apart (fixes the libel over-merge). The entity's REAL label
+    # is preserved in `canonical` — the cluster-id resolution name is used only as the
+    # match key, never stored. Records WITHOUT multi-field props are untouched and keep
+    # their raw-label resolution (so name-only structured + prose paths are unaffected).
+    multifield_entities = [e for e in grounded_entities if _has_multifield(e)]
+    use_multifield_tier = bool(multifield_entities)
+    multifield_cluster: dict[str, str] = {}
+    # Ambiguous multi-field pairs (e.g. a shared reg_id whose address differs / is
+    # missing — a data-error-vs-two-companies judgment) the deterministic tier
+    # deliberately does NOT auto-merge. They stay SEPARATE entities (the libel floor
+    # holds) but are surfaced here so a human adjudicates them via the P1.3 review
+    # feed below — never auto-decided, never silently dropped.
+    multifield_review_pairs: list[dict] = []
+    if use_multifield_tier:
+        from .dedup import splink_dedupe_multifield
+        multifield_cluster, multifield_review_pairs = splink_dedupe_multifield([
+            {"unique_id": e["id"], "name": e.get("label", ""),
+             "entity_type": e.get("entity_type", ""),
+             "reg_id": e.get("reg_id", ""), "address": e.get("address", ""),
+             "jurisdiction": e.get("jurisdiction", "")}
+            for e in multifield_entities
+        ])
+
     for e in grounded_entities:
         # Stance-bearing types (a claim / policy_position) are EXCLUDED from the
         # cosine tier: opposing stances embed as near-identical ("Support …" vs
@@ -286,7 +334,26 @@ def ground_and_resolve(
             if is_stance_bearing_type(e.get("entity_type", ""))
             else embeddings.get(e["id"])
         )
-        if use_structured_tier:
+        if use_multifield_tier and _has_multifield(e):
+            # MULTI-FIELD path: resolve under the Splink multi-field CLUSTER ID as the
+            # match name (see the 2a-multifield block). This routes the identity
+            # decision through the multi-field fields (reg_id/address/jurisdiction)
+            # instead of the raw label, so cross-source spellings merge and same-name-
+            # different-reg_id entities stay apart. Fuzzy is disabled (cluster ids must
+            # match EXACTLY to merge — a fuzzy match on opaque cluster ids would be
+            # meaningless and could re-introduce an over-merge), and the embedding is
+            # withheld (the name embedding would re-introduce the same-name over-merge
+            # this tier exists to prevent). The cluster id is a match key only; the
+            # entity's real label is kept in `canonical` below.
+            resolution_name = multifield_cluster.get(e["id"], e["id"])
+            canon = resolve_or_create_semantic(
+                e["id"], resolution_name, e.get("entity_type", ""),
+                index,
+                embedding=None,
+                threshold=threshold,
+                fuzzy_threshold=1.01,        # disable fuzzy — cluster ids match exactly
+            )
+        elif use_structured_tier:
             # Structured path: exact + (deterministic normalized-name) tier +
             # embedding, fuzzy disabled (fuzzy_threshold > 1 can never fire). The
             # normalized-name tier runs only on a full miss of exact/embedding, so
@@ -417,6 +484,13 @@ def ground_and_resolve(
         "edges_out": len(resolved_edges),
         "quarantine_rate": report.quarantine_rate(),
         "merges": merge_records,   # (kept, merged) pairs for review (P1.3)
+        # Ambiguous multi-field pairs the deterministic resolver REFUSED to
+        # auto-merge (shared reg_id but address differs / missing / jurisdiction
+        # disagrees). Each carries needs_review=True and a reason. These records
+        # remain SEPARATE entities — surfaced for the SAME P1.3 human review the
+        # merges get, so a reg_id collision is a human decision, not a silent merge
+        # nor a silent drop. (No fuzzy threshold adjudicates them.)
+        "multifield_review": multifield_review_pairs,
         # Edge collisions a merge created that could NOT be losslessly collapsed
         # (e.g. mismatched currency, contradictory share_pct). These are NEVER
         # dropped — they are surfaced here for the same human review the entity

@@ -57,6 +57,13 @@ interop = ["followthemoney>=4.9,<5"]
 # tier is the dep-free deterministic normalized-name tier; Splink is reserved for
 # multi-field messy records (eval showed it undertrained on single-field variants).
 dedup-structured = ["splink>=4.0,<5"]
+# Multi-field entity resolution (PUB.5 / GATE-ER-MULTIFIELD). Optional — weighs
+# reg_id / address / jurisdiction OVER the name string so cross-source spellings
+# merge while same-name-different-registry entities stay apart (the libel floor).
+# Splink-backed (DuckDB deterministic linking, training-free — see
+# investigation_graph/dedup/splink_multifield.py for why deterministic, not EM, on
+# tiny batches). The core stays import-light when this extra is not installed.
+er-multifield = ["splink>=4.0,<5"]
 dev = ["pytest>=8.0", "pytest-mock", "pytest-timeout", "ruff"]
 
 [project.scripts]
